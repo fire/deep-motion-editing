@@ -1,8 +1,8 @@
 import os
 import numpy as np
 import copy
-from datasets.bvh_parser import BVH_file
-from datasets.motion_dataset import MotionData
+from bvh_parser import BVH_file
+from motion_dataset import MotionData
 from option_parser import get_args, try_mkdir
 
 
