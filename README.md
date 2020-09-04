@@ -33,6 +33,19 @@ We provide pretrained models together with demo examples using animation files s
 python test.py -model_path MODEL_PATH -input_A PATH_A -input_B PATH_B -edit_type TYPE
 ```-->
 
+## Quick Start Chibifire
+
+Use existing software to retarget animations from A to vrm rig.
+
+Retarget one animation.
+
+```
+python.exe .\datasets\preprocess.py
+cd retargeting
+python train.py --save_dir=./training/
+sh demo.sh
+```
+
 ### Motion Retargeting
 <!-- `TYPE = retargeting`  
 `PATH_A` - motion input  

@@ -3,6 +3,8 @@ This code comes from https://github.com/rubenvillegas/cvpr2018nkn/blob/master/da
 """
 import bpy
 import numpy as np
+import sys
+sys.path.append(".")
 
 from os import listdir
 
