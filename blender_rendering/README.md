@@ -1,4 +1,19 @@
-# Usage
+## Blender Visualization
+
+We provide a simple wrapper of blender's python API (2.80) for rendering 3D animations.
+
+### Prerequisites
+
+> The Blender releases distributed from blender.org include a complete Python installation across all platforms, which means that any extensions you have installed in your systems Python won’t appear in Blender.
+
+To use external python libraries, you can install new packages directly to Blender's python distribution. Alternatively, you can change the default blender python interpreter by:
+
+1. Remove the built-in python directory: `[blender_path]/2.80/python` .
+
+2. Make a symbolic link or simply copy a python interpreter at [blender_path]/2.80/python. E.g. `ln -s ~/anaconda3/envs/env_name [blender_path]/2.80/python`
+This interpreter should be python 3.7.x version and contains at least: numpy, scipy.
+
+## Usage
 
 #### Arguments
 
