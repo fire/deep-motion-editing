@@ -5,6 +5,7 @@ import numpy as np
 from option_parser import try_mkdir
 from eval import eval
 import argparse
+from shutil import copyfile
 
 
 def batch_copy(source_path, suffix, dest_path, dest_suffix=None):
@@ -13,11 +14,15 @@ def batch_copy(source_path, suffix, dest_path, dest_suffix=None):
 
     length = len('_{}.bvh'.format(suffix))
     for f in files:
+        src = ""
+        dst = ""
         if dest_suffix is not None:
-            cmd = 'cp \"{}\" \"{}\"'.format(os.path.join(source_path, f), os.path.join(dest_path, f[:-length] + '_{}.bvh'.format(dest_suffix)))
+            src = os.path.join(source_path, f)
+            dst = os.path.join(dest_path, f[:-length] + '_{}.bvh'.format(dest_suffix))
         else:
-            cmd = 'cp \"{}\" \"{}\"'.format(os.path.join(source_path, f), os.path.join(dest_path, f[:-length] + '.bvh'))
-        os.system(cmd)
+            src = os.path.join(source_path, f)
+            dst = os.path.join(dest_path, f[:-length] + '.bvh')
+        copyfile(src, dst)
 
 
 if __name__ == '__main__':
