@@ -16,7 +16,7 @@ Retarget one animation.
 
 ```
 
-python.exe .\datasets\preprocess.py
+python .\datasets\preprocess.py
 cd retargeting
 python train.py --save_dir=./training/
 sh demo.sh
