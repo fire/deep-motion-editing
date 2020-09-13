@@ -4,7 +4,7 @@ sys.path.append(".")
 from datasets.bvh_parser import BVH_file
 from datasets.bvh_writer import BVH_writer
 from models.IK import fix_foot_contact
-from os.path import join as pjoin
+from posixpath import join as pjoin
 
 
 # downsampling and remove redundant joints
