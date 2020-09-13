@@ -3,7 +3,7 @@ import sys
 import numpy as np
 import argparse
 import os
-
+import shutil
 
 def clean_scene():
     bpy.ops.object.select_all(action='SELECT')
@@ -162,7 +162,7 @@ def main():
         set_modifier(me, dest_arm)
 
     source_arm.hide_viewport = True
-    os.system('rm %s' % bvh_file) # remove temporary file 
+    shutil.rmtree(bvh_file, ignore_errors = True) # remove temporary file 
 
 
 if __name__ == "__main__":

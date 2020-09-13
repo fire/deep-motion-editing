@@ -6,6 +6,8 @@ from option_parser import try_mkdir
 from eval import eval
 import argparse
 from shutil import copyfile
+from posixpath import join as pjoin
+import shutil
 
 
 def batch_copy(source_path, suffix, dest_path, dest_suffix=None):
@@ -17,11 +19,11 @@ def batch_copy(source_path, suffix, dest_path, dest_suffix=None):
         src = ""
         dst = ""
         if dest_suffix is not None:
-            src = os.path.join(source_path, f)
-            dst = os.path.join(dest_path, f[:-length] + '_{}.bvh'.format(dest_suffix))
+            src = pjoin(source_path, f)
+            dst = pjoin(dest_path, f[:-length] + '_{}.bvh'.format(dest_suffix))
         else:
-            src = os.path.join(source_path, f)
-            dst = os.path.join(dest_path, f[:-length] + '.bvh')
+            src = pjoin(source_path, f)
+            dst = pjoin(dest_path, f[:-length] + '.bvh')
         copyfile(src, dst)
 
 
@@ -47,14 +49,14 @@ if __name__ == '__main__':
         if i == 0:
             cross_error += full_batch(0, prefix)
             for char in test_characters:
-                batch_copy(os.path.join(source_path, char), 0, os.path.join(cross_dest_path, char))
-                batch_copy(os.path.join(source_path, char), 'gt', os.path.join(cross_dest_path, char), 'gt')
+                batch_copy(pjoin(source_path, char), 0, pjoin(cross_dest_path, char))
+                batch_copy(pjoin(source_path, char), 'gt', pjoin(cross_dest_path, char), 'gt')
 
-        intra_dest = os.path.join(intra_dest_path, 'from_{}'.format(test_characters[i]))
+        intra_dest = pjoin(intra_dest_path, 'from_{}'.format(test_characters[i]))
         for char in test_characters:
             for char in test_characters:
-                batch_copy(os.path.join(source_path, char), 1, os.path.join(intra_dest, char))
-                batch_copy(os.path.join(source_path, char), 'gt', os.path.join(intra_dest, char), 'gt')
+                batch_copy(pjoin(source_path, char), 1, pjoin(intra_dest, char))
+                batch_copy(pjoin(source_path, char), 'gt', pjoin(intra_dest, char), 'gt')
 
         intra_error += full_batch(1, prefix)
 
@@ -64,7 +66,7 @@ if __name__ == '__main__':
     cross_error_mean = cross_error.mean()
     intra_error_mean = intra_error.mean()
 
-    os.system('rm -r %s' % pjoin(prefix, 'results/bvh'))
+    shutil.rmtree(pjoin(prefix, 'results/bvh'), ignore_errors = True)
 
     print('Intra-retargeting error:', intra_error_mean)
     print('Cross-retargeting error:', cross_error_mean)

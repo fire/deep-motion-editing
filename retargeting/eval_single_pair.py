@@ -4,6 +4,7 @@ from models import create_model
 from datasets import create_dataset
 import option_parser
 from shutil import copyfile
+from posixpath import join as pjoin
 
 
 def eval_prepare(args):
@@ -63,7 +64,7 @@ def main():
     test_device = args.cuda_device
     eval_seq = args.eval_seq
 
-    para_path = os.path.join(args.save_dir, 'para.txt')
+    para_path = pjoin(args.save_dir, 'para.txt')
     with open(para_path, 'r') as para_file:
         argv_ = para_file.readline().split()[1:]
         args = option_parser.get_parser().parse_args(argv_)

@@ -5,6 +5,7 @@ from bvh_parser import BVH_file
 from motion_dataset import MotionData
 from option_parser import get_args, try_mkdir
 from shutil import copyfile
+from posixpath import join as pjoin
 
 
 def collect_bvh(data_path, character, files):
@@ -52,15 +53,15 @@ def copy_std_bvh(data_path, character, files):
 
 if __name__ == '__main__':
     prefix = './datasets/Mixamo/'
-    characters = [f for f in os.listdir(prefix) if os.path.isdir(os.path.join(prefix, f))]
+    characters = [f for f in os.listdir(prefix) if os.path.isdir(pjoin(prefix, f))]
     if 'std_bvhs' in characters: characters.remove('std_bvhs')
     if 'mean_var' in characters: characters.remove('mean_var')
 
-    try_mkdir(os.path.join(prefix, 'std_bvhs'))
-    try_mkdir(os.path.join(prefix, 'mean_var'))
+    try_mkdir(pjoin(prefix, 'std_bvhs'))
+    try_mkdir(pjoin(prefix, 'mean_var'))
 
     for character in characters:
-        data_path = os.path.join(prefix, character)
+        data_path = pjoin(prefix, character)
         files = sorted([f for f in os.listdir(data_path) if f.endswith(".bvh")])
 
         collect_bvh(prefix, character, files)

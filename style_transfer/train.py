@@ -13,6 +13,7 @@ from itertools import cycle
 from py_utils import write_loss, print_composite, to_float
 from probe.latent_plot_utils import get_all_plots
 from trainer import Trainer
+from posixpath import join as pjoin
 
 
 def parse_args():
@@ -45,7 +46,7 @@ def main(args):
     trainer = Trainer(config)
     print("here!")
 
-    tr_info = open(os.path.join(config.info_dir, "info-network"), "w")
+    tr_info = open(pjoin(config.info_dir, "info-network"), "w")
     print(trainer.model, file=tr_info)
     tr_info.close()
 
@@ -53,8 +54,8 @@ def main(args):
     iterations = trainer.resume()
 
     # Summary Writer
-    train_writer = SummaryWriter(os.path.join(config.tb_dir, 'train'))
-    test_writer = SummaryWriter(os.path.join(config.tb_dir, 'test'))
+    train_writer = SummaryWriter(pjoin(config.tb_dir, 'train'))
+    test_writer = SummaryWriter(pjoin(config.tb_dir, 'test'))
 
     layout = {'adversarial acc & loss': {
         'acc': ['Multiline', ['gen_acc_all', 'dis_acc_all']],
@@ -128,7 +129,7 @@ def main(args):
                     vis_dicts[phase] = vis_dict
 
                 writers = {"train": train_writer, "test": test_writer}
-                get_all_plots(vis_dicts, os.path.join(config.output_dir, key_str), writers, iterations + 1)
+                get_all_plots(vis_dicts, pjoin(config.output_dir, key_str), writers, iterations + 1)
 
                 """outputs"""
                 for phase, co_loader, cl_loader in [['trainfull', trainfull_content_loader, trainfull_class_loader],
@@ -149,7 +150,7 @@ def main(args):
                                 else:
                                     outputs[key].append(output)
 
-                        output_path = os.path.join(config.output_dir, name)
+                        output_path = pjoin(config.output_dir, name)
                         print("%s saved" % name)
                         torch.save(outputs, output_path)
 

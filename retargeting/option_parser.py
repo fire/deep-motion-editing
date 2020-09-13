@@ -69,4 +69,4 @@ def get_std_bvh(args=None, dataset=None):
 def try_mkdir(path):
     import os
     if not os.path.exists(path):
-        os.system('mkdir -p {}'.format(path))
+        os.makedirs(path)

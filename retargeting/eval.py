@@ -4,10 +4,11 @@ from datasets import create_dataset, get_character_names
 import option_parser
 import torch
 from tqdm import tqdm
+from posixpath import join as pjoin
 
 
 def eval(eval_seq, save_dir, test_device='cpu'):
-    para_path = os.path.join(save_dir, 'para.txt')
+    para_path = pjoin(save_dir, 'para.txt')
     with open(para_path, 'r') as para_file:
         argv_ = para_file.readline().split()[1:]
         args = option_parser.get_parser().parse_args(argv_)

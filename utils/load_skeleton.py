@@ -6,13 +6,14 @@ from os.path import join as pjoin
 BASEPATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASEPATH)
 import BVH as BVH
+from posixpath import join as pjoin
 
 
 class Skel:
-    def __init__(self, filename=os.path.join(BASEPATH, "..", "style_transfer", "global_info", "skeleton_CMU.yml")):
+    def __init__(self, filename=pjoin(BASEPATH, "..", "style_transfer", "global_info", "skeleton_CMU.yml")):
         f = open(filename, "r")
         skel = yaml.load(f, Loader=yaml.Loader)
-        self.bvh_name = os.path.join(os.path.dirname(filename), skel['BVH'])
+        self.bvh_name = pjoin(os.path.dirname(filename), skel['BVH'])
         self.rest_bvh = BVH.load(self.bvh_name)
         self.offset = np.array(skel['offsets'])
         self.topology = np.array(skel['parents'])

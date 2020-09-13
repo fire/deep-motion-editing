@@ -13,6 +13,7 @@ sys.path.insert(0, pjoin(BASEPATH, '..', '..'))
 
 from utils.animation_data import AnimationData
 from utils.load_skeleton import Skel
+from posixpath import join as pjoin
 
 
 def pad_to_window(slice, window):
@@ -88,8 +89,8 @@ def process_file(filename, divider, window, window_step, downsample=4, skel=None
 
 
 def get_bvh_files(directory):
-    return [os.path.join(directory, f) for f in sorted(list(os.listdir(directory)))
-            if os.path.isfile(os.path.join(directory, f))
+    return [pjoin(directory, f) for f in sorted(list(os.listdir(directory)))
+            if os.path.isfile(pjoin(directory, f))
             and f.endswith('.bvh') and f != 'rest.bvh']
 
 
