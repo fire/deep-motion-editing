@@ -6,6 +6,7 @@ from models.Kinematics import ForwardKinematics
 from datasets.bvh_parser import BVH_file
 from option_parser import get_std_bvh
 import os
+from posixpath import join as pjoin
 
 
 class IntegratedModel:
@@ -55,13 +56,12 @@ class IntegratedModel:
     def save(self, path, epoch):
         from option_parser import try_mkdir
 
-        path = os.path.join(path, str(epoch))
+        path = pjoin(path, str(epoch))
         try_mkdir(path)
-
-        torch.save(self.height, os.path.join(path, 'height.pt'))
-        torch.save(self.auto_encoder.state_dict(), os.path.join(path, 'auto_encoder.pt'))
-        torch.save(self.discriminator.state_dict(), os.path.join(path, 'discriminator.pt'))
-        torch.save(self.static_encoder.state_dict(), os.path.join(path, 'static_encoder.pt'))
+        torch.save(self.height, pjoin(path, 'height.pt'))
+        torch.save(self.auto_encoder.state_dict(), pjoin(path, 'auto_encoder.pt'))
+        torch.save(self.discriminator.state_dict(), pjoin(path, 'discriminator.pt'))
+        torch.save(self.static_encoder.state_dict(), pjoin(path, 'static_encoder.pt'))
 
         print('Save at {} succeed!'.format(path))
 
@@ -76,11 +76,11 @@ class IntegratedModel:
                 raise Exception('Empty loading path')
             epoch = sorted(all)[-1]
 
-        path = os.path.join(path, str(epoch))
+        path = pjoin(path, str(epoch))
         print('loading from epoch {}......'.format(epoch))
 
-        self.auto_encoder.load_state_dict(torch.load(os.path.join(path, 'auto_encoder.pt'),
+        self.auto_encoder.load_state_dict(torch.load(pjoin(path, 'auto_encoder.pt'),
                                                      map_location=self.args.cuda_device))
-        self.static_encoder.load_state_dict(torch.load(os.path.join(path, 'static_encoder.pt'),
+        self.static_encoder.load_state_dict(torch.load(pjoin(path, 'static_encoder.pt'),
                                                        map_location=self.args.cuda_device))
         print('load succeed!')

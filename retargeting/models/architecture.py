@@ -4,6 +4,8 @@ import torch
 from models.utils import GAN_loss, ImagePool, get_ee, Criterion_EE, Eval_Criterion, Criterion_EE_2
 from models.base_model import BaseModel
 from option_parser import try_mkdir
+from posixpath import join as pjoin
+from posixpath import split as psplit
 
 import os
 
@@ -42,7 +44,7 @@ class GAN_model(BaseModel):
             for i in range(self.n_topology):
                 self.err_crit.append(Eval_Criterion(dataset.joint_topologies[i]))
             self.id_test = 0
-            self.bvh_path = os.path.join(args.save_dir, 'results/bvh')
+            self.bvh_path = pjoin(args.save_dir, 'results/bvh')
             option_parser.try_mkdir(self.bvh_path)
 
             self.writer = []
@@ -262,20 +264,20 @@ class GAN_model(BaseModel):
 
     def save(self):
         for i, model in enumerate(self.models):
-            model.save(os.path.join(self.model_save_dir, 'topology{}'.format(i)), self.epoch_cnt)
+            model.save(pjoin(self.model_save_dir, 'topology{}'.format(i)), self.epoch_cnt)
 
         for i, optimizer in enumerate(self.optimizers):
-            file_name = os.path.join(self.model_save_dir, 'optimizers/{}/{}.pt'.format(self.epoch_cnt, i))
-            try_mkdir(os.path.split(file_name)[0])
+            file_name = pjoin(self.model_save_dir, 'optimizers/{}/{}.pt'.format(self.epoch_cnt, i))
+            try_mkdir(psplit(file_name)[0])
             torch.save(optimizer.state_dict(), file_name)
 
     def load(self, epoch=None):
         for i, model in enumerate(self.models):
-            model.load(os.path.join(self.model_save_dir, 'topology{}'.format(i)), epoch)
+            model.load(pjoin(self.model_save_dir, 'topology{}'.format(i)), epoch)
 
         if self.is_train:
             for i, optimizer in enumerate(self.optimizers):
-                file_name = os.path.join(self.model_save_dir, 'optimizers/{}/{}.pt'.format(epoch, i))
+                file_name = pjoin(self.model_save_dir, 'optimizers/{}/{}.pt'.format(epoch, i))
                 optimizer.load_state_dict(torch.load(file_name))
         self.epoch_cnt = epoch
 
@@ -290,18 +292,18 @@ class GAN_model(BaseModel):
             gt_pose = self.models[src].fk.forward_from_raw(gt, self.dataset.offsets[src][idx])
             gt_poses.append(gt_pose)
             for i in idx:
-                new_path = os.path.join(self.bvh_path, self.character_names[src][i])
+                new_path = pjoin(self.bvh_path, self.character_names[src][i])
                 from option_parser import try_mkdir
                 try_mkdir(new_path)
-                self.writer[src][i].write_raw(gt[i, ...], 'quaternion', os.path.join(new_path, '{}_gt.bvh'.format(self.id_test)))
+                self.writer[src][i].write_raw(gt[i, ...], 'quaternion', pjoin(new_path, '{}_gt.bvh'.format(self.id_test)))
 
         p = 0
         for src in range(self.n_topology):
             for dst in range(self.n_topology):
                 for i in range(len(self.character_names[dst])):
-                    dst_path = os.path.join(self.bvh_path, self.character_names[dst][i])
+                    dst_path = pjoin(self.bvh_path, self.character_names[dst][i])
                     self.writer[dst][i].write_raw(self.fake_res_denorm[p][i, ...], 'quaternion',
-                                                  os.path.join(dst_path, '{}_{}.bvh'.format(self.id_test, src)))
+                                                  pjoin(dst_path, '{}_{}.bvh'.format(self.id_test, src)))
                 p += 1
 
         self.id_test += 1

@@ -14,6 +14,7 @@ sys.path.insert(0, BASEPATH)
 sys.path.insert(0, pjoin(BASEPATH, '..'))
 
 from py_utils import ensure_dirs
+from posixpath import join as pjoin
 
 
 def distinct_labels_and_indices(labels):
@@ -319,10 +320,10 @@ def show_images_from_disk(path, titles, rows, this_title):
     images = []
     for title in titles:
         name = "%s.png" % title
-        input_path = os.path.join(path, name)
+        input_path = pjoin(path, name)
         images.append(plt.imread(input_path))
 
-    this_title = os.path.join(path, this_title)
+    this_title = pjoin(path, this_title)
 
     return show_images(images, titles, this_title, rows)
 

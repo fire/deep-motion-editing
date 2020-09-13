@@ -1,6 +1,7 @@
 import bpy
 import numpy as np
 from os import listdir, path
+from posixpath import join as pjoin
 
 def fbx2bvh(data_path, file):
     sourcepath = data_path+"/"+file
@@ -29,4 +30,4 @@ if __name__ == '__main__':
     for d in directories:
       files = sorted([f for f in listdir(data_path+d) if f.endswith(".fbx")])
       for file in files:
-          fbx2bvh(path.join(data_path,d), file)
+          fbx2bvh(pjoin(data_path,d), file)

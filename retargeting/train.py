@@ -7,21 +7,24 @@ import option_parser
 import os
 from option_parser import try_mkdir
 import time
+from posixpath import join as pjoin
 
 
 def main():
     args = option_parser.get_args()
     characters = get_character_names(args)
 
-    log_path = os.path.join(args.save_dir, 'logs/')
+    log_path = pjoin(args.save_dir, 'logs/')
     try_mkdir(args.save_dir)
     try_mkdir(log_path)
 
-    with open(os.path.join(args.save_dir, 'para.txt'), 'w') as para_file:
+    with open(pjoin(args.save_dir, 'para.txt'), 'w') as para_file:
         para_file.write(' '.join(sys.argv))
 
     dataset = create_dataset(args, characters)
-    data_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=2)
+    # https://github.com/fastai/fastbook/issues/85
+    # You always need to set num_workers=0 when creating a DataLoaders because Pytorch multiprocessing does not work on Windows.
+    data_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=0)
 
     model = create_model(args, characters, dataset)
 

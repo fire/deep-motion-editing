@@ -8,13 +8,14 @@ from torch.optim import lr_scheduler
 
 from model import Model
 from py_utils import update_dict
+from posixpath import join as pjoin
 
 
 def get_model_list(dirname, key):
     if os.path.exists(dirname) is False:
         return None
-    gen_models = [os.path.join(dirname, f) for f in os.listdir(dirname) if
-                  os.path.isfile(os.path.join(dirname, f)) and
+    gen_models = [pjoin(dirname, f) for f in os.listdir(dirname) if
+                  os.path.isfile(pjoin(dirname, f)) and
                   key in f and ".pt" in f]
     if gen_models is None or len(gen_models) == 0:
         return None
@@ -117,7 +118,7 @@ class Trainer(nn.Module):
         state_dict = torch.load(last_model_name, map_location=self.cfg.device)
         self.model.dis.load_state_dict(state_dict['dis'])
 
-        optim_name = os.path.join(model_dir, 'optimizer.pt')
+        optim_name = pjoin(model_dir, 'optimizer.pt')
         state_dict = torch.load(optim_name, map_location=self.cfg.device)
         self.dis_opt.load_state_dict(state_dict['dis'])
         self.gen_opt.load_state_dict(state_dict['gen'])
@@ -129,9 +130,9 @@ class Trainer(nn.Module):
         return iterations
 
     def save(self, iterations):
-        gen_name = os.path.join(self.model_dir, 'gen_%08d.pt' % (iterations + 1))
-        dis_name = os.path.join(self.model_dir, 'dis_%08d.pt' % (iterations + 1))
-        opt_name = os.path.join(self.model_dir, 'optimizer.pt')
+        gen_name = pjoin(self.model_dir, 'gen_%08d.pt' % (iterations + 1))
+        dis_name = pjoin(self.model_dir, 'dis_%08d.pt' % (iterations + 1))
+        opt_name = pjoin(self.model_dir, 'optimizer.pt')
         torch.save({'gen': self.model.gen.state_dict()}, gen_name)
         torch.save({'dis': self.model.dis.state_dict()}, dis_name)
         torch.save({'gen': self.gen_opt.state_dict(),
