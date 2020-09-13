@@ -19,7 +19,7 @@ Retarget one animation.
 python .\datasets\preprocess.py
 cd retargeting
 python train.py --save_dir=./training/
-sh demo.sh
+python demo.py
 
 ``` 
 
@@ -35,7 +35,7 @@ To generate the demo examples with the pretrained model, run
 
 ```bash
 cd retargeting
-sh demo.sh
+python demo.py
 ```
 
 The results will be saved in `retargeting/examples` .
