@@ -3,6 +3,7 @@ import torch
 from models import create_model
 from datasets import create_dataset
 import option_parser
+from shutil import copyfile
 
 
 def eval_prepare(args):
@@ -90,8 +91,8 @@ def main():
 
     model.set_input(input_motion)
     model.test()
-
-    os.system('cp "{}/{}/0_{}.bvh" "./{}"'.format(model.bvh_path, output_character_name, src_id, output_filename))
+    bvh_path = "{}/{}/0_{}.bvh".format(model.bvh_path, output_character_name, src_id)
+    copyfile(bvh_path, output_filename)
 
 
 if __name__ == '__main__':
