@@ -37,8 +37,8 @@ We support 2 render engines provided in Blender 2.80: Eevee and Cycles, where th
 Eevee (left) is a fast, real-time, render engine provides limited quality, while Cycles (right) is a slower, unbiased, ray-tracing render engine provides photo-level rendering result. Cycles also supports CUDA and OpenGL acceleration.
 
 <p float="left">
-  <img src="blender_rendering/images/eevee.png" width="300" />
-  <img src="blender_rendering/images/cycles.png" width="300" />
+  <img src="images/eevee.png" width="300" />
+  <img src="images/cycles.png" width="300" />
 </p>
 
 ## Skinning
