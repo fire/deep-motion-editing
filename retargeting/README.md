@@ -2,12 +2,6 @@
 
 We provide pretrained models together with demo examples using animation files specified in bvh format.
 
-<!--
-
-``` bash
-python test.py -model_path MODEL_PATH -input_A PATH_A -input_B PATH_B -edit_type TYPE
-```-->
-
 ## Quick Start Chibifire
 
 Use existing software to retarget animations from A to vrm rig.
@@ -25,11 +19,7 @@ python demo.py
 
 ### Motion Retargeting
 
-<!-- `TYPE = retargeting`
-`PATH_A` - motion input  
-`PATH_B` - skeleton input -->
-
-Download and extract the test dataset from [Google Drive](https://docs.google.com/uc?export=download&id=1_849LvuT3WBEHktBT97P2oMBzeJz7-UP) or [Baidu Disk](https://pan.baidu.com/s/1z1cQiqLUgjfxlWoajIPr0g) (ye1q). Then place the `Mixamo` directory within `retargeting/datasets` .
+Download and extract the test dataset from [Google Drive](https://docs.google.com/uc?export=download&id=1_849LvuT3WBEHktBT97P2oMBzeJz7-UP). Then place the `Mixamo` directory within `retargeting/datasets` .
 
 To generate the demo examples with the pretrained model, run
 
