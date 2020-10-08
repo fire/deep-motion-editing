@@ -1,15 +1,15 @@
 # Deep-motion-editing
 
-![Python](https://img.shields.io/badge/Python->=3.7-Blue?logo=python)  ![Pytorch](https://img.shields.io/badge/PyTorch->=1.5.0-Red?logo=pytorch)
+This library provides fundamental and advanced functions to work with 3D character animation in deep learning with Pytorch.
 
-This library provides fundamental and advanced functions to work with 3D character animation in deep learning with Pytorch. The code contains end-to-end modules, from reading and editing animation files to visualizing and rendering (using Blender) them.
+This library is maintained by [K. S. Ernest (iFire) Lee](https://github.com/fire).
 
 The main deep editing operations provided here, motion retargeting, are based on work published in SIGGRAPH 2020:
 
+This library was written by [Kfir Aberman](https://kfiraberman.github.io), [Peizhuo Li](https://peizhuoli.github.io/) and [Yijia Weng](https://halfsummer11.github.io/).
+
 **Skeleton-Aware Networks for Deep Motion Retargeting**: [Project](https://deepmotionediting.github.io/retargeting) | [Paper](https://arxiv.org/abs/2005.05732) |
 [Video](https://www.youtube.com/watch?v=ym8Tnmiz5N8)
-
-This library is written and maintained by [Kfir Aberman](https://kfiraberman.github.io), [Peizhuo Li](https://peizhuoli.github.io/) and [Yijia Weng](https://halfsummer11.github.io/). The library is still under development.
 
 ## Prerequisites
 
@@ -28,7 +28,7 @@ python demo.py
 
 ### Motion Retargeting
 
-Download and extract the test dataset from [Google Drive](https://docs.google.com/uc?export=download&id=1_849LvuT3WBEHktBT97P2oMBzeJz7-UP). Then place the `Mixamo` directory within `datasets` .
+Download and extract the test dataset from https://github.com/fire/deep-motion-editing/releases/download/v0.1-alpha/training_set.tar.bz2. Then place the `Mixamo` directory within `datasets` .
 
 To generate the demo examples with the pretrained model, run
 
@@ -54,7 +54,7 @@ We provide instructions for retraining our models
 
 #### Dataset
 
-We use Mixamo dataset to train our model. You can download our preprocessed data from [Google Drive](https://drive.google.com/file/d/1BYH2t5XMGWwnu5coftehU0rTXupQvFLg/view?usp=sharing). Then place the `Mixamo` directory within `datasets` .
+We use Mixamo dataset to train our model. You can download our preprocessed data from [Github Releases](https://github.com/fire/deep-motion-editing/releases/download/v0.1-alpha/training_set.tar.bz2). Then place the `Mixamo` directory within `datasets` .
 
 Otherwise, if you want to download Mixamo dataset or use your own dataset, please follow the instructions below.
 
