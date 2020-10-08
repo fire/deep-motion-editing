@@ -7,15 +7,15 @@ from tqdm import tqdm
 from posixpath import join as pjoin
 
 
-def eval(eval_seq, save_dir, test_device='cpu'):
-    para_path = pjoin(save_dir, 'para.txt')
-    with open(para_path, 'r') as para_file:
+def eval(eval_seq, save_dir, test_device="cpu"):
+    para_path = pjoin(save_dir, "para.txt")
+    with open(para_path, "r") as para_file:
         argv_ = para_file.readline().split()[1:]
         args = option_parser.get_parser().parse_args(argv_)
 
-    args.cuda_device = test_device if torch.cuda.is_available() else 'cpu'
+    args.cuda_device = test_device if torch.cuda.is_available() else "cpu"
     args.is_train = False
-    args.rotation = 'quaternion'
+    args.rotation = "quaternion"
     args.eval_seq = eval_seq
     args.save_dir = save_dir
     character_names = get_character_names(args)
@@ -30,7 +30,7 @@ def eval(eval_seq, save_dir, test_device='cpu'):
         model.test()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = option_parser.get_parser()
     args = parser.parse_args()
     eval(args.eval_seq, args.save_dir, args.cuda_device)

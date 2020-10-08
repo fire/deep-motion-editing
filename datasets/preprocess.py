@@ -9,20 +9,20 @@ from posixpath import join as pjoin
 
 
 def collect_bvh(data_path, character, files):
-    print('begin {}'.format(character))
+    print("begin {}".format(character))
     motions = []
 
     for i, motion in enumerate(files):
-        if not os.path.exists(data_path + character + '/' + motion):
+        if not os.path.exists(data_path + character + "/" + motion):
             continue
-        file = BVH_file(data_path + character + '/' + motion)
+        file = BVH_file(data_path + character + "/" + motion)
         new_motion = file.to_tensor().permute((1, 0)).numpy()
         motions.append(new_motion)
 
-    save_file = data_path + character + '.npy'
+    save_file = data_path + character + ".npy"
 
     np.save(save_file, motions)
-    print('Npy file saved at {}'.format(save_file))
+    print("Npy file saved at {}".format(save_file))
 
 
 def write_statistics(character, path):
@@ -38,27 +38,29 @@ def write_statistics(character, path):
     mean = mean.cpu().numpy()[0, ...]
     var = var.cpu().numpy()[0, ...]
 
-    np.save(path + '{}_mean.npy'.format(character), mean)
-    np.save(path + '{}_var.npy'.format(character), var)
+    np.save(path + "{}_mean.npy".format(character), mean)
+    np.save(path + "{}_var.npy".format(character), var)
 
 
 def copy_std_bvh(data_path, character, files):
     """
     copy an arbitrary bvh file as a static information (skeleton's offset) reference
     """
-    src = data_path + character + '/' + files[0]
-    dst = './datasets/Mixamo/std_bvhs/{}.bvh'.format(character)
+    src = data_path + character + "/" + files[0]
+    dst = "./datasets/Mixamo/std_bvhs/{}.bvh".format(character)
     copyfile(src, dst)
 
 
-if __name__ == '__main__':
-    prefix = './datasets/Mixamo/'
+if __name__ == "__main__":
+    prefix = "./datasets/Mixamo/"
     characters = [f for f in os.listdir(prefix) if os.path.isdir(pjoin(prefix, f))]
-    if 'std_bvhs' in characters: characters.remove('std_bvhs')
-    if 'mean_var' in characters: characters.remove('mean_var')
+    if "std_bvhs" in characters:
+        characters.remove("std_bvhs")
+    if "mean_var" in characters:
+        characters.remove("mean_var")
 
-    try_mkdir(pjoin(prefix, 'std_bvhs'))
-    try_mkdir(pjoin(prefix, 'mean_var'))
+    try_mkdir(pjoin(prefix, "std_bvhs"))
+    try_mkdir(pjoin(prefix, "mean_var"))
 
     for character in characters:
         data_path = pjoin(prefix, character)
@@ -66,4 +68,4 @@ if __name__ == '__main__':
 
         collect_bvh(prefix, character, files)
         copy_std_bvh(prefix, character, files)
-        write_statistics(character, './datasets/Mixamo/mean_var/')
+        write_statistics(character, "./datasets/Mixamo/mean_var/")
