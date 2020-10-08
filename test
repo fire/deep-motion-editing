@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 from os.path import join as pjoin
 from get_error import full_batch
