@@ -1,6 +1,6 @@
 import sys
 import os
-sys.path.append("utils")
+sys.path.append("../utils")
 sys.path.append("./")
 import BVH
 import numpy as np
