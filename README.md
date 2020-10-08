@@ -11,8 +11,6 @@ The main deep editing operations provided here, motion retargeting, are based on
 **Skeleton-Aware Networks for Deep Motion Retargeting**: [Project](https://deepmotionediting.github.io/retargeting) | [Paper](https://arxiv.org/abs/2005.05732) |
 [Video](https://www.youtube.com/watch?v=ym8Tnmiz5N8)
 
-<img src="images/retargeting_teaser.gif" align="center"> <br>
-
 This library is written and maintained by [Kfir Aberman](https://kfiraberman.github.io), [Peizhuo Li](https://peizhuoli.github.io/) and [Yijia Weng](https://halfsummer11.github.io/). The library is still under development.
 
 ## Prerequisites
