@@ -39,8 +39,7 @@ Download and extract the test dataset from [Google Drive](https://docs.google.co
 To generate the demo examples with the pretrained model, run
 
 ```bash
-cd retargeting
-python demo.py
+./demo
 ```
 
 The results will be saved in `retargeting/examples` .
@@ -48,8 +47,7 @@ The results will be saved in `retargeting/examples` .
 To reconstruct the quantitative result with the pretrained model, run
 
 ``` bash
-cd retargeting
-python test.py
+./test
 ```
 
 The retargeted demo results, that consists both intra-structual retargeting and cross-structural retargeting, will be saved in `retargeting/pretrained/results` .
