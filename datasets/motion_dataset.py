@@ -1,7 +1,7 @@
 from torch.utils.data import Dataset
 import os
 import sys
-sys.path.append("../utils")
+sys.path.append("utils")
 import numpy as np
 import torch
 from Quaternions import Quaternions

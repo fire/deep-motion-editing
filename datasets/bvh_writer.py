@@ -1,5 +1,5 @@
 import sys
-sys.path.append("../utils")
+sys.path.append("utils")
 import numpy as np
 from Quaternions import Quaternions
 from models.skeleton import build_joint_topology

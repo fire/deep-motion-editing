@@ -1,7 +1,7 @@
 import sys
 import os
 from option_parser import get_std_bvh
-sys.path.append("../utils")
+sys.path.append("utils")
 import BVH as BVH
 import numpy as np
 from datasets.bvh_parser import BVH_file
