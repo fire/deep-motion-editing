@@ -4,7 +4,7 @@ from models.Kinematics import InverseKinematics
 from datasets.bvh_parser import BVH_file
 from tqdm import tqdm
 
-sys.path.append('../utils')
+sys.path.append("../utils")
 
 import BVH as BVH
 import Animation as Animation
@@ -46,7 +46,7 @@ def get_foot_contact(file_name, ref_height):
 
 
 def get_ee_id_by_names(joint_names):
-    ees = ['RightToeBase', 'LeftToeBase', 'LeftFoot', 'RightFoot']
+    ees = ["RightToeBase", "LeftToeBase", "LeftFoot", "RightFoot"]
     ee_id = []
     for i, ee in enumerate(ees):
         ee_id.append(joint_names.index(ee))
@@ -76,7 +76,7 @@ def fix_foot_contact(input_file, foot_file, output_file, ref_height):
             while t + 1 < T and fixed[t + 1] == 1:
                 t += 1
                 avg += glb[t, fidx].copy()
-            avg /= (t - s + 1)
+            avg /= t - s + 1
 
             for j in range(s, t + 1):
                 glb[j, fidx] = avg.copy()
@@ -104,22 +104,25 @@ def fix_foot_contact(input_file, foot_file, output_file, ref_height):
             if not consl and not consr:
                 continue
             if consl and consr:
-                litp = lerp(alpha(1.0 * (s - l + 1) / (L + 1)),
-                            glb[s, fidx], glb[l, fidx])
-                ritp = lerp(alpha(1.0 * (r - s + 1) / (L + 1)),
-                            glb[s, fidx], glb[r, fidx])
-                itp = lerp(alpha(1.0 * (s - l + 1) / (r - l + 1)),
-                           ritp, litp)
+                litp = lerp(
+                    alpha(1.0 * (s - l + 1) / (L + 1)), glb[s, fidx], glb[l, fidx]
+                )
+                ritp = lerp(
+                    alpha(1.0 * (r - s + 1) / (L + 1)), glb[s, fidx], glb[r, fidx]
+                )
+                itp = lerp(alpha(1.0 * (s - l + 1) / (r - l + 1)), ritp, litp)
                 glb[s, fidx] = itp.copy()
                 continue
             if consl:
-                litp = lerp(alpha(1.0 * (s - l + 1) / (L + 1)),
-                            glb[s, fidx], glb[l, fidx])
+                litp = lerp(
+                    alpha(1.0 * (s - l + 1) / (L + 1)), glb[s, fidx], glb[l, fidx]
+                )
                 glb[s, fidx] = litp.copy()
                 continue
             if consr:
-                ritp = lerp(alpha(1.0 * (r - s + 1) / (L + 1)),
-                            glb[s, fidx], glb[r, fidx])
+                ritp = lerp(
+                    alpha(1.0 * (r - s + 1) / (L + 1)), glb[s, fidx], glb[r, fidx]
+                )
                 glb[s, fidx] = ritp.copy()
 
     # glb is ready
@@ -134,7 +137,7 @@ def fix_foot_contact(input_file, foot_file, output_file, ref_height):
 
     ik_solver = InverseKinematics(rot, pos, offset, anim.parents, glb)
 
-    print('Fixing foot contact using IK...')
+    print("Fixing foot contact using IK...")
     for i in tqdm(range(50)):
         ik_solver.step()
 

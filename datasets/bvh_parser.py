@@ -1,5 +1,6 @@
 import sys
 import torch
+
 sys.path.append("utils")
 sys.path.append(".")
 import BVH_mod as BVH
@@ -15,17 +16,285 @@ Specify the joints that you want to use in training and test. Other joints will 
 Please start with root joint, then left leg chain, right leg chain, head chain, left shoulder chain and right shoulder chain.
 See the examples below.
 """
-corps_name_1 = ['Pelvis', 'LeftUpLeg', 'LeftLeg', 'LeftFoot', 'LeftToeBase', 'RightUpLeg', 'RightLeg', 'RightFoot', 'RightToeBase', 'Hips', 'Spine', 'Spine1', 'Spine2', 'Neck', 'Head', 'LeftShoulder', 'LeftArm', 'LeftForeArm', 'LeftHand', 'RightShoulder', 'RightArm', 'RightForeArm', 'RightHand']
-corps_name_2 = ['Hips', 'LeftUpLeg', 'LeftLeg', 'LeftFoot', 'LeftToeBase', 'LeftToe_End', 'RightUpLeg', 'RightLeg', 'RightFoot', 'RightToeBase', 'RightToe_End', 'Spine', 'Spine1', 'Spine2', 'Neck', 'Head', 'HeadTop_End', 'LeftShoulder', 'LeftArm', 'LeftForeArm', 'LeftHand', 'RightShoulder', 'RightArm', 'RightForeArm', 'RightHand']
-corps_name_3 = ['Hips', 'LeftUpLeg', 'LeftLeg', 'LeftFoot', 'RightUpLeg', 'RightLeg', 'RightFoot', 'Spine', 'Spine1', 'Neck', 'Head', 'LeftShoulder', 'LeftArm', 'LeftForeArm', 'LeftHand', 'RightShoulder', 'RightArm', 'RightForeArm', 'RightHand']
-corps_name_boss = ['Hips', 'LeftUpLeg', 'LeftLeg', 'LeftFoot', 'LeftToeBase', 'RightUpLeg', 'RightLeg', 'RightFoot', 'RightToeBase', 'Spine', 'Spine1', 'Spine2', 'Neck', 'Neck1', 'Head', 'LeftShoulder', 'LeftArm', 'LeftForeArm', 'LeftHand', 'RightShoulder', 'RightArm', 'RightForeArm', 'RightHand']
-corps_name_boss2 = ['Hips', 'LeftUpLeg', 'LeftLeg', 'LeftFoot', 'LeftToeBase', 'Left_End', 'RightUpLeg', 'RightLeg', 'RightFoot', 'RightToeBase', 'Right_End', 'Spine', 'Spine1', 'Spine2', 'Neck', 'Neck1', 'Head', 'LeftShoulder', 'LeftArm', 'LeftForeArm', 'LeftHand', 'RightShoulder', 'RightArm', 'RightForeArm', 'RightHand']
-corps_name_cmu = ['Hips', 'LHipJoint', 'LeftUpLeg', 'LeftLeg', 'LeftFoot', 'LeftToeBase', 'RHipJoint', 'RightUpLeg', 'RightLeg', 'RightFoot', 'RightToeBase', 'LowerBack', 'Spine', 'Spine1', 'Neck', 'Neck1', 'Head', 'LeftShoulder', 'LeftArm', 'LeftForeArm', 'LeftHand', 'RightShoulder', 'RightArm', 'RightForeArm', 'RightHand']
-corps_name_monkey = ['Hips', 'LeftUpLeg', 'LeftLeg', 'LeftFoot', 'LeftToeBase', 'RightUpLeg', 'RightLeg', 'RightFoot', 'RightToeBase', 'Spine', 'Spine1', 'Neck', 'Head', 'LeftShoulder', 'LeftArm', 'LeftForeArm', 'LeftHand', 'RightShoulder', 'RightArm', 'RightForeArm', 'RightHand']
-corps_name_three_arms = ['Three_Arms_Hips', 'LeftUpLeg', 'LeftLeg', 'LeftFoot', 'LeftToeBase', 'RightUpLeg', 'RightLeg', 'RightFoot', 'RightToeBase', 'Spine', 'Spine1', 'Neck', 'Head', 'LeftShoulder', 'LeftArm', 'LeftForeArm', 'LeftHand', 'RightShoulder', 'RightArm', 'RightForeArm', 'RightHand']
-corps_name_three_arms_split = ['Three_Arms_split_Hips', 'LeftUpLeg', 'LeftLeg', 'LeftFoot', 'LeftToeBase', 'RightUpLeg', 'RightLeg', 'RightFoot', 'RightToeBase', 'Spine', 'Spine1', 'Neck', 'Head', 'LeftShoulder', 'LeftArm', 'LeftForeArm', 'LeftHand', 'LeftHand_split', 'RightShoulder', 'RightArm', 'RightForeArm', 'RightHand', 'RightHand_split']
-corps_name_Prisoner = ['HipsPrisoner', 'LeftUpLeg', 'LeftLeg', 'LeftFoot', 'LeftToeBase', 'LeftToe_End', 'RightUpLeg', 'RightLeg', 'RightFoot', 'RightToeBase', 'RightToe_End', 'Spine', 'Spine1', 'Spine2', 'Neck', 'Head', 'HeadTop_End', 'LeftShoulder', 'LeftArm', 'LeftForeArm', 'LeftHand', 'RightShoulder', 'RightArm', 'RightForeArm']
-corps_name_mixamo2_m = ['Hips', 'LeftUpLeg', 'LeftLeg', 'LeftFoot', 'LeftToeBase', 'LeftToe_End', 'RightUpLeg', 'RightLeg', 'RightFoot', 'RightToeBase', 'RightToe_End', 'Spine', 'Spine1', 'Spine1_split', 'Spine2', 'Neck', 'Head', 'HeadTop_End', 'LeftShoulder', 'LeftShoulder_split', 'LeftArm', 'LeftForeArm', 'LeftHand', 'RightShoulder', 'RightShoulder_split', 'RightArm', 'RightForeArm', 'RightHand']
+corps_name_1 = [
+    "Pelvis",
+    "LeftUpLeg",
+    "LeftLeg",
+    "LeftFoot",
+    "LeftToeBase",
+    "RightUpLeg",
+    "RightLeg",
+    "RightFoot",
+    "RightToeBase",
+    "Hips",
+    "Spine",
+    "Spine1",
+    "Spine2",
+    "Neck",
+    "Head",
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+]
+corps_name_2 = [
+    "Hips",
+    "LeftUpLeg",
+    "LeftLeg",
+    "LeftFoot",
+    "LeftToeBase",
+    "LeftToe_End",
+    "RightUpLeg",
+    "RightLeg",
+    "RightFoot",
+    "RightToeBase",
+    "RightToe_End",
+    "Spine",
+    "Spine1",
+    "Spine2",
+    "Neck",
+    "Head",
+    "HeadTop_End",
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+]
+corps_name_3 = [
+    "Hips",
+    "LeftUpLeg",
+    "LeftLeg",
+    "LeftFoot",
+    "RightUpLeg",
+    "RightLeg",
+    "RightFoot",
+    "Spine",
+    "Spine1",
+    "Neck",
+    "Head",
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+]
+corps_name_boss = [
+    "Hips",
+    "LeftUpLeg",
+    "LeftLeg",
+    "LeftFoot",
+    "LeftToeBase",
+    "RightUpLeg",
+    "RightLeg",
+    "RightFoot",
+    "RightToeBase",
+    "Spine",
+    "Spine1",
+    "Spine2",
+    "Neck",
+    "Neck1",
+    "Head",
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+]
+corps_name_boss2 = [
+    "Hips",
+    "LeftUpLeg",
+    "LeftLeg",
+    "LeftFoot",
+    "LeftToeBase",
+    "Left_End",
+    "RightUpLeg",
+    "RightLeg",
+    "RightFoot",
+    "RightToeBase",
+    "Right_End",
+    "Spine",
+    "Spine1",
+    "Spine2",
+    "Neck",
+    "Neck1",
+    "Head",
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+]
+corps_name_cmu = [
+    "Hips",
+    "LHipJoint",
+    "LeftUpLeg",
+    "LeftLeg",
+    "LeftFoot",
+    "LeftToeBase",
+    "RHipJoint",
+    "RightUpLeg",
+    "RightLeg",
+    "RightFoot",
+    "RightToeBase",
+    "LowerBack",
+    "Spine",
+    "Spine1",
+    "Neck",
+    "Neck1",
+    "Head",
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+]
+corps_name_monkey = [
+    "Hips",
+    "LeftUpLeg",
+    "LeftLeg",
+    "LeftFoot",
+    "LeftToeBase",
+    "RightUpLeg",
+    "RightLeg",
+    "RightFoot",
+    "RightToeBase",
+    "Spine",
+    "Spine1",
+    "Neck",
+    "Head",
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+]
+corps_name_three_arms = [
+    "Three_Arms_Hips",
+    "LeftUpLeg",
+    "LeftLeg",
+    "LeftFoot",
+    "LeftToeBase",
+    "RightUpLeg",
+    "RightLeg",
+    "RightFoot",
+    "RightToeBase",
+    "Spine",
+    "Spine1",
+    "Neck",
+    "Head",
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+]
+corps_name_three_arms_split = [
+    "Three_Arms_split_Hips",
+    "LeftUpLeg",
+    "LeftLeg",
+    "LeftFoot",
+    "LeftToeBase",
+    "RightUpLeg",
+    "RightLeg",
+    "RightFoot",
+    "RightToeBase",
+    "Spine",
+    "Spine1",
+    "Neck",
+    "Head",
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "LeftHand_split",
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+    "RightHand_split",
+]
+corps_name_Prisoner = [
+    "HipsPrisoner",
+    "LeftUpLeg",
+    "LeftLeg",
+    "LeftFoot",
+    "LeftToeBase",
+    "LeftToe_End",
+    "RightUpLeg",
+    "RightLeg",
+    "RightFoot",
+    "RightToeBase",
+    "RightToe_End",
+    "Spine",
+    "Spine1",
+    "Spine2",
+    "Neck",
+    "Head",
+    "HeadTop_End",
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+]
+corps_name_mixamo2_m = [
+    "Hips",
+    "LeftUpLeg",
+    "LeftLeg",
+    "LeftFoot",
+    "LeftToeBase",
+    "LeftToe_End",
+    "RightUpLeg",
+    "RightLeg",
+    "RightFoot",
+    "RightToeBase",
+    "RightToe_End",
+    "Spine",
+    "Spine1",
+    "Spine1_split",
+    "Spine2",
+    "Neck",
+    "Head",
+    "HeadTop_End",
+    "LeftShoulder",
+    "LeftShoulder_split",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightShoulder",
+    "RightShoulder_split",
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+]
 # corps_name_example = ['Root', 'LeftUpLeg', ..., 'LeftToe', 'RightUpLeg', ..., 'RightToe', 'Spine', ..., 'Head', 'LeftShoulder', ..., 'LeftHand', 'RightShoulder', ..., 'RightHand']
 
 """
@@ -33,20 +302,54 @@ corps_name_mixamo2_m = ['Hips', 'LeftUpLeg', 'LeftLeg', 'LeftFoot', 'LeftToeBase
 Specify five end effectors' name.
 Please follow the same order as in 1.
 """
-ee_name_1 = ['LeftToeBase', 'RightToeBase', 'Head', 'LeftHand', 'RightHand']
-ee_name_2 = ['LeftToe_End', 'RightToe_End', 'HeadTop_End', 'LeftHand', 'RightHand']
-ee_name_3 = ['LeftFoot', 'RightFoot', 'Head', 'LeftHand', 'RightHand']
-ee_name_cmu = ['LeftToeBase', 'RightToeBase', 'Head', 'LeftHand', 'RightHand']
-ee_name_monkey = ['LeftToeBase', 'RightToeBase', 'Head', 'LeftHand', 'RightHand']
-ee_name_three_arms_split = ['LeftToeBase', 'RightToeBase', 'Head', 'LeftHand_split', 'RightHand_split']
-ee_name_Prisoner = ['LeftToe_End', 'RightToe_End', 'HeadTop_End', 'LeftHand', 'RightForeArm']
+ee_name_1 = ["LeftToeBase", "RightToeBase", "Head", "LeftHand", "RightHand"]
+ee_name_2 = ["LeftToe_End", "RightToe_End", "HeadTop_End", "LeftHand", "RightHand"]
+ee_name_3 = ["LeftFoot", "RightFoot", "Head", "LeftHand", "RightHand"]
+ee_name_cmu = ["LeftToeBase", "RightToeBase", "Head", "LeftHand", "RightHand"]
+ee_name_monkey = ["LeftToeBase", "RightToeBase", "Head", "LeftHand", "RightHand"]
+ee_name_three_arms_split = [
+    "LeftToeBase",
+    "RightToeBase",
+    "Head",
+    "LeftHand_split",
+    "RightHand_split",
+]
+ee_name_Prisoner = [
+    "LeftToe_End",
+    "RightToe_End",
+    "HeadTop_End",
+    "LeftHand",
+    "RightForeArm",
+]
 # ee_name_example = ['LeftToe', 'RightToe', 'Head', 'LeftHand', 'RightHand']
 
 
-
-corps_names = [corps_name_1, corps_name_2, corps_name_3, corps_name_cmu, corps_name_monkey, corps_name_boss,
-               corps_name_boss, corps_name_three_arms, corps_name_three_arms_split, corps_name_Prisoner, corps_name_mixamo2_m]
-ee_names = [ee_name_1, ee_name_2, ee_name_3, ee_name_cmu, ee_name_monkey, ee_name_1, ee_name_1, ee_name_1, ee_name_three_arms_split, ee_name_Prisoner, ee_name_2]
+corps_names = [
+    corps_name_1,
+    corps_name_2,
+    corps_name_3,
+    corps_name_cmu,
+    corps_name_monkey,
+    corps_name_boss,
+    corps_name_boss,
+    corps_name_three_arms,
+    corps_name_three_arms_split,
+    corps_name_Prisoner,
+    corps_name_mixamo2_m,
+]
+ee_names = [
+    ee_name_1,
+    ee_name_2,
+    ee_name_3,
+    ee_name_cmu,
+    ee_name_monkey,
+    ee_name_1,
+    ee_name_1,
+    ee_name_1,
+    ee_name_three_arms_split,
+    ee_name_Prisoner,
+    ee_name_2,
+]
 """
 3.
 Add previously added corps_name and ee_name at the end of the two above lists.
@@ -70,8 +373,8 @@ class BVH_file:
         self.ee_length = []
 
         for i, name in enumerate(self._names):
-            if ':' in name:
-                name = name[name.find(':') + 1:]
+            if ":" in name:
+                name = name[name.find(":") + 1 :]
                 self._names[i] = name
 
         full_fill = [1] * len(corps_names)
@@ -92,22 +395,22 @@ class BVH_file:
         if self.skeleton_type == 2 and full_fill[4]:
             self.skeleton_type = 4
 
-        if 'Neck1' in self._names:
+        if "Neck1" in self._names:
             self.skeleton_type = 5
-        if 'Left_End' in self._names:
+        if "Left_End" in self._names:
             self.skeleton_type = 6
-        if 'Three_Arms_Hips' in self._names:
+        if "Three_Arms_Hips" in self._names:
             self.skeleton_type = 7
-        if 'Three_Arms_Hips_split' in self._names:
+        if "Three_Arms_Hips_split" in self._names:
             self.skeleton_type = 8
 
-        if 'LHipJoint' in self._names:
+        if "LHipJoint" in self._names:
             self.skeleton_type = 3
 
-        if 'HipsPrisoner' in self._names:
+        if "HipsPrisoner" in self._names:
             self.skeleton_type = 9
 
-        if 'Spine1_split' in self._names:
+        if "Spine1_split" in self._names:
             self.skeleton_type = 10
 
         """
@@ -120,15 +423,17 @@ class BVH_file:
 
         if self.skeleton_type == -1:
             print(self._names)
-            raise Exception('Unknown skeleton')
+            raise Exception("Unknown skeleton")
 
         if self.skeleton_type == 0:
             self.set_new_root(1)
 
         self.details = []
         for i, name in enumerate(self._names):
-            if ':' in name: name = name[name.find(':')+1:]
-            if name not in corps_names[self.skeleton_type]: self.details.append(i)
+            if ":" in name:
+                name = name[name.find(":") + 1 :]
+            if name not in corps_names[self.skeleton_type]:
+                self.details.append(i)
         self.joint_num = self.anim.shape[1]
         self.corps = []
         self.simplified_name = []
@@ -142,9 +447,10 @@ class BVH_file:
                     break
 
         if len(self.corps) != len(corps_names[self.skeleton_type]):
-            for i in self.corps: print(self._names[i], end=' ')
-            print(self.corps, self.skeleton_type, len(self.corps), sep='\n')
-            raise Exception('Problem in file', file_path)
+            for i in self.corps:
+                print(self._names[i], end=" ")
+            print(self.corps, self.skeleton_type, len(self.corps), sep="\n")
+            raise Exception("Problem in file", file_path)
 
         self.ee_id = []
         for i in ee_names[self.skeleton_type]:
@@ -169,18 +475,20 @@ class BVH_file:
         global_position[1:, :] += (1 - alpha) * global_position[0, :]
 
     def rotate(self, theta, axis):
-        q = Quaternions(np.hstack((np.cos(theta/2), np.sin(theta/2) * axis)))
+        q = Quaternions(np.hstack((np.cos(theta / 2), np.sin(theta / 2) * axis)))
         position = self.anim.positions[:, 0, :].copy()
         rotation = self.anim.rotations[:, 0, :]
         position[1:, ...] -= position[0:-1, ...]
-        q_position = Quaternions(np.hstack((np.zeros((position.shape[0], 1)), position)))
+        q_position = Quaternions(
+            np.hstack((np.zeros((position.shape[0], 1)), position))
+        )
         q_rotation = Quaternions.from_euler(np.radians(rotation))
         q_rotation = q * q_rotation
         q_position = q * q_position * (-q)
         self.anim.rotations[:, 0, :] = np.degrees(q_rotation.euler())
         position = q_position.imaginaries
         for i in range(1, position.shape[0]):
-            position[i] += position[i-1]
+            position[i] += position[i - 1]
         self.anim.positions[:, 0, :] = position
 
     @property
@@ -188,7 +496,8 @@ class BVH_file:
         if self._topology is None:
             self._topology = self.anim.parents[self.corps].copy()
             for i in range(self._topology.shape[0]):
-                if i >= 1: self._topology[i] = self.simplify_map[self._topology[i]]
+                if i >= 1:
+                    self._topology[i] = self.simplify_map[self._topology[i]]
             self._topology = tuple(self._topology)
         return self._topology
 
@@ -250,7 +559,7 @@ class BVH_file:
         return res
 
     def write(self, file_path):
-        BVH.save(file_path, self.anim, self.names, self.frametime, order='xyz')
+        BVH.save(file_path, self.anim, self.names, self.frametime, order="xyz")
 
     def from_numpy(self, motions, frametime=None, quater=False):
         if frametime is not None:
@@ -260,7 +569,12 @@ class BVH_file:
         self.anim.positions = positions[:, np.newaxis, :]
         if quater:
             rotations = motions[:, :-3].reshape(motions.shape[0], -1, 4)
-            norm = rotations[:, :, 0]**2 + rotations[:, :, 1]**2 + rotations[:, :, 2]**2 + rotations[:, :, 3]**2
+            norm = (
+                rotations[:, :, 0] ** 2
+                + rotations[:, :, 1] ** 2
+                + rotations[:, :, 2] ** 2
+                + rotations[:, :, 3] ** 2
+            )
             norm = np.repeat(norm[:, :, np.newaxis], 4, axis=2)
             rotations /= norm
             rotations = Quaternions(rotations)
@@ -276,10 +590,12 @@ class BVH_file:
         self.anim.rotations = rotations_full
 
     def get_ee_length(self):
-        if len(self.ee_length): return self.ee_length
+        if len(self.ee_length):
+            return self.ee_length
         degree = [0] * len(self.topology)
         for i in self.topology:
-            if i < 0: continue
+            if i < 0:
+                continue
             degree[i] += 1
 
         for j in self.ee_id:
@@ -304,17 +620,21 @@ class BVH_file:
 
     def set_new_root(self, new_root):
         euler = torch.tensor(self.anim.rotations[:, 0, :], dtype=torch.float)
-        transform = ForwardKinematics.transform_from_euler(euler, 'xyz')
+        transform = ForwardKinematics.transform_from_euler(euler, "xyz")
         offset = torch.tensor(self.anim.offsets[new_root], dtype=torch.float)
         new_pos = torch.matmul(transform, offset)
         new_pos = new_pos.numpy() + self.anim.positions[:, 0, :]
         self.anim.offsets[0] = -self.anim.offsets[new_root]
-        self.anim.offsets[new_root] = np.zeros((3, ))
+        self.anim.offsets[new_root] = np.zeros((3,))
         self.anim.positions[:, new_root, :] = new_pos
-        rot0 = Quaternions.from_euler(np.radians(self.anim.rotations[:, 0, :]), order='xyz')
-        rot1 = Quaternions.from_euler(np.radians(self.anim.rotations[:, new_root, :]), order='xyz')
+        rot0 = Quaternions.from_euler(
+            np.radians(self.anim.rotations[:, 0, :]), order="xyz"
+        )
+        rot1 = Quaternions.from_euler(
+            np.radians(self.anim.rotations[:, new_root, :]), order="xyz"
+        )
         new_rot1 = rot0 * rot1
-        new_rot0 = (-rot1)
+        new_rot0 = -rot1
         new_rot0 = np.degrees(new_rot0.euler())
         new_rot1 = np.degrees(new_rot1.euler())
         self.anim.rotations[:, 0, :] = new_rot0
@@ -331,7 +651,9 @@ class BVH_file:
             new_seq.append(x)
             vis[x] = 1
             for y in range(len(vis)):
-                if not vis[y] and (self.anim.parents[x] == y or self.anim.parents[y] == x):
+                if not vis[y] and (
+                    self.anim.parents[x] == y or self.anim.parents[y] == x
+                ):
                     relabel(y)
                     new_parent[new_idx[y]] = new_idx[x]
 

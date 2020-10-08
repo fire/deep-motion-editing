@@ -5,6 +5,7 @@ import Animation as Animation
 
 """ Maya Functions """
 
+
 def load_from_maya(root):
     """
     Load joint parents and names from maya
@@ -26,32 +27,39 @@ def load_from_maya(root):
         Joint index -1 is used to represent
         that there is no parent joint
     """
-    
+
     import pymel.core as pm
-    
+
     names = []
     parents = []
 
     def unload_joint(j, parents, par):
-        
+
         id = len(names)
         names.append(j)
         parents.append(par)
-        
-        children = [c for c in j.getChildren() if
-                isinstance(c, pm.nt.Transform) and
-            not isinstance(c, pm.nt.Constraint) and
-            not any(pm.listRelatives(c, s=True)) and 
-            (any(pm.listRelatives(c, ad=True, ap=False, type='joint')) or isinstance(c, pm.nt.Joint))]
-        
+
+        children = [
+            c
+            for c in j.getChildren()
+            if isinstance(c, pm.nt.Transform)
+            and not isinstance(c, pm.nt.Constraint)
+            and not any(pm.listRelatives(c, s=True))
+            and (
+                any(pm.listRelatives(c, ad=True, ap=False, type="joint"))
+                or isinstance(c, pm.nt.Joint)
+            )
+        ]
+
         map(lambda c: unload_joint(c, parents, id), children)
 
     unload_joint(root, parents, -1)
-    
+
     return (names, parents)
 
-    
+
 """ Family Functions """
+
 
 def joints(parents):
     """
@@ -69,6 +77,7 @@ def joints(parents):
     """
     return np.arange(len(parents), dtype=int)
 
+
 def joints_list(parents):
     """
     Parameters
@@ -84,8 +93,9 @@ def joints_list(parents):
         List of arrays of joint idices for
         each joint
     """
-    return list(joints(parents)[:,np.newaxis])
-    
+    return list(joints(parents)[:, np.newaxis])
+
+
 def parents_list(parents):
     """
     Parameters
@@ -101,9 +111,9 @@ def parents_list(parents):
         List of arrays of joint idices for
         the parents of each joint
     """
-    return list(parents[:,np.newaxis])
-    
-    
+    return list(parents[:, np.newaxis])
+
+
 def children_list(parents):
     """
     Parameters
@@ -119,13 +129,13 @@ def children_list(parents):
         List of arrays of joint indices for
         the children of each joint
     """
-    
+
     def joint_children(i):
         return [j for j, p in enumerate(parents) if p == i]
-        
+
     return list(map(lambda j: np.array(joint_children(j)), joints(parents)))
-     
-     
+
+
 def descendants_list(parents):
     """
     Parameters
@@ -141,15 +151,15 @@ def descendants_list(parents):
         List of arrays of joint idices for
         the descendants of each joint
     """
-    
+
     children = children_list(parents)
-    
+
     def joint_descendants(i):
         return sum([joint_descendants(j) for j in children[i]], list(children[i]))
-    
+
     return list(map(lambda j: np.array(joint_descendants(j)), joints(parents)))
-    
-    
+
+
 def ancestors_list(parents):
     """
     Parameters
@@ -165,16 +175,17 @@ def ancestors_list(parents):
         List of arrays of joint idices for
         the ancestors of each joint
     """
-    
+
     decendants = descendants_list(parents)
-    
+
     def joint_ancestors(i):
         return [j for j in joints(parents) if i in decendants[j]]
-        
+
     return list(map(lambda j: np.array(joint_ancestors(j)), joints(parents)))
-    
-    
+
+
 """ Mask Functions """
+
 
 def mask(parents, filter):
     """
@@ -208,17 +219,34 @@ def mask(parents, filter):
     m = np.zeros((len(parents), len(parents))).astype(bool)
     jnts = joints(parents)
     fltr = filter(parents)
-    for i,f in enumerate(fltr): m[i,:] = np.any(jnts[:,np.newaxis] == f[np.newaxis,:], axis=1)
+    for i, f in enumerate(fltr):
+        m[i, :] = np.any(jnts[:, np.newaxis] == f[np.newaxis, :], axis=1)
     return m
 
-def joints_mask(parents): return np.eye(len(parents)).astype(bool)
-def children_mask(parents): return mask(parents, children_list)
-def parents_mask(parents): return mask(parents, parents_list)
-def descendants_mask(parents): return mask(parents, descendants_list)
-def ancestors_mask(parents): return mask(parents, ancestors_list)
-    
+
+def joints_mask(parents):
+    return np.eye(len(parents)).astype(bool)
+
+
+def children_mask(parents):
+    return mask(parents, children_list)
+
+
+def parents_mask(parents):
+    return mask(parents, parents_list)
+
+
+def descendants_mask(parents):
+    return mask(parents, descendants_list)
+
+
+def ancestors_mask(parents):
+    return mask(parents, ancestors_list)
+
+
 """ Search Functions """
-    
+
+
 def joint_chain_ascend(parents, start, end):
     chain = []
     while start != end:
@@ -226,10 +254,11 @@ def joint_chain_ascend(parents, start, end):
         start = parents[start]
     chain.append(end)
     return np.array(chain, dtype=int)
-    
-    
+
+
 """ Constraints """
-    
+
+
 def constraints(anim, **kwargs):
     """
     Constraint list for Animation
@@ -258,37 +287,40 @@ def constraints(anim, **kwargs):
         (Joint1, Joint2, Masses1, Masses2, Lengths)
     
     """
-    
-    masses = kwargs.pop('masses', None)
-    
+
+    masses = kwargs.pop("masses", None)
+
     children = children_list(anim.parents)
     constraints = []
 
     points_offsets = Animation.offsets_global(anim)
     points = Animation.positions_global(anim)
-    
+
     if masses is None:
-        masses = 1.0 / (0.1 + np.absolute(points_offsets[:,1]))
+        masses = 1.0 / (0.1 + np.absolute(points_offsets[:, 1]))
         masses = masses[np.newaxis].repeat(len(anim), axis=0)
-    
+
     for j in xrange(anim.shape[1]):
-                
+
         """ Add constraints between all joints and their children """
         for c0 in children[j]:
-            
-            dists = np.sum((points[:, c0] - points[:, j])**2.0, axis=1)**0.5
-            constraints.append((c0, j, masses[:,c0], masses[:,j], dists))
-            
+
+            dists = np.sum((points[:, c0] - points[:, j]) ** 2.0, axis=1) ** 0.5
+            constraints.append((c0, j, masses[:, c0], masses[:, j], dists))
+
             """ Add constraints between all children of joint """
             for c1 in children[j]:
-                if c0 == c1: continue
+                if c0 == c1:
+                    continue
 
-                dists = np.sum((points[:, c0] - points[:, c1])**2.0, axis=1)**0.5
-                constraints.append((c0, c1, masses[:,c0], masses[:,c1], dists))  
-    
+                dists = np.sum((points[:, c0] - points[:, c1]) ** 2.0, axis=1) ** 0.5
+                constraints.append((c0, c1, masses[:, c0], masses[:, c1], dists))
+
     return constraints
-    
+
+
 """ Graph Functions """
+
 
 def graph(anim):
     """
@@ -324,18 +356,19 @@ def graph(anim):
         directly connected are assigned
         the weight `0`.
     """
-    
+
     graph = np.zeros(anim.shape[1], anim.shape[1])
-    lengths = np.sum(anim.offsets**2.0, axis=1)**0.5 + 0.001
-    
-    for i,p in enumerate(anim.parents):
-        if p == -1: continue
-        graph[i,p] = lengths[p]
-        graph[p,i] = lengths[p]
-    
+    lengths = np.sum(anim.offsets ** 2.0, axis=1) ** 0.5 + 0.001
+
+    for i, p in enumerate(anim.parents):
+        if p == -1:
+            continue
+        graph[i, p] = lengths[p]
+        graph[p, i] = lengths[p]
+
     return graph
 
-    
+
 def distances(anim):
     """
     Generates a distance matrix for
@@ -357,43 +390,58 @@ def distances(anim):
         from some joint N to some
         joint M
     """
-    
+
     distances = np.zeros((anim.shape[1], anim.shape[1]))
     generated = distances.copy().astype(bool)
-    
-    joint_lengths = np.sum(anim.offsets**2.0, axis=1)**0.5
+
+    joint_lengths = np.sum(anim.offsets ** 2.0, axis=1) ** 0.5
     joint_children = children_list(anim)
-    joint_parents  = parents_list(anim)
-    
+    joint_parents = parents_list(anim)
+
     def find_distance(distances, generated, prev, i, j):
-        
-        """ If root, identity, or already generated, return """ 
-        if j == -1: return (0.0, True)
-        if j ==  i: return (0.0, True)
-        if generated[i,j]: return (distances[i,j], True)
-        
+
+        """ If root, identity, or already generated, return """
+        if j == -1:
+            return (0.0, True)
+        if j == i:
+            return (0.0, True)
+        if generated[i, j]:
+            return (distances[i, j], True)
+
         """ Find best distances along parents and children """
-        par_dists = [(joint_lengths[j], find_distance(distances, generated, j, i, p)) for p in joint_parents[j]  if p != prev]
-        out_dists = [(joint_lengths[c], find_distance(distances, generated, j, i, c)) for c in joint_children[j] if c != prev]
-        
+        par_dists = [
+            (joint_lengths[j], find_distance(distances, generated, j, i, p))
+            for p in joint_parents[j]
+            if p != prev
+        ]
+        out_dists = [
+            (joint_lengths[c], find_distance(distances, generated, j, i, c))
+            for c in joint_children[j]
+            if c != prev
+        ]
+
         """ Check valid distance and not dead end """
         par_dists = [a + d for (a, (d, f)) in par_dists if f]
         out_dists = [a + d for (a, (d, f)) in out_dists if f]
-        
+
         """ All dead ends """
-        if (out_dists + par_dists) == []: return (0.0, False)
-        
+        if (out_dists + par_dists) == []:
+            return (0.0, False)
+
         """ Get minimum path """
         dist = min(out_dists + par_dists)
-        distances[i,j] = dist; distances[j,i] = dist
-        generated[i,j] = True; generated[j,i] = True
-    
+        distances[i, j] = dist
+        distances[j, i] = dist
+        generated[i, j] = True
+        generated[j, i] = True
+
     for i in xrange(anim.shape[1]):
         for j in xrange(anim.shape[1]):
             find_distance(distances, generated, -1, i, j)
-        
+
     return distances
-    
+
+
 def edges(parents):
     """
     Animation structure edges
@@ -413,10 +461,10 @@ def edges(parents):
         which corrisponds to an edge in the
         joint structure going from parent to child.
     """
-    
+
     return np.array(list(zip(parents, joints(parents)))[1:])
-    
-    
+
+
 def incidence(parents):
     """
     Incidence Matrix
@@ -439,13 +487,12 @@ def incidence(parents):
         array of vectors along each edge
         of the structure
     """
-    
+
     es = edges(parents)
-    
-    inc = np.zeros((len(parents)-1, len(parents))).astype(np.int)
+
+    inc = np.zeros((len(parents) - 1, len(parents))).astype(np.int)
     for i, e in enumerate(es):
-        inc[i,e[0]] =  1
-        inc[i,e[1]] = -1
-    
+        inc[i, e[0]] = 1
+        inc[i, e[1]] = -1
+
     return inc.T
-    

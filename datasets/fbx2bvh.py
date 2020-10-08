@@ -4,11 +4,12 @@ This code comes from https://github.com/rubenvillegas/cvpr2018nkn/blob/master/da
 import bpy
 import numpy as np
 import sys
+
 sys.path.append(".")
 
 from os import listdir
 
-data_path = './Mixamo/'
+data_path = "./Mixamo/"
 
 directories = sorted([f for f in listdir(data_path) if not f.startswith(".")])
 for d in directories:
@@ -16,7 +17,7 @@ for d in directories:
 
     for f in files:
         sourcepath = data_path + d + "/" + f
-        dumppath = data_path+d + "/" + f.split(".fbx")[0] + ".bvh"
+        dumppath = data_path + d + "/" + f.split(".fbx")[0] + ".bvh"
 
         bpy.ops.import_scene.fbx(filepath=sourcepath)
 
@@ -29,9 +30,12 @@ for d in directories:
             frame_start = action.frame_range[0]
 
         frame_end = np.max([60, frame_end])
-        bpy.ops.export_anim.bvh(filepath=dumppath,
-                                frame_start=frame_start,
-                                frame_end=frame_end, root_transform_only=True)
+        bpy.ops.export_anim.bvh(
+            filepath=dumppath,
+            frame_start=frame_start,
+            frame_end=frame_end,
+            root_transform_only=True,
+        )
         bpy.data.actions.remove(bpy.data.actions[-1])
 
         print(data_path + d + "/" + f + " processed.")

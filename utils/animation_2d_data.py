@@ -1,9 +1,10 @@
 import sys
 import os
 from os.path import join as pjoin
+
 BASEPATH = os.path.dirname(__file__)
 sys.path.insert(0, BASEPATH)
-sys.path.insert(0, pjoin(BASEPATH, '..'))
+sys.path.insert(0, pjoin(BASEPATH, ".."))
 
 import numpy as np
 import json
@@ -48,14 +49,24 @@ class AnimationData2D:
         motion = []
         joint_map = {
             0: 8,
-            1: 12, 2: 13, 3: 14, 4: 19,
-            5: 9, 6: 10, 7: 11, 8: 22,
+            1: 12,
+            2: 13,
+            3: 14,
+            4: 19,
+            5: 9,
+            6: 10,
+            7: 11,
+            8: 22,
             # 9 is somewhere between 0 & 10
             10: 1,
             # 11 is somewhere between 10 and 12
             12: 0,
-            13: 5, 14: 6, 15: 7,  # 16 is a little bit further
-            17: 2, 18: 3, 19: 4,  # 20 is a little bit further
+            13: 5,
+            14: 6,
+            15: 7,  # 16 is a little bit further
+            17: 2,
+            18: 3,
+            19: 4,  # 20 is a little bit further
         }
 
         num_joints = 21
@@ -64,23 +75,35 @@ class AnimationData2D:
         for path in json_files:
             with open(path) as f:
                 joint_dict = json.load(f)
-                if len(joint_dict['people']) == 0:
+                if len(joint_dict["people"]) == 0:
                     if start:
                         raw_joint = motion[-1]
                         motion.append(raw_joint)
                     else:
                         continue
                 start = True
-                body_joint = np.array(joint_dict['people'][0]['pose_keypoints_2d']).reshape((-1, 3))[:, :2]
-                lhand_joint = np.array(joint_dict['people'][0]['hand_left_keypoints_2d']).reshape((-1, 3))[:, :2]
-                rhand_joint = np.array(joint_dict['people'][0]['hand_right_keypoints_2d']).reshape((-1, 3))[:, :2]
-                raw_joint = np.concatenate([body_joint, lhand_joint, rhand_joint], axis=-2)
+                body_joint = np.array(
+                    joint_dict["people"][0]["pose_keypoints_2d"]
+                ).reshape((-1, 3))[:, :2]
+                lhand_joint = np.array(
+                    joint_dict["people"][0]["hand_left_keypoints_2d"]
+                ).reshape((-1, 3))[:, :2]
+                rhand_joint = np.array(
+                    joint_dict["people"][0]["hand_right_keypoints_2d"]
+                ).reshape((-1, 3))[:, :2]
+                raw_joint = np.concatenate(
+                    [body_joint, lhand_joint, rhand_joint], axis=-2
+                )
                 if len(motion) > 0:
-                    raw_joint[np.where(raw_joint == 0)] = motion[-1][np.where(raw_joint == 0)]
+                    raw_joint[np.where(raw_joint == 0)] = motion[-1][
+                        np.where(raw_joint == 0)
+                    ]
                 motion.append(raw_joint)
 
         for i in range(len(motion) - 1, 0, -1):
-            motion[i - 1][np.where(motion[i - 1] == 0)] = motion[i][np.where(motion[i - 1] == 0)]
+            motion[i - 1][np.where(motion[i - 1] == 0)] = motion[i][
+                np.where(motion[i - 1] == 0)
+            ]
 
         motion = np.stack(motion, axis=0)
         # motion: [T, J, 2]
@@ -119,11 +142,13 @@ def test():
 
     bla = {}
     for num in [27, 32, 95]:
-        anim2d = AnimationData2D.from_openpose_json(f'../../data/treadmill/json_inputs/{num}')
+        anim2d = AnimationData2D.from_openpose_json(
+            f"../../data/treadmill/json_inputs/{num}"
+        )
         bla[str(num)] = {"motion": anim2d.get_projection(), "foot_contact": None}
 
     visualize(bla)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()
