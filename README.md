@@ -23,7 +23,6 @@ Retarget one animation.
 python .\datasets\preprocess.py
 python train.py --save_dir=./training/
 python demo.py
-
 ``` 
 
 ### Motion Retargeting
