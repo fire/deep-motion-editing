@@ -1,6 +1,6 @@
 import sys
 import torch
-sys.path.append("../utils")
+sys.path.append("utils")
 sys.path.append(".")
 import BVH_mod as BVH
 import numpy as np

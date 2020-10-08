@@ -13,7 +13,7 @@ import numpy as np
 from tqdm import tqdm
 from datasets.bvh_parser import BVH_file
 
-sys.path.append("../utils")
+sys.path.append("utils")
 import BVH_mod as BVH
 
 
