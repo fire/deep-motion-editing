@@ -20,9 +20,13 @@ This library was written by [Kfir Aberman](https://kfiraberman.github.io), [Peiz
 Retarget one animation.
 
 ```
-python .\datasets\preprocess.py
-python train.py --save_dir=./training/
-python demo.py
+scoop install miniconda3
+# restart prompt
+# install cuda
+conda install scipy tensorboard pytorch torchvision cudatoolkit=10.2 -c pytorch
+python3 .\datasets\preprocess.py
+python3 train --save_dir=./training/
+python3 demo
 ``` 
 
 ### Motion Retargeting
