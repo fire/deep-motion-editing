@@ -1,13 +1,14 @@
-import sys
 import os
+import sys
 from os.path import join as pjoin
 
 BASEPATH = os.path.dirname(__file__)
 sys.path.insert(0, BASEPATH)
 sys.path.insert(0, pjoin(BASEPATH, ".."))
 
-import numpy as np
 import json
+
+import numpy as np
 from scipy.ndimage import gaussian_filter1d
 from style_transfer.probe.anim_view import visualize
 

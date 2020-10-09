@@ -1,7 +1,8 @@
+import math
+
+import numpy as np
 import torch
 import torch.nn as nn
-import numpy as np
-import math
 
 
 class ForwardKinematics:
