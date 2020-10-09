@@ -105,8 +105,8 @@ def main(input_file, ref_file, output_file_name, test_type):
     copyfile(bvh_path, output_filename)
 
     # TODO Random input
-    torch.onnx.export(model, [], './model.onnx', verbose=False, 
-                    input_names=character_names, output_names=output_filename, 
+    torch.onnx.export(model, [], './model.onnx', export_params=True,  do_constant_folding=True, verbose=True, 
+                    input_names=["input"], output_names=["output"], 
                     opset_version=11)
 
 
