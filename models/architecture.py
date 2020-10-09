@@ -9,6 +9,7 @@ from models.utils import (
     Eval_Criterion,
     Criterion_EE_2,
 )
+from models.base_model import BaseModel
 from option_parser import try_mkdir
 from posixpath import join as pjoin
 from posixpath import split as psplit
@@ -141,7 +142,7 @@ class GAN_model(nn.Module):
         It also calls <compute_visuals> to produce additional visualization results
         """
         with torch.no_grad():
-            self.forward()
+            self.forward(torch.nn.Sequential)
             self.compute_test_result()
 
 
@@ -160,7 +161,7 @@ class GAN_model(nn.Module):
             for para in model.discriminator.parameters():
                 para.requires_grad = requires_grad
 
-    def forward(self):
+    def forward(self, input):
         self.latents = []
         self.offset_repr = []
         self.pos_ref = []
