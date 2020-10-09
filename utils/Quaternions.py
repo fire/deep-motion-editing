@@ -5,18 +5,18 @@ class Quaternions:
     """
     Quaternions is a wrapper around a numpy ndarray
     that allows it to act as if it were an narray of
-    a quater data type.
+    a quaternion data type.
     
     Therefore addition, subtraction, multiplication,
     division, negation, absolute, are all defined
-    in terms of quater operations such as quater
+    in terms of quaternion operations such as quaternion
     multiplication.
     
     This allows for much neater code and many routines
     which conceptually do the same thing to be written
     in the same way for point data and for rotation data.
     
-    The Quaternions class has been desgined such that it
+    The Quaternions class has been designed such that it
     should support broadcasting and slicing in all of the
     usual ways.
     """
