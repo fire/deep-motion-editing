@@ -53,7 +53,7 @@ We provide instructions for retraining our models
 
 #### Dataset
 
-We use Mixamo dataset to train our model. You can download our preprocessed data from [Github Releases](https://github.com/fire/deep-motion-editing/releases/download/v0.1-alpha/training_set.tar.bz2). Then place the `Mixamo` directory within `datasets` .
+We use Mixamo dataset to train our model. You can download our preprocessed data from [Github Releases](https://github.com/fire/deep-motion-editing/releases/download/v0.1-alpha/test_set.tar.bz2). Then place the `Mixamo` directory within `datasets` .
 
 Otherwise, if you want to download Mixamo dataset or use your own dataset, please follow the instructions below.
 
