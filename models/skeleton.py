@@ -181,9 +181,6 @@ class SkeletonLinear(nn.Module):
         self.mask = torch.zeros(out_channels, in_channels)
         self.bias = nn.Parameter(torch.Tensor(out_channels))
 
-        self.reset_parameters()
-
-    def reset_parameters(self):
         for i, neighbour in enumerate(self.expanded_neighbour_list):
             tmp = torch.zeros_like(
                 self.weight[
@@ -207,8 +204,6 @@ class SkeletonLinear(nn.Module):
         bound = 1 / math.sqrt(fan_in)
         nn.init.uniform_(self.bias, -bound, bound)
 
-        self.weight = nn.Parameter(self.weight)
-        self.mask = nn.Parameter(self.mask, requires_grad=False)
 
     def forward(self, input):
         input = input.reshape(input.shape[0], -1)
