@@ -16,7 +16,7 @@ class Quaternions:
     which conceptually do the same thing to be written
     in the same way for point data and for rotation data.
     
-    The Quaternions class has been desgined such that it
+    The Quaternions class has been designed such that it
     should support broadcasting and slicing in all of the
     usual ways.
     """
