@@ -1,9 +1,10 @@
-import models.skeleton as skeleton
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from models.skeleton import SkeletonConv, SkeletonUnpool, SkeletonPool
+
+import models.skeleton as skeleton
 from models.Kinematics import ForwardKinematics
+from models.skeleton import SkeletonConv, SkeletonPool, SkeletonUnpool
 
 
 class Discriminator(nn.Module):

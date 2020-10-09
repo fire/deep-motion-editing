@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 
 import sys
+
 sys.path.append('.')
-from torch.utils.data.dataloader import DataLoader
-from models import create_model
-from datasets import create_dataset, get_character_names
-import option_parser
 import os
-from option_parser import try_mkdir
 import time
 from posixpath import join as pjoin
+
+from torch.utils.data.dataloader import DataLoader
+
+import option_parser
+from datasets import create_dataset, get_character_names
+from models import create_model
+from option_parser import try_mkdir
 
 
 def main():

@@ -1,12 +1,8 @@
 import torch
 import torch.nn as nn
-from models.skeleton import (
-    SkeletonUnpool,
-    SkeletonPool,
-    SkeletonConv,
-    find_neighbor,
-    SkeletonLinear,
-)
+
+from models.skeleton import (SkeletonConv, SkeletonLinear, SkeletonPool,
+                             SkeletonUnpool, find_neighbor)
 
 
 class Encoder(nn.Module):

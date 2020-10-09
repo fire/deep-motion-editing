@@ -1,12 +1,14 @@
-import sys
 import os
+import sys
+
 from option_parser import get_std_bvh
 
 sys.path.append("utils")
+import Animation
 import BVH as BVH
 import numpy as np
+
 from datasets.bvh_parser import BVH_file
-import Animation
 
 
 def full_batch(suffix, prefix):

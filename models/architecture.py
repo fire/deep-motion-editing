@@ -1,45 +1,20 @@
-from models.integrated import IntegratedModel
-from torch import optim
-import torch
-from models.utils import (
-    GAN_loss,
-    ImagePool,
-    get_ee,
-    Criterion_EE,
-    Eval_Criterion,
-    Criterion_EE_2,
-)
-from option_parser import try_mkdir
+import os
 from posixpath import join as pjoin
 from posixpath import split as psplit
-import os
-import torch.nn as nn
-from loss_record import LossRecorder
-from torch.utils.tensorboard import SummaryWriter
-import option_parser
-from datasets.bvh_writer import BVH_writer
-from datasets.bvh_parser import BVH_file
 
-class GAN_model(nn.Module):
-    def __init__(self, args, character_names, dataset): 
-        super(GAN_model, self).__init__()
-        self.args = args
-        self.is_train = args.is_train
-        self.device = torch.device(
-            args.cuda_device if (torch.cuda.is_available()) else "cpu"
-        )
-        self.model_save_dir = pjoin(
-            args.save_dir, "models"
-        )  # save all the checkpoints to save_dir
+import torch
+from option_parser import try_mkdir
+from torch import optim
 
-        if self.is_train:
-            self.log_path = pjoin(args.save_dir, "logs")
-            self.writer = SummaryWriter(self.log_path)
-            self.loss_recoder = LossRecorder(self.writer)
+from models.base_model import BaseModel
+from models.integrated import IntegratedModel
+from models.utils import (Criterion_EE, Criterion_EE_2, Eval_Criterion,
+                          GAN_loss, ImagePool, get_ee)
 
-        self.epoch_cnt = 0
-        self.schedulers = []
-        self.optimizers = []
+
+class GAN_model(BaseModel):
+    def __init__(self, args, character_names, dataset):
+        super(GAN_model, self).__init__(args)
         self.character_names = character_names
         self.dataset = dataset
         self.n_topology = len(character_names)
@@ -72,6 +47,8 @@ class GAN_model(nn.Module):
             for i in range(self.n_topology):
                 self.fake_pools.append(ImagePool(args.pool_size))
         else:
+            import option_parser
+
             self.err_crit = []
             for i in range(self.n_topology):
                 self.err_crit.append(Eval_Criterion(dataset.joint_topologies[i]))
@@ -83,88 +60,13 @@ class GAN_model(nn.Module):
             for i in range(self.n_topology):
                 writer_group = []
                 for _, char in enumerate(character_names[i]):
+                    import option_parser
+                    from datasets.bvh_parser import BVH_file
+                    from datasets.bvh_writer import BVH_writer
+
                     file = BVH_file(option_parser.get_std_bvh(dataset=char))
                     writer_group.append(BVH_writer(file.edges, file.names))
                 self.writer.append(writer_group)
-
-        self.latents =  []
-        self.offset_repr = []
-        self.pos_ref = []
-        self.ee_ref = []
-        self.res = []
-        self.res_denorm = []
-        self.res_pos = []
-        self.fake_res = []
-        self.fake_res_denorm = []
-        self.fake_pos = []
-        self.fake_ee = []
-        self.fake_latent = []
-        self.motions = []
-        self.motion_denorm = []
-        self.rnd_idx = []
-
-    def get_scheduler(self, optimizer):
-        if self.args.scheduler == "linear":
-
-            def lambda_rule(epoch):
-                lr_l = 1.0 - max(0, epoch - self.args.n_epochs_origin) / float(
-                    self.args.n_epochs_decay + 1
-                )
-                return lr_l
-
-            return torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda_rule)
-        if self.args.scheduler == "Step_LR":
-            print("Step_LR scheduler set")
-            return torch.optim.lr_scheduler.StepLR(optimizer, 50, 0.5)
-        if self.args.scheduler == "Plateau":
-            print("Plateau_LR shceduler set")
-            return torch.optim.lr_scheduler.ReduceLROnPlateau(
-                optimizer,
-                mode="min",
-                factor=0.2,
-                threshold=0.01,
-                patience=5,
-                verbose=True,
-            )
-        if self.args.scheduler == "MultiStep":
-            return torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[])
-
-    def setup(self):
-        """Load and print networks; create schedulers
-        Parameters:
-            opt (Option class) -- stores all the experiment flags; needs to be a subclass of BaseOptions
-        """
-        if self.is_train:
-            self.schedulers = [
-                self.get_scheduler(optimizer) for optimizer in self.optimizers
-            ]
-
-    def epoch(self):
-        self.loss_recoder.epoch()
-        for scheduler in self.schedulers:
-            if scheduler is not None:
-                scheduler.step()
-        self.epoch_cnt += 1
-
-    def test(self):
-        """Forward function used in test time.
-        This function wraps <forward> function in no_grad() so we don't save intermediate steps for backprop
-        It also calls <compute_visuals> to produce additional visualization results
-        """
-        with torch.no_grad():
-            self.forward(torch.nn.Sequential)
-            self.compute_test_result()
-
-    
-    def to_torch_script(self, motions):
-        """Generate TorchScript"""
-        
-        # TODO Random input
-        script_module = torch.jit.script(self, motions)
-        print(script_module.code)
-        script_module.save("traced_deep_motion_targeting_model.pt")
-
-
 
     def set_input(self, motions):
         self.motions_input = motions
@@ -181,7 +83,23 @@ class GAN_model(nn.Module):
             for para in model.discriminator.parameters():
                 para.requires_grad = requires_grad
 
-    def forward(self, input):
+    def forward(self):
+        self.latents = []
+        self.offset_repr = []
+        self.pos_ref = []
+        self.ee_ref = []
+        self.res = []
+        self.res_denorm = []
+        self.res_pos = []
+        self.fake_res = []
+        self.fake_res_denorm = []
+        self.fake_pos = []
+        self.fake_ee = []
+        self.fake_latent = []
+        self.motions = []
+        self.motion_denorm = []
+        self.rnd_idx = []
+
         for i in range(self.n_topology):
             self.offset_repr.append(
                 self.models[i].static_encoder(self.dataset.offsets[i])

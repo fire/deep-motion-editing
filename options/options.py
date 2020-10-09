@@ -1,6 +1,7 @@
 import argparse
-import torch
+
 import models
+import torch
 
 
 class Options:

@@ -1,10 +1,12 @@
 import os
-import torch
-from models import create_model
-from datasets import create_dataset
-import option_parser
-from shutil import copyfile
 from posixpath import join as pjoin
+from shutil import copyfile
+
+import torch
+
+import option_parser
+from datasets import create_dataset
+from models import create_model
 
 
 def eval_prepare(args):

@@ -1,10 +1,12 @@
 import os
-from models import create_model
-from datasets import create_dataset, get_character_names
-import option_parser
+from posixpath import join as pjoin
+
 import torch
 from tqdm import tqdm
-from posixpath import join as pjoin
+
+import option_parser
+from datasets import create_dataset, get_character_names
+from models import create_model
 
 
 def eval(eval_seq, save_dir, test_device="cpu"):

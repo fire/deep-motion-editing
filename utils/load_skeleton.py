@@ -1,13 +1,15 @@
-import yaml
-import numpy as np
 import os
 import sys
 from os.path import join as pjoin
 
+import numpy as np
+import yaml
+
 BASEPATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASEPATH)
-import BVH as BVH
 from posixpath import join as pjoin
+
+import BVH as BVH
 
 
 class Skel:

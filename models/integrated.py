@@ -1,12 +1,14 @@
-import torch
-from models.enc_and_dec import AE, StaticEncoder
-from models.vanilla_gan import Discriminator
-from models.skeleton import build_edge_topology
-from models.Kinematics import ForwardKinematics
-from datasets.bvh_parser import BVH_file
-from option_parser import get_std_bvh
 import os
 from posixpath import join as pjoin
+
+import torch
+from datasets.bvh_parser import BVH_file
+from option_parser import get_std_bvh
+
+from models.enc_and_dec import AE, StaticEncoder
+from models.Kinematics import ForwardKinematics
+from models.skeleton import build_edge_topology
+from models.vanilla_gan import Discriminator
 
 
 class IntegratedModel:

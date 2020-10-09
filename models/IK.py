@@ -1,15 +1,16 @@
 import sys
+
 import torch
-from models.Kinematics import InverseKinematics
 from datasets.bvh_parser import BVH_file
 from tqdm import tqdm
 
+from models.Kinematics import InverseKinematics
+
 sys.path.append("../utils")
 
-import BVH as BVH
 import Animation as Animation
+import BVH as BVH
 from Quaternions_old import Quaternions
-
 
 L = 5  # #frame to look forward/backward
 

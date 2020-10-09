@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 from os.path import join as pjoin
 
 BASEPATH = os.path.dirname(__file__)
@@ -7,13 +7,15 @@ sys.path.insert(0, BASEPATH)
 sys.path.insert(0, pjoin(BASEPATH, ".."))
 
 import argparse
+
 import numpy as np
 import scipy.ndimage.filters as filters
-from load_skeleton import Skel
-from Quaternions_old import Quaternions
-from Pivots import Pivots
-import BVH
 from probe.anim_view import visualize
+
+import BVH
+from load_skeleton import Skel
+from Pivots import Pivots
+from Quaternions_old import Quaternions
 
 
 def forward_rotations(skel, rotations, rtpos=None, trim=True):
