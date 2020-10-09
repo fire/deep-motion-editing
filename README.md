@@ -72,7 +72,7 @@ Otherwise, if you want to download Mixamo dataset or use your own dataset, pleas
 After preparing dataset, simply run 
 
 ``` bash
-python train.py --save_dir=./training/
+./train --save_dir=./training/
 ```
 
 It will use default hyper-parameters to train the model and save trained model in `training` directory. More options are available in `option_parser.py` . You can use tensorboard to monitor the training progress by running
