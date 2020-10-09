@@ -9,17 +9,20 @@ from models.utils import (
     Eval_Criterion,
     Criterion_EE_2,
 )
-from models.base_model import BaseModel
 from option_parser import try_mkdir
 from posixpath import join as pjoin
 from posixpath import split as psplit
-
 import os
 import torch.nn as nn
+from loss_record import LossRecorder
+from torch.utils.tensorboard import SummaryWriter
+import option_parser
+from datasets.bvh_writer import BVH_writer
+from datasets.bvh_parser import BVH_file
 
 class GAN_model(nn.Module):
-    def __init__(self, args, character_names, dataset):    
-        super(GAN_model, self).__init__()    
+    def __init__(self, args, character_names, dataset): 
+        super(GAN_model, self).__init__()
         self.args = args
         self.is_train = args.is_train
         self.device = torch.device(
@@ -30,9 +33,6 @@ class GAN_model(nn.Module):
         )  # save all the checkpoints to save_dir
 
         if self.is_train:
-            from loss_record import LossRecorder
-            from torch.utils.tensorboard import SummaryWriter
-
             self.log_path = pjoin(args.save_dir, "logs")
             self.writer = SummaryWriter(self.log_path)
             self.loss_recoder = LossRecorder(self.writer)
@@ -72,8 +72,6 @@ class GAN_model(nn.Module):
             for i in range(self.n_topology):
                 self.fake_pools.append(ImagePool(args.pool_size))
         else:
-            import option_parser
-
             self.err_crit = []
             for i in range(self.n_topology):
                 self.err_crit.append(Eval_Criterion(dataset.joint_topologies[i]))
@@ -85,13 +83,25 @@ class GAN_model(nn.Module):
             for i in range(self.n_topology):
                 writer_group = []
                 for _, char in enumerate(character_names[i]):
-                    from datasets.bvh_writer import BVH_writer
-                    from datasets.bvh_parser import BVH_file
-                    import option_parser
-
                     file = BVH_file(option_parser.get_std_bvh(dataset=char))
                     writer_group.append(BVH_writer(file.edges, file.names))
                 self.writer.append(writer_group)
+
+        self.latents =  []
+        self.offset_repr = []
+        self.pos_ref = []
+        self.ee_ref = []
+        self.res = []
+        self.res_denorm = []
+        self.res_pos = []
+        self.fake_res = []
+        self.fake_res_denorm = []
+        self.fake_pos = []
+        self.fake_ee = []
+        self.fake_latent = []
+        self.motions = []
+        self.motion_denorm = []
+        self.rnd_idx = []
 
     def get_scheduler(self, optimizer):
         if self.args.scheduler == "linear":
@@ -145,6 +155,16 @@ class GAN_model(nn.Module):
             self.forward(torch.nn.Sequential)
             self.compute_test_result()
 
+    
+    def to_torch_script(self, motions):
+        """Generate TorchScript"""
+        
+        # TODO Random input
+        script_module = torch.jit.script(self, motions)
+        print(script_module.code)
+        script_module.save("traced_deep_motion_targeting_model.pt")
+
+
 
     def set_input(self, motions):
         self.motions_input = motions
@@ -162,22 +182,6 @@ class GAN_model(nn.Module):
                 para.requires_grad = requires_grad
 
     def forward(self, input):
-        self.latents = []
-        self.offset_repr = []
-        self.pos_ref = []
-        self.ee_ref = []
-        self.res = []
-        self.res_denorm = []
-        self.res_pos = []
-        self.fake_res = []
-        self.fake_res_denorm = []
-        self.fake_pos = []
-        self.fake_ee = []
-        self.fake_latent = []
-        self.motions = []
-        self.motion_denorm = []
-        self.rnd_idx = []
-
         for i in range(self.n_topology):
             self.offset_repr.append(
                 self.models[i].static_encoder(self.dataset.offsets[i])
