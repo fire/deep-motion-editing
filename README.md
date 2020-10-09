@@ -36,7 +36,7 @@ Download and extract the test dataset from https://github.com/fire/deep-motion-e
 To generate the demo examples with the pretrained model, run
 
 ```bash
-./demo
+python3 demo
 ```
 
 The results will be saved in `examples` .
@@ -44,7 +44,7 @@ The results will be saved in `examples` .
 To reconstruct the quantitative result with the pretrained model, run
 
 ``` bash
-./test
+python3 test
 ```
 
 The retargeted demo results, that consists both intra-structual retargeting and cross-structural retargeting, will be saved in `pretrained/results` .
@@ -65,9 +65,9 @@ Otherwise, if you want to download Mixamo dataset or use your own dataset, pleas
 
 * Enter `datasets` directory and run `blender -b -P fbx2bvh.py` to convert fbx files to bvh files. If you already have bvh file as dataset, please skip this step.
 
-* In our original implementation, we manually split three joints for skeletons in `group A` . If you want to follow our routine, run `python datasets/split_joint.py` . This step is optional.
+* In our original implementation, we manually split three joints for skeletons in `group A` . If you want to follow our routine, run `python3 datasets/split_joint.py` . This step is optional.
 
-* Run `python datasets/preprocess.py` to simplify the skeleton by removing some less interesting joints, e.g. fingers and convert bvh files into npy files. If you use your own data, you'll need to define simplified structure in `datasets/bvh_parser.py` . This information currently is hard-coded in the code. See the comment in source file for more details. There are four steps to make your own dataset work.
+* Run `python3 datasets/preprocess.py` to simplify the skeleton by removing some less interesting joints, e.g. fingers and convert bvh files into npy files. If you use your own data, you'll need to define simplified structure in `datasets/bvh_parser.py` . This information currently is hard-coded in the code. See the comment in source file for more details. There are four steps to make your own dataset work.
 
 * Training and testing character are hard-coded in `datasets/__init__.py` . You'll need to modify it if you want to use your own dataset.
 
@@ -76,7 +76,7 @@ Otherwise, if you want to download Mixamo dataset or use your own dataset, pleas
 After preparing dataset, simply run 
 
 ``` bash
-./train --save_dir=./training/
+python3 train --save_dir=./training/
 ```
 
 It will use default hyper-parameters to train the model and save trained model in `training` directory. More options are available in `option_parser.py` . You can use tensorboard to monitor the training progress by running
