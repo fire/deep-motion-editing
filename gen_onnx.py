@@ -105,9 +105,7 @@ def main(input_file, ref_file, output_file_name, test_type):
     copyfile(bvh_path, output_filename)
 
     # TODO Random input
-    torch.onnx.export(model, [], './model.onnx', export_params=True,  do_constant_folding=True, verbose=True, 
-                    input_names=["input"], output_names=["output"], 
-                    opset_version=11)
+    traced_script_module = torch.jit.trace(model, input_motion)
 
 
 # downsampling and remove redundant joints
