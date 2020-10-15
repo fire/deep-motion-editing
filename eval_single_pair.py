@@ -47,7 +47,8 @@ def recover_space(file):
 def main():
     parser = option_parser.get_parser()
     parser.add_argument("--input_bvh", type=str, required=True)
-    parser.add_argument("--target_bvh", type=str, required=True)
+    parser.add_argument("--target_armature", type=str, required=True)
+    parser.add_argument("--target_bvh", type=str, required=False)
     parser.add_argument("--test_type", type=str, required=True)
     parser.add_argument("--output_filename", type=str, required=True)
 
@@ -59,9 +60,8 @@ def main():
     args.output_filename = recover_space(args.output_filename)
 
     character_names, file_id, src_id = eval_prepare(args)
-    input_character_name = args.input_bvh.split("/")[-2]
-    output_character_name = args.target_bvh.split("/")[-2]
     output_filename = args.output_filename
+    target_armature = args.target_armature
 
     test_device = args.cuda_device
     eval_seq = args.eval_seq
@@ -94,7 +94,7 @@ def main():
 
     model.set_input(input_motion)
     model.test()
-    bvh_path = "{}/{}/0_{}.bvh".format(model.bvh_path, output_character_name, src_id)
+    bvh_path = "{}/{}/0_{}.bvh".format(model.bvh_path, target_armature, src_id)
     copyfile(bvh_path, output_filename)
 
 
