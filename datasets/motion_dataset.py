@@ -108,10 +108,8 @@ class MotionData(Dataset):
                     )
 
                 new = new[np.newaxis, ...]
-
                 new_window = torch.tensor(new, dtype=torch.float32)
                 new_windows.append(new_window)
-
         return torch.cat(new_windows)
 
     def subsample(self, motion):

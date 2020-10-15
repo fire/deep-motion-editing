@@ -50,7 +50,6 @@ def load(filename, start=None, end=None, order=None, world=False, need_quater=Fa
     (animation, joint_names, frametime)
         Tuple of loaded animation and joint names
     """
-
     f = open(filename, "r")
 
     i = 0
