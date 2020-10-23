@@ -79,17 +79,14 @@ class SkeletonConv(nn.Module):
             ] = 1
         self.mask = nn.Parameter(self.mask, requires_grad=False)
 
-        self.description = (
-            "SkeletonConv(in_channels_per_armature={}, out_channels_per_armature={}, kernel_size={}, "
-            "joint_num={}, stride={}, padding={}, bias={})".format(
-                in_channels // joint_num,
-                out_channels // joint_num,
-                kernel_size,
-                joint_num,
-                stride,
-                padding,
-                bias,
-            )
+        self.description = "SkeletonConv(in_channels_per_armature={}, out_channels_per_armature={}, kernel_size={}, " "joint_num={}, stride={}, padding={}, bias={})".format(
+            in_channels // joint_num,
+            out_channels // joint_num,
+            kernel_size,
+            joint_num,
+            stride,
+            padding,
+            bias,
         )
 
         self.reset_parameters()
@@ -157,6 +154,11 @@ class SkeletonConv(nn.Module):
             self.dilation,
             self.groups,
         )
+
+        if self.add_offset:
+            offset_res = self.offset_enc(self.offset)
+            offset_res = offset_res.reshape(offset_res.shape + (1,))
+            res += offset_res / 100
         return res
 
 
@@ -303,7 +305,8 @@ class SkeletonUnpool(nn.Module):
             self.output_edge_num += len(t)
 
         self.description = "SkeletonUnpool(in_edge_num={}, out_edge_num={})".format(
-            self.input_edge_num, self.output_edge_num,
+            self.input_edge_num,
+            self.output_edge_num,
         )
 
         self.weight = torch.zeros(
