@@ -1,8 +1,13 @@
 import torch
 import torch.nn as nn
 
-from models.skeleton import (SkeletonConv, SkeletonLinear, SkeletonPool,
-                             SkeletonUnpool, find_neighbor)
+from models.skeleton import (
+    SkeletonConv,
+    SkeletonLinear,
+    SkeletonPool,
+    SkeletonUnpool,
+    find_neighbor,
+)
 
 
 class Encoder(nn.Module):
@@ -236,5 +241,5 @@ class StaticEncoder(nn.Module):
         output = [input]
         for i, layer in enumerate(self.layers):
             input = layer(input)
-            output.append(input.squeeze())
+            output.append(input.squeeze(-1))
         return output
