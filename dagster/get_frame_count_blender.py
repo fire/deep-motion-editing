@@ -27,7 +27,7 @@ if bpy.data.actions:
 import json
 
 json_object = json.dumps(output, ensure_ascii=False, indent = 4)   
-
+print(str(json_object))
 f = open(f'{path}.json', 'wb')
 f.write(bytes(json_object, encoding='utf8'))
 f.close() 
