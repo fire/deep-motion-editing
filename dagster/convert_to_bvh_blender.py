@@ -5,22 +5,9 @@ argv = sys.argv
 argv = argv[argv.index("--") + 1:]
 path = argv[0]
 bpy.ops.import_scene.gltf(filepath=f'{path}')
-list_of_meshes = []
-# https://blender.stackexchange.com/questions/13757/list-of-objects-in-scene-with-counts-verts-faces-tris
-for element in bpy.context.scene.objects:
-    if element.type != "MESH": 
+for i in range(len(bpy.context.scene.objects)):
+    element = bpy.context.scene.objects[i]
+    if element.type != "ARMATURE": 
         continue
-    output = {}
-    output["name"] = element.data.name
-    output["vertices"] = len(element.data.vertices)
-    output["edges"] = len(element.data.polygons)
-    print(str(output))
-    list_of_meshes.append(output)
-
-import json
-
-json_object = json.dumps(list_of_meshes, ensure_ascii=False, indent = 4)   
-
-f = open(f'{path}.json', 'wb')
-f.write(bytes(json_object, encoding='utf8'))
-f.close() 
+    bpy.ops.export_anim.bvh(filepath=f'{path}.{i}.bvh', check_existing=True, filter_glob="*.bvh", 
+global_scale=1, frame_start=0, frame_end=0, rotate_mode='NATIVE', root_transform_only=False)
