@@ -11,7 +11,7 @@ import requests
 
 @solid
 def base_row_table_api_jwt(_):
-    return ""
+    return "X2MGi5f82sirNY400ozVdpcMXLmiEqF9"
 
 @solid
 def one(_):
@@ -31,9 +31,21 @@ def fetch_vrm_metadata(_, api_jwt: str, page: int):
 import json as j
 @solid
 def fetch_vrm_gltf(context, json: str):
-    doc = j.loads(json) 
-    for d in doc:   
-        context.log.info(d)
+    doc = j.loads(json)
+    for r in doc["results"]:
+        context.log.info(f'Name: {r["field_24361"]}')
+        files = r["field_24364"]
+        for f in files:
+            url = f["url"]
+            context.log.debug(f'Url: {url}')
+            vrm_binary = requests.get(url, allow_redirects=True)
+            return vrm_binary.content
+
+# import bpy
+@solid 
+def get_vrm_gltf_bounds(context, data):
+    pass
+    # bpy.ops.import_scene.gltf(filepath='path/to/myFile.glb')
 
 # @solid 
 # normalize each bvh to be
@@ -105,4 +117,5 @@ def deep_motion_targeting():
     i = one()
     api_jwt = base_row_table_api_jwt()
     n = fetch_vrm_metadata(api_jwt, i)
-    fetch_vrm_gltf(n)
+    content = fetch_vrm_gltf(n)
+    get_vrm_gltf_bounds(content)
