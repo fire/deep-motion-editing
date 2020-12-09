@@ -1,3 +1,4 @@
+import json
 import json as j
 from dagster import execute_pipeline, pipeline, solid
 import requests
@@ -10,7 +11,7 @@ def base_row_table_api_jwt(_):
 
 @solid
 def item(_):
-    return 3
+    return 2
 
 
 @solid
@@ -41,7 +42,7 @@ def fetch_vrm_gltf(context, json: str):
             vrm_binary = requests.get(url, allow_redirects=True)
             return vrm_binary.content
 
-import json
+
 @solid
 def check_num_of_vrm_frames(context, vrm) -> bool:
     path = './check_num_of_vrm_frames.vrm'
@@ -49,13 +50,15 @@ def check_num_of_vrm_frames(context, vrm) -> bool:
     f.write(vrm)
     f.close()
     import subprocess
-    subprocess.run(["blender", "--background", "--python", "get_frame_count_blender.py", "--", path])
+    subprocess.run(["blender", "--background", "--python",
+                    "get_frame_count_blender.py", "--", path])
     f = open(f'{path}.json', 'rb')
     context.log.info(str(f))
     out = json.load(f)
     if out["last_keyframe"] - out["first_keyframe"] < 64:
         return False
     return True
+
 
 @solid
 def get_scene_info_of_vrm(context, vrm):
@@ -64,14 +67,31 @@ def get_scene_info_of_vrm(context, vrm):
     f.write(vrm)
     f.close()
     import subprocess
-    subprocess.run(["blender", "--background", "--python", "get_scene_info_blender.py", "--", path])
+    subprocess.run(["blender", "--background", "--python",
+                    "get_scene_info_blender.py", "--", path])
     f = open(f'{path}.json', 'rb')
     context.log.info(str(f))
     return f
-   
+
+
+@solid
+def convert_to_bvh(context, has_enough_frames: bool, vrm):
+    if not has_enough_frames:
+        raise ValueError
+    path = './convert_to_bvh.vrm'
+    f = open(path, 'wb')
+    f.write(vrm)
+    f.close()
+    import subprocess
+    subprocess.run(["blender", "--background", "--python",
+                    "convert_to_bvh_blender.py", "--", path])
+    f = open(f'{path}.json', 'rb')
+    context.log.info(str(f))
+    return f
+
 
 # @solid
-# convert to bvh
+# get bvh of existing animation
 
 
 # @solid
@@ -129,5 +149,6 @@ def deep_motion_targeting():
     api_jwt = base_row_table_api_jwt()
     n = fetch_vrm_metadata(api_jwt, i)
     content = fetch_vrm_gltf(n)
-    check_num_of_vrm_frames(content)
+    has_frames = check_num_of_vrm_frames(content)
     get_scene_info_of_vrm(content)
+    convert_to_bvh(has_frames, content)
