@@ -41,9 +41,9 @@ def fetch_vrm_gltf(context, json: str):
             vrm_binary = requests.get(url, allow_redirects=True)
             return vrm_binary.content
 
-
+import json
 @solid
-def check_num_of_vrm_frames(context, vrm):
+def check_num_of_vrm_frames(context, vrm) -> bool:
     path = './check_num_of_vrm_frames.vrm'
     f = open(path, 'wb')
     f.write(vrm)
@@ -52,10 +52,10 @@ def check_num_of_vrm_frames(context, vrm):
     subprocess.run(["blender", "--background", "--python", "get_frame_count_blender.py", "--", path])
     f = open(f'{path}.json', 'rb')
     context.log.info(str(f))
-    # context.log.debug(f'Number of frames: {num_of_frames}')
-    # if < 64 frames fail
-    # minimum 64 frames
-    return f
+    out = json.load(f)
+    if out["last_keyframe"] - out["first_keyframe"] < 64:
+        return False
+    return True
 
 @solid
 def get_scene_info_of_vrm(context, vrm):
