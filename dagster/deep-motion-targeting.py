@@ -9,13 +9,13 @@ def base_row_table_api_jwt(_):
 
 
 @solid
-def one(_):
-    return 1
+def item(_):
+    return 2
 
 
 @solid
 def fetch_vrm_metadata(_, api_jwt: str, page: int):
-    url = f"https://api.baserow.io/api/database/rows/table/5785/?size={str(page)}&page=1"
+    url = f"https://api.baserow.io/api/database/rows/table/5785/?size=1&page={str(page)}"
     req = requests.get(
         url,
         headers={
@@ -41,25 +41,31 @@ def fetch_vrm_gltf(context, json: str):
             vrm_binary = requests.get(url, allow_redirects=True)
             return vrm_binary.content
 
-# https://github.com/TylerGubala/blenderpy/wiki/Building
-# >= 2.91
-# import bpy
-# import addon_utils
+
 @solid
 def check_num_of_vrm_frames(context, vrm):
-    f = open('./check_num_of_vrm_frames.vrm', 'wb')
+    path = './check_num_of_vrm_frames.vrm'
+    f = open(path, 'wb')
     f.write(vrm)
     f.close()
-    bpy.ops.import_scene.gltf(filepath='./check_num_of_vrm_frames.vrm')
-#     # https://blender.stackexchange.com/questions/13757/list-of-objects-in-scene-with-counts-verts-faces-tris
-#     for element in bpy.context.scene.objects:
-#         if element.type != "MESH": continue
-#         context.log.debug(f'{element.data.name}, {len(element.data.vertices)}, {len(element.data.polygons)}, {len(element.data.edges)}')
-    # num_of_frames
+    import subprocess
+    subprocess.run(["blender", "--background", "--python", "get_frame_count_blender.py", "--", path])
+    f = open(f'{path}.json', 'rb')
+    context.log.debug(str(f))
     # context.log.debug(f'Number of frames: {num_of_frames}')
     # if < 64 frames fail
     # minimum 64 frames
+    return f
 
+@solid
+def get_scene_info_of_vrm(context, vrm):
+    path = './get_scene_info_of_vrm.vrm'
+    f = open(path, 'wb')
+    f.write(vrm)
+    f.close()
+    import subprocess
+    subprocess.run(["blender", "--background", "--python", "get_scene_info_blender.py", "--", path])
+   
 
 # @solid
 # convert to bvh
@@ -116,8 +122,9 @@ def check_num_of_vrm_frames(context, vrm):
 
 @pipeline
 def deep_motion_targeting():
-    i = one()
+    i = item()
     api_jwt = base_row_table_api_jwt()
     n = fetch_vrm_metadata(api_jwt, i)
     content = fetch_vrm_gltf(n)
     check_num_of_vrm_frames(content)
+    get_scene_info_of_vrm(content)
