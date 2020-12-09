@@ -10,7 +10,7 @@ def base_row_table_api_jwt(_):
 
 @solid
 def item(_):
-    return 2
+    return 3
 
 
 @solid
@@ -51,7 +51,7 @@ def check_num_of_vrm_frames(context, vrm):
     import subprocess
     subprocess.run(["blender", "--background", "--python", "get_frame_count_blender.py", "--", path])
     f = open(f'{path}.json', 'rb')
-    context.log.debug(str(f))
+    context.log.info(str(f))
     # context.log.debug(f'Number of frames: {num_of_frames}')
     # if < 64 frames fail
     # minimum 64 frames
@@ -65,6 +65,9 @@ def get_scene_info_of_vrm(context, vrm):
     f.close()
     import subprocess
     subprocess.run(["blender", "--background", "--python", "get_scene_info_blender.py", "--", path])
+    f = open(f'{path}.json', 'rb')
+    context.log.info(str(f))
+    return f
    
 
 # @solid
