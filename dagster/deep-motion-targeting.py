@@ -41,14 +41,24 @@ def fetch_vrm_gltf(context, json: str):
             vrm_binary = requests.get(url, allow_redirects=True)
             return vrm_binary.content
 
-
+# https://github.com/TylerGubala/blenderpy/wiki/Building
+# >= 2.91
 # import bpy
-# @solid
-# if < 64 frames fail
-# bpy.ops.import_scene.gltf(filepath='path/to/myFile.glb')
-# num_of_frames
-# context.log.debug(f'Url: {url}')
-# minimum 64 frames
+# import addon_utils
+@solid
+def check_num_of_vrm_frames(context, vrm):
+    f = open('./check_num_of_vrm_frames.vrm', 'wb')
+    f.write(vrm)
+    f.close()
+    bpy.ops.import_scene.gltf(filepath='./check_num_of_vrm_frames.vrm')
+#     # https://blender.stackexchange.com/questions/13757/list-of-objects-in-scene-with-counts-verts-faces-tris
+#     for element in bpy.context.scene.objects:
+#         if element.type != "MESH": continue
+#         context.log.debug(f'{element.data.name}, {len(element.data.vertices)}, {len(element.data.polygons)}, {len(element.data.edges)}')
+    # num_of_frames
+    # context.log.debug(f'Number of frames: {num_of_frames}')
+    # if < 64 frames fail
+    # minimum 64 frames
 
 
 # @solid
@@ -110,3 +120,4 @@ def deep_motion_targeting():
     api_jwt = base_row_table_api_jwt()
     n = fetch_vrm_metadata(api_jwt, i)
     content = fetch_vrm_gltf(n)
+    check_num_of_vrm_frames(content)
