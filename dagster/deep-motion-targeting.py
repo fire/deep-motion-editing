@@ -1,3 +1,5 @@
+import pathlib
+import tempfile
 import json
 import json as j
 from dagster import execute_pipeline, pipeline, solid
@@ -45,14 +47,17 @@ def fetch_vrm_gltf(context, json: str):
 
 @solid
 def check_num_of_vrm_frames(context, vrm) -> bool:
-    path = './check_num_of_vrm_frames.vrm'
-    f = open(path, 'wb')
+    current_abs_path = pathlib.Path().absolute()
+    temp = tempfile.mkdtemp(prefix='check_num_of_vrm_frames_')
+    path = 'check_num_of_vrm_frames.vrm'
+    temp_path = f'{temp}/{path}'
+    f = open(temp_path, 'wb')
     f.write(vrm)
     f.close()
     import subprocess
-    subprocess.run(["blender", "--background", "--python",
-                    "get_frame_count_blender.py", "--", path])
-    f = open(f'{path}.json', 'rb')
+    subprocess.run(["flatpak", "run", "org.blender.Blender", "--background", "--python",
+                    f"{current_abs_path}/get_frame_count_blender.py", "--", temp_path])
+    f = open(f'{temp_path}.json', 'rb')
     context.log.info(str(f))
     out = json.load(f)
     if out["last_keyframe"] - out["first_keyframe"] < 64:
@@ -62,14 +67,18 @@ def check_num_of_vrm_frames(context, vrm) -> bool:
 
 @solid
 def get_scene_info_of_vrm(context, vrm):
-    path = './get_scene_info_of_vrm.vrm'
-    f = open(path, 'wb')
+    current_abs_path = pathlib.Path().absolute()
+    temp = tempfile.mkdtemp(prefix='get_scene_info_of_vrm_')
+    path = 'get_scene_info_of_vrm.vrm'
+    temp_path = f'{temp}/{path}'
+    context.log.info(f'Temporary file: {temp_path}')
+    f = open(temp_path, 'wb')
     f.write(vrm)
     f.close()
     import subprocess
-    subprocess.run(["blender", "--background", "--python",
-                    "get_scene_info_blender.py", "--", path])
-    f = open(f'{path}.json', 'rb')
+    subprocess.run(["flatpak", "run", "org.blender.Blender", "--background", "--python",
+                    f'{current_abs_path}/get_scene_info_blender.py', '--', temp_path])
+    f = open(f'{temp_path}.json', 'rb')
     context.log.info(str(f))
     return f
 
@@ -78,16 +87,16 @@ def get_scene_info_of_vrm(context, vrm):
 def convert_to_bvh(context, has_enough_frames: bool, vrm):
     if not has_enough_frames:
         raise ValueError
-    path = './convert_to_bvh.vrm'
-    f = open(path, 'wb')
+    current_abs_path = pathlib.Path().absolute()
+    temp = tempfile.mkdtemp(prefix='convert_to_bvh_')
+    path = 'convert_to_bvh.vrm'
+    temp_path = f'{temp}/{path}'
+    f = open(temp_path, 'wb')
     f.write(vrm)
     f.close()
     import subprocess
-    subprocess.run(["blender", "--background", "--python",
-                    "convert_to_bvh_blender.py", "--", path])
-    f = open(f'{path}.json', 'rb')
-    context.log.info(str(f))
-    return f
+    subprocess.run(["flatpak", "run", "org.blender.Blender",  "--background", "--python",
+                    f"{current_abs_path}/convert_to_bvh_blender.py", "--", temp_path])
 
 
 # @solid
