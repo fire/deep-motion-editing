@@ -183,6 +183,12 @@ def convert_to_bvh(context, has_enough_frames: bool, vrm) -> DataFrame:
 # @solid
 # rename mixamo rig names to vrm
 
+########################################
+
+@solid
+def return_true(_):
+    return True
+
 @composite_solid
 def deep_motion_targeting(m : String)-> DataFrame:
     content = fetch_vrm_gltf_baserow(m)
@@ -204,6 +210,6 @@ def fetch_vrm() -> DataFrame:
 def target_motion():
     # result = fetch_vrm()
     content = fetch_vrm_gltf_url(get_url())
-    has_frames = check_num_of_vrm_frames(content)
-    get_scene_info_of_vrm(content)
-    bvh = convert_to_bvh(has_frames, content)
+    # has_frames = check_num_of_vrm_frames(content)
+    # get_scene_info_of_vrm(content)
+    convert_to_bvh(return_true(), content)
