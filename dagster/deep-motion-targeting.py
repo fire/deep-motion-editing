@@ -1,9 +1,27 @@
 import pathlib
 import tempfile
 import json
-import json as j
-from dagster import execute_pipeline, pipeline, solid
+import typing
+from copy import deepcopy
+from typing import Any
+
+from dagster import (
+    Bool,
+    Field,
+    Int,
+    PythonObjectDagsterType,
+    String,
+    composite_solid,
+    execute_pipeline,
+    pipeline,
+    solid,
+)
 import requests
+
+if typing.TYPE_CHECKING:
+    DataFrame = list
+else:
+    DataFrame = PythonObjectDagsterType(list, name="DataFrame")  # type: Any
 
 
 @solid
@@ -33,8 +51,8 @@ VRM_TABLE_FILES: str = "field_24364"
 
 
 @solid
-def fetch_vrm_gltf(context, json: str):
-    doc = j.loads(json)
+def fetch_vrm_gltf(context, m: str):
+    doc = json.loads(m)
     for r in doc["results"]:
         context.log.info(f'Name: {r[VRM_TABLE_NAME]}')
         files = r[VRM_TABLE_FILES]
@@ -84,7 +102,7 @@ def get_scene_info_of_vrm(context, vrm):
 
 
 @solid
-def convert_to_bvh(context, has_enough_frames: bool, vrm):
+def convert_to_bvh(context, has_enough_frames: bool, vrm) -> DataFrame:
     if not has_enough_frames:
         raise ValueError
     current_abs_path = pathlib.Path().absolute()
@@ -98,8 +116,9 @@ def convert_to_bvh(context, has_enough_frames: bool, vrm):
     subprocess.run(["blender",  "--background", "--python",
                     f"{current_abs_path}/convert_to_bvh_blender.py", "--", temp_path])
     f = open(f'{temp_path}.bvh', 'rb')
-    char_count = f'Character count of bvh file: {len(str(f))}'
-    context.log.debug(char_count)
+    bvh_doc = str(f.read())
+    bvh = [[bvh_doc]]
+    return bvh
 
 
 # @solid
@@ -154,13 +173,23 @@ def convert_to_bvh(context, has_enough_frames: bool, vrm):
 # @solid
 # rename mixamo rig names to vrm
 
-
-@pipeline
-def deep_motion_targeting():
-    i = item()
-    api_jwt = base_row_table_api_jwt()
-    n = fetch_vrm_metadata(api_jwt, i)
-    content = fetch_vrm_gltf(n)
+@composite_solid
+def deep_motion_targeting(m : String)-> DataFrame:
+    content = fetch_vrm_gltf(m)
     has_frames = check_num_of_vrm_frames(content)
     get_scene_info_of_vrm(content)
-    convert_to_bvh(has_frames, content)
+    bvh = convert_to_bvh(has_frames, content)
+    return bvh
+
+
+@composite_solid
+def fetch_vrm() -> DataFrame:
+    i = item()
+    api_jwt = base_row_table_api_jwt()
+    meta = fetch_vrm_metadata(api_jwt, i)
+    return deep_motion_targeting(meta)
+
+
+@pipeline
+def target_motion():
+    fetch_vrm()
