@@ -85,8 +85,8 @@ def check_num_of_vrm_frames(context, vrm) -> bool:
     out = json.load(f)
     frames = out["last_keyframe"] - out["first_keyframe"]
     context.log.debug(f'Frames: {frames}')
-    if frames < 64:
-        return False
+    if frames < 1:
+        raise ValueError
     return True
 
 
@@ -110,13 +110,11 @@ def get_scene_info_of_vrm(context, vrm):
 
 @solid 
 def get_url(_):
-    return "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/BrainStem/glTF-Binary/BrainStem.glb"
+    return "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Fox/glTF-Binary/Fox.glb"
 
 
 @solid
 def convert_to_bvh(context, has_enough_frames: bool, vrm) -> DataFrame:
-    if not has_enough_frames:
-        raise ValueError
     current_abs_path = pathlib.Path().absolute()
     temp = tempfile.mkdtemp(prefix='convert_to_bvh_')
     path = 'convert_to_bvh.vrm'
@@ -128,7 +126,7 @@ def convert_to_bvh(context, has_enough_frames: bool, vrm) -> DataFrame:
     subprocess.run(["blender",  "--background", "--python",
                     f"{current_abs_path}/convert_to_bvh_blender.py", "--", temp_path])
     f = open(f'{temp_path}.bvh', 'rb')
-    bvh_doc = str(f.read())
+    bvh_doc = str(f)
     bvh = [[bvh_doc]]
     return bvh
 
