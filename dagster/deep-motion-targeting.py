@@ -51,7 +51,7 @@ VRM_TABLE_FILES: str = "field_24364"
 
 
 @solid
-def fetch_vrm_gltf(context, m: str):
+def fetch_vrm_gltf_baserow(context, m: str):
     doc = json.loads(m)
     for r in doc["results"]:
         context.log.info(f'Name: {r[VRM_TABLE_NAME]}')
@@ -61,6 +61,12 @@ def fetch_vrm_gltf(context, m: str):
             context.log.debug(f'Url: {url}')
             vrm_binary = requests.get(url, allow_redirects=True)
             return vrm_binary.content
+
+
+@solid
+def fetch_vrm_gltf_url(context, url: str):
+    vrm_binary = requests.get(url, allow_redirects=True)
+    return vrm_binary.content
 
 
 @solid
@@ -76,9 +82,10 @@ def check_num_of_vrm_frames(context, vrm) -> bool:
     subprocess.run(["blender", "--background", "--python",
                     f"{current_abs_path}/get_frame_count_blender.py", "--", f'{temp_path}'])
     f = open(f'{temp_path}.json', 'rb')
-    context.log.debug(str(f))
     out = json.load(f)
-    if out["last_keyframe"] - out["first_keyframe"] < 64:
+    frames = out["last_keyframe"] - out["first_keyframe"]
+    context.log.debug(f'Frames: {frames}')
+    if frames < 64:
         return False
     return True
 
@@ -99,6 +106,11 @@ def get_scene_info_of_vrm(context, vrm):
     f = open(f'{temp_path}.json', 'rb')
     context.log.debug(str(f))
     return f
+
+
+@solid 
+def get_url(_):
+    return "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/BrainStem/glTF-Binary/BrainStem.glb"
 
 
 @solid
@@ -175,7 +187,7 @@ def convert_to_bvh(context, has_enough_frames: bool, vrm) -> DataFrame:
 
 @composite_solid
 def deep_motion_targeting(m : String)-> DataFrame:
-    content = fetch_vrm_gltf(m)
+    content = fetch_vrm_gltf_baserow(m)
     has_frames = check_num_of_vrm_frames(content)
     get_scene_info_of_vrm(content)
     bvh = convert_to_bvh(has_frames, content)
@@ -192,4 +204,8 @@ def fetch_vrm() -> DataFrame:
 
 @pipeline
 def target_motion():
-    fetch_vrm()
+    # result = fetch_vrm()
+    content = fetch_vrm_gltf_url(get_url())
+    has_frames = check_num_of_vrm_frames(content)
+    get_scene_info_of_vrm(content)
+    bvh = convert_to_bvh(has_frames, content)
