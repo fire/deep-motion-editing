@@ -4,7 +4,6 @@ import bpy
 argv = sys.argv
 argv = argv[argv.index("--") + 1:]
 path = argv[0]
-print(path)
 bpy.ops.import_scene.gltf(filepath=path)
 
 
