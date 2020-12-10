@@ -14,7 +14,6 @@ for element in bpy.context.scene.objects:
     output["name"] = element.data.name
     output["vertices"] = len(element.data.vertices)
     output["edges"] = len(element.data.polygons)
-    print(str(output))
     list_of_meshes.append(output)
 
 import json

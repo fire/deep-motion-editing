@@ -58,7 +58,7 @@ def check_num_of_vrm_frames(context, vrm) -> bool:
     subprocess.run(["blender", "--background", "--python",
                     f"{current_abs_path}/get_frame_count_blender.py", "--", f'{temp_path}'])
     f = open(f'{temp_path}.json', 'rb')
-    context.log.info(str(f))
+    context.log.debug(str(f))
     out = json.load(f)
     if out["last_keyframe"] - out["first_keyframe"] < 64:
         return False
@@ -71,7 +71,7 @@ def get_scene_info_of_vrm(context, vrm):
     temp = tempfile.mkdtemp(prefix='get_scene_info_of_vrm_')
     path = 'get_scene_info_of_vrm.vrm'
     temp_path = f'{temp}/{path}'
-    context.log.info(f'Temporary file: {temp_path}')
+    context.log.debug(f'Temporary file: {temp_path}')
     f = open(temp_path, 'wb')
     f.write(vrm)
     f.close()
@@ -79,7 +79,7 @@ def get_scene_info_of_vrm(context, vrm):
     subprocess.run(["blender", "--background", "--python",
                     f'{current_abs_path}/get_scene_info_blender.py', '--', temp_path])
     f = open(f'{temp_path}.json', 'rb')
-    context.log.info(str(f))
+    context.log.debug(str(f))
     return f
 
 
@@ -97,6 +97,9 @@ def convert_to_bvh(context, has_enough_frames: bool, vrm):
     import subprocess
     subprocess.run(["blender",  "--background", "--python",
                     f"{current_abs_path}/convert_to_bvh_blender.py", "--", temp_path])
+    f = open(f'{temp_path}.bvh', 'rb')
+    char_count = f'Character count of bvh file: {len(str(f))}'
+    context.log.debug(char_count)
 
 
 # @solid
