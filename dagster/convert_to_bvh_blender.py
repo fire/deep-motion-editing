@@ -5,6 +5,16 @@ argv = sys.argv
 argv = argv[argv.index("--") + 1:]
 path = argv[0]
 bpy.ops.import_scene.gltf(filepath=path)
+armature_count = 0
+for i in range(len(bpy.context.scene.objects)):
+    element = bpy.context.scene.objects[i]
+    if element.type != "ARMATURE": 
+        continue
+    armature_count += 1
+
+if armature_count > 1:
+    raise AssertionError
+
 for i in range(len(bpy.context.scene.objects)):
     element = bpy.context.scene.objects[i]
     if element.type != "ARMATURE": 
