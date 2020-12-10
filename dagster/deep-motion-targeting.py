@@ -80,7 +80,7 @@ def check_num_of_vrm_frames(context, vrm) -> bool:
     f.close()
     import subprocess
     subprocess.run(["blender", "--background", "--python",
-                    f"{current_abs_path}/get_frame_count_blender.py", "--", f'{temp_path}'])
+                    f"{current_abs_path}/lib/get_frame_count_blender.py", "--", f'{temp_path}'])
     f = open(f'{temp_path}.json', 'rb')
     out = json.load(f)
     frames = out["last_keyframe"] - out["first_keyframe"]
@@ -102,7 +102,7 @@ def get_scene_info_of_vrm(context, vrm):
     f.close()
     import subprocess
     subprocess.run(["blender", "--background", "--python",
-                    f'{current_abs_path}/get_scene_info_blender.py', '--', temp_path])
+                    f'{current_abs_path}/lib/get_scene_info_blender.py', '--', temp_path])
     f = open(f'{temp_path}.json', 'rb')
     context.log.debug(str(f))
     return f
@@ -124,7 +124,7 @@ def convert_to_bvh(context, has_enough_frames: bool, vrm) -> DataFrame:
     f.close()
     import subprocess
     subprocess.run(["blender",  "--background", "--python",
-                    f"{current_abs_path}/convert_to_bvh_blender.py", "--", temp_path])
+                    f"{current_abs_path}/lib/convert_to_bvh_blender.py", "--", temp_path])
     f = open(f'{temp_path}.bvh', 'rb')
     bvh_doc = str(f)
     bvh = [[bvh_doc]]
