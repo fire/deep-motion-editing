@@ -18,7 +18,8 @@ class MixedData0(Dataset):
         super(MixedData0, self).__init__()
 
         self.motions = motions
-        self.motions_reverse = torch.tensor(self.motions.numpy()[..., ::-1].copy())
+        self.motions_reverse = torch.tensor(
+            self.motions.numpy()[..., ::-1].copy())
         self.skeleton_idx = skeleton_idx
         self.length = motions.shape[0]
         self.args = args
@@ -35,13 +36,12 @@ class MixedData0(Dataset):
 
 class MixedData(Dataset):
     """
-    data_gruop_num * 2 * samples
+    data_group_num * 2 * samples
     """
 
     def __init__(self, args, datasets_groups):
-        device = torch.device(
-            args.cuda_device if (torch.cuda.is_available()) else "cpu"
-        )
+        device = torch.device(args.cuda_device if (
+            torch.cuda.is_available()) else 'cpu')
         self.final_data = []
         self.length = 0
         self.offsets = []
@@ -66,8 +66,10 @@ class MixedData(Dataset):
 
                 tmp.append(MotionData(new_args))
 
-                mean = np.load("./datasets/Mixamo/mean_var/{}_mean.npy".format(dataset))
-                var = np.load("./datasets/Mixamo/mean_var/{}_var.npy".format(dataset))
+                mean = np.load(
+                    './datasets/Mixamo/mean_var/{}_mean.npy'.format(dataset))
+                var = np.load(
+                    './datasets/Mixamo/mean_var/{}_var.npy'.format(dataset))
                 mean = torch.tensor(mean)
                 mean = mean.reshape((1,) + mean.shape)
                 var = torch.tensor(var)
@@ -151,13 +153,13 @@ class TestData(Dataset):
                 new_offset = new_offset.reshape((1,) + new_offset.shape)
                 offsets_group.append(new_offset)
                 mean = np.load(
-                    "./datasets/Mixamo/mean_var/{}_mean.npy".format(character)
-                )
-                var = np.load("./datasets/Mixamo/mean_var/{}_var.npy".format(character))
+                    './datasets/Mixamo/mean_var/{}_mean.npy'.format(character))
+                var = np.load(
+                    './datasets/Mixamo/mean_var/{}_var.npy'.format(character))
                 mean = torch.tensor(mean)
-                mean = mean.reshape((1,) + mean.shape)
+                mean = mean.reshape((1, ) + mean.shape)
                 var = torch.tensor(var)
-                var = var.reshape((1,) + var.shape)
+                var = var.reshape((1, ) + var.shape)
                 mean_group.append(mean)
                 var_group.append(var)
 
@@ -177,20 +179,21 @@ class TestData(Dataset):
             for j in range(len(character_group)):
                 new_motion = self.get_item(i, j, item)
                 if new_motion is not None:
-                    new_motion = new_motion.reshape((1,) + new_motion.shape)
-                    new_motion = (new_motion - self.mean[i][j]) / self.var[i][j]
+                    new_motion = new_motion.reshape((1, ) + new_motion.shape)
+                    new_motion = (
+                        new_motion - self.mean[i][j]) / self.var[i][j]
                     ref_shape = new_motion
                 res_group.append(new_motion)
 
             if ref_shape is None:
-                print("Bad at {}".format(item))
+                print('Bad at {}'.format(item))
                 return None
             for j in range(len(character_group)):
                 if res_group[j] is None:
                     bad_flag = 1
                     res_group[j] = torch.zeros_like(ref_shape)
             if bad_flag:
-                print("Bad at {}".format(item))
+                print('Bad at {}'.format(item))
 
             res_group = torch.cat(res_group, dim=0)
             res.append([res_group, list(range(len(character_group)))])
@@ -201,17 +204,17 @@ class TestData(Dataset):
 
     def get_item(self, gid, pid, id):
         character = self.characters[gid][pid]
-        path = "./datasets/Mixamo/{}/".format(character)
+        path = './datasets/Mixamo/{}/'.format(character)
         if isinstance(id, int):
             file = path + self.file_list[id]
         elif isinstance(id, str):
             file = id
         else:
-            raise Exception("Wrong input file type")
+            raise Exception('Wrong input file type')
         if not os.path.exists(file):
-            raise Exception("Cannot find file")
+            raise Exception('Cannot find file')
         file = BVH_file(file)
-        motion = file.to_tensor(quater=self.args.rotation == "quaternion")
+        motion = file.to_tensor(quater=self.args.rotation == 'quaternion')
         motion = motion[:, ::2]
         length = motion.shape[-1]
         length = length // 4 * 4
