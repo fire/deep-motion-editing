@@ -109,7 +109,5 @@ venv.bak/
 .idea/
 
 # result and datasets for retargeting
-datasets/Mixamo/*
-datasets/test_set.tar.bz2
 pretrained/results/*
 examples

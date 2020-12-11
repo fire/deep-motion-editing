@@ -67,9 +67,9 @@ class MixedData(Dataset):
                 tmp.append(MotionData(new_args))
 
                 mean = np.load(
-                    './datasets/Mixamo/mean_var/{}_mean.npy'.format(dataset))
+                    './datasets/Motions/mean_var/{}_mean.npy'.format(dataset))
                 var = np.load(
-                    './datasets/Mixamo/mean_var/{}_var.npy'.format(dataset))
+                    './datasets/Motions/mean_var/{}_var.npy'.format(dataset))
                 mean = torch.tensor(mean)
                 mean = mean.reshape((1,) + mean.shape)
                 var = torch.tensor(var)
@@ -153,9 +153,9 @@ class TestData(Dataset):
                 new_offset = new_offset.reshape((1,) + new_offset.shape)
                 offsets_group.append(new_offset)
                 mean = np.load(
-                    './datasets/Mixamo/mean_var/{}_mean.npy'.format(character))
+                    './datasets/Motions/mean_var/{}_mean.npy'.format(character))
                 var = np.load(
-                    './datasets/Mixamo/mean_var/{}_var.npy'.format(character))
+                    './datasets/Motions/mean_var/{}_var.npy'.format(character))
                 mean = torch.tensor(mean)
                 mean = mean.reshape((1, ) + mean.shape)
                 var = torch.tensor(var)
@@ -204,7 +204,7 @@ class TestData(Dataset):
 
     def get_item(self, gid, pid, id):
         character = self.characters[gid][pid]
-        path = './datasets/Mixamo/{}/'.format(character)
+        path = './datasets/Motions/{}/'.format(character)
         if isinstance(id, int):
             file = path + self.file_list[id]
         elif isinstance(id, str):

@@ -104,7 +104,7 @@ def batch_split(source, dest):
 
 
 if __name__ == "__main__":
-    prefix = "./datasets/Mixamo/"
+    prefix = "./datasets/Motions/"
     names = [f for f in os.listdir(prefix) if os.path.isdir(os.path.join(prefix, f))]
 
     for name in names:
