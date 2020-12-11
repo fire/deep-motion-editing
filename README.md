@@ -23,7 +23,7 @@ Retarget one animation.
 scoop install miniconda3
 # restart prompt
 # install cuda
-conda install scipy tensorboard pytorch torchvision cudatoolkit=10.2 -c pytorch
+conda install -y pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch -c=conda-forge
 python3 .\datasets\preprocess.py
 python3 train --save_dir=./training/
 python3 demo
