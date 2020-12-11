@@ -54,29 +54,14 @@ def example(
 
 
 if __name__ == "__main__":
-    # Ensure FBX has multiple of 64 frames
-    # blender -b -P fbx2bvh.py
-    # python3 datasets/split_joint.py # Optional
-    # python3 datasets/preprocess.py
-    # python3 .\demo
     err = 0
     if err == 0:
         example(
-            src_name="SportyGranny",
-            src_bvh="Dancing Running Man.bvh",
-            dest_armature="Kaya",
-            dest_name="Kaya",
-            bvh_name="Dancing Running Man.bvh",
-            test_type="intra",
-            output_path="./examples/intra_structure",
-        )
-    if err == 0:
-        example(
-            src_name="BigVegas",
-            src_bvh="Dual Weapon Combo.bvh",
-            dest_armature="Mousey_m",
-            dest_name="Mousey_m",
-            bvh_name="Dual Weapon Combo.bvh",
+            src_name="BerkeleyMHAD_skl_s01",
+            src_bvh="skl_s01_a07_r03.bvh",
+            dest_armature="Alicia",
+            dest_name="Alicia",
+            bvh_name="Dodging.bvh",
             test_type="cross",
             output_path="./examples/cross_structure",
         )

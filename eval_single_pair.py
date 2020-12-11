@@ -79,7 +79,7 @@ def main():
     dataset = create_dataset(args, character_names)
 
     model = create_model(args, character_names, dataset)
-    model.load(epoch=20000)
+    model.load(epoch=400)
 
     input_motion = []
     for i, character_group in enumerate(character_names):

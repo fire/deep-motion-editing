@@ -4,7 +4,7 @@ import argparse
 def get_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--save_dir", type=str, default="./pretrained", help="directory for all savings"
+        "--save_dir", type=str, default="./training", help="directory for all savings"
     )
     parser.add_argument(
         "--cuda_device",
