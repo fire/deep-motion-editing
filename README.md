@@ -57,12 +57,6 @@ We provide instructions for retraining our models
 
 #### Dataset
 
-We use Mixamo dataset to train our model. You can download our preprocessed data from [Github Releases](https://github.com/fire/deep-motion-editing/releases/download/v0.1-alpha/test_set.tar.bz2). Then place the `Mixamo` directory within `datasets` .
-
-Otherwise, if you want to download Mixamo dataset or use your own dataset, please follow the instructions below.
-
-* To download Mixamo on your own, you can refer to [this](https://github.com/ChrisWu1997/2D-Motion-Retargeting/blob/master/dataset/Guide%20For%20Downloading%20Mixamo%20Data.md) good tutorial. You will need to download as fbx file (skin is not required) and make a subdirectory for each character in `datasets/Mixamo` . In our original implementation we download 60fps fbx files and downsample them into 30fps. Since we use an unpaired way in training, it is recommended to divide all motions into two equal size sets for each group and equal size sets for each character in each group. If you use your own data, you need to make sure that your dataset consists of bvh files with same t-pose. You should also put your dataset in subdirectories of `datasets/Mixamo` .
-
 * Enter `datasets` directory and run `blender -b -P fbx2bvh.py` to convert fbx files to bvh files. If you already have bvh file as dataset, please skip this step.
 
 * In our original implementation, we manually split three joints for skeletons in `group A` . If you want to follow our routine, run `python3 datasets/split_joint.py` . This step is optional.

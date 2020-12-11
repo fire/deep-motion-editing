@@ -29,16 +29,16 @@ def example(
     if not os.path.exists(output_path):
         os.makedirs(output_path)
 
-    input_file = "./datasets/Mixamo/{}/{}".format(src_name, src_bvh)
+    input_file = "./datasets/Motions/{}/{}".format(src_name, src_bvh)
     copy_ref_file(input_file, pjoin(output_path, "input.bvh"))
 
-    ref_file = './datasets/Mixamo/{}/{}'.format(dest_name, bvh_name)
+    ref_file = './datasets/Motions/{}/{}'.format(dest_name, bvh_name)
     copy_ref_file(ref_file, pjoin(output_path, 'gt.bvh'))
     height = get_height(input_file)
 
     bvh_name = bvh_name.replace(" ", "_")
-    input_file = "./datasets/Mixamo/{}/{}".format(src_name, bvh_name)
-    ref_file = "./datasets/Mixamo/{}/{}".format(dest_name, bvh_name)
+    input_file = "./datasets/Motions/{}/{}".format(src_name, bvh_name)
+    ref_file = "./datasets/Motions/{}/{}".format(dest_name, bvh_name)
     cmd = "python eval_single_pair.py --input_bvh={} --target_armature={} --target_bvh={} --output_filename={} --test_type={}".format(
         input_file, dest_armature, ref_file, pjoin(output_path, "result.bvh"), test_type
     )

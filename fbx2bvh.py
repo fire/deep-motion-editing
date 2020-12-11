@@ -9,7 +9,7 @@ sys.path.append(".")
 
 from os import walk
 
-data_path = "./datasets/Mixamo/"
+data_path = "./datasets/Motions/"
 
 for _, dirs, _ in sorted([f for f in walk(data_path)]):
     for d in dirs:
