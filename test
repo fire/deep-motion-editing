@@ -32,10 +32,10 @@ def batch_copy(source_path, suffix, dest_path, dest_suffix=None):
 
 
 if __name__ == '__main__':
-    test_characters = ['Mousey_m', 'Goblin_m', 'Mremireh_m', 'Vampire_m']
+    test_characters = ['Alicia_m', 'BerkeleyMHAD_skl_s05', 'BerkeleyMHAD_skl_s06', 'BerkeleyMHAD_skl_s07']
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--save_dir', type=str, default='./pretrained/')
+    parser.add_argument('--save_dir', type=str, default='./training/')
     args = parser.parse_args()
     prefix = args.save_dir
 
