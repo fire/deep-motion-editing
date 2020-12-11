@@ -59,8 +59,6 @@ We provide instructions for retraining our models
 
 * Enter `datasets` directory and run `blender -b -P fbx2bvh.py` to convert fbx files to bvh files. If you already have bvh file as dataset, please skip this step.
 
-* In our original implementation, we manually split three joints for skeletons in `group A` . If you want to follow our routine, run `python3 datasets/split_joint.py` . This step is optional.
-
 * Run `python3 datasets/preprocess.py` to simplify the skeleton by removing some less interesting joints, e.g. fingers and convert bvh files into npy files. If you use your own data, you'll need to define simplified structure in `datasets/bvh_parser.py` . This information currently is hard-coded in the code. See the comment in source file for more details. There are four steps to make your own dataset work.
 
 * Training and testing character are hard-coded in `datasets/__init__.py` . You'll need to modify it if you want to use your own dataset.

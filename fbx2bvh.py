@@ -4,6 +4,7 @@ This code comes from https://github.com/rubenvillegas/cvpr2018nkn/blob/master/da
 import bpy
 import numpy as np
 import sys
+from math import radians
 
 sys.path.append(".")
 
@@ -23,7 +24,7 @@ for _, dirs, _ in sorted([f for f in walk(data_path)]):
                 dumppath = data_path + d + "/" + f.split(".fbx")[0] + ".bvh"
 
                 bpy.ops.import_scene.fbx(filepath=sourcepath)
-
+                
                 frame_start = 9999
                 frame_end = -9999
                 action = bpy.data.actions[-1]
