@@ -59,8 +59,8 @@ if __name__ == "__main__":
         example(
             src_name="BerkeleyMHAD_skl_s01",
             src_bvh="skl_s01_a07_r03.bvh",
-            dest_armature="Alicia",
-            dest_name="Alicia",
+            dest_armature="Alicia_m",
+            dest_name="Alicia_m",
             bvh_name="Dodging.bvh",
             test_type="cross",
             output_path="./examples/cross_structure",

@@ -13,7 +13,7 @@ def get_character_names(args):
                 "BerkeleyMHAD_skl_s07",
                 "BerkeleyMHAD_skl_s08",
             ],
-            ["Alicia"],
+            ["Alicia_m","Alicia_m","Alicia_m","Alicia_m","Alicia_m","Alicia_m","Alicia_m","Alicia_m"],
         ]
 
     else:
@@ -22,7 +22,7 @@ def get_character_names(args):
         """
         characters = [
             ["BerkeleyMHAD_skl_s09", "BerkeleyMHAD_skl_s10", "BerkeleyMHAD_skl_s11", "BerkeleyMHAD_skl_s12"],
-            ["Alicia", "Alicia", "Alicia", "Alicia",],
+            ["Alicia_m", "Alicia_m", "Alicia_m", "Alicia_m",],
         ]
         tmp = characters[1][args.eval_seq]
         characters[1][args.eval_seq] = characters[1][0]

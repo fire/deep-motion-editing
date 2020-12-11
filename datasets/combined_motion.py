@@ -202,19 +202,23 @@ class TestData(Dataset):
     def __len__(self):
         return len(self.file_list)
 
-    def get_item(self, gid, pid, id):
-        character = self.characters[gid][pid]
-        path = './datasets/Motions/{}/'.format(character)
-        if isinstance(id, int):
-            file = path + self.file_list[id]
-        elif isinstance(id, str):
-            file = id
+    def get_item(self, gid, pid, item_id):
+        character_i = self.characters[gid]
+        character = character_i[pid]
+        path = f'./datasets/Motions/{character}/'
+        item_file = ""
+        if isinstance(item_id, int):
+            item_file = path + self.file_list[item_id] 
+        elif isinstance(item_id, str):
+            item_file = item_id
         else:
             raise Exception('Wrong input file type')
-        if not os.path.exists(file):
-            raise Exception('Cannot find file')
-        file = BVH_file(file)
-        motion = file.to_tensor(quater=self.args.rotation == 'quaternion')
+        if not os.path.exists(item_file):
+            error = f'Cannot find file {item_file}'
+            print(error)
+            raise Exception(error)
+        item_file = BVH_file(item_file)
+        motion = item_file.to_tensor(quater=self.args.rotation == 'quaternion')
         motion = motion[:, ::2]
         length = motion.shape[-1]
         length = length // 4 * 4

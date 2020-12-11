@@ -79,12 +79,12 @@ def main():
     dataset = create_dataset(args, character_names)
 
     model = create_model(args, character_names, dataset)
-    model.load(epoch=400)
-
+    model.load(epoch=1000)
     input_motion = []
+    print(file_id)
     for i, character_group in enumerate(character_names):
         input_group = []
-        for j in range(len(character_group)):
+        for j in range(1):
             new_motion = dataset.get_item(i, j, file_id[i][j])
             new_motion.unsqueeze_(0)
             new_motion = (new_motion - dataset.mean[i][j]) / dataset.var[i][j]
