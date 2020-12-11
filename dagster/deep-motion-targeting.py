@@ -108,7 +108,7 @@ def get_scene_info_of_vrm(context, vrm):
     return f
 
 
-@solid 
+@solid
 def get_url(_):
     return "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Fox/glTF-Binary/Fox.glb"
 
@@ -131,66 +131,48 @@ def convert_to_bvh(context, has_enough_frames: bool, vrm) -> DataFrame:
     return bvh
 
 
-# @solid
-# get bvh of existing animation
+@solid
+def check_human_volume(_):
+    pass
 
 
-# @solid
-# normalize each bvh to be
-# * y up
-# * z forward
-# Use bounding box of the skeleton
-# hips and chest for the foward
-
-# @solid
-# check if the vrm is within the volume of a normal person
+@solid
+def remove_fingers(_):
+    pass
 
 
-# @solid
-# Dictionary of original rig to vrm names
-# rename known rigs to vrm bone names
+@solid
+def split_skeleton_spine(_):
+    pass
 
 
-# @solid
-# ? remove fingers
+@solid
+def put_bvh_on_vrm(_):
+    pass
 
 
-# @solid
-# ? split skeleton spine bones
+@solid
+def target_model(_, model, rig_bvhs: DataFrame):
+    pass
 
 
-# @solid
-# Take original vrm and put the animation on it.
-# Does vrm allow animations?
+@solid
+def train_target_model(_, model, rig_bvhs: DataFrame) -> DataFrame:
+    pass
 
-
-# @solid
-# input 1
-# A) list of known and taught bvh animation as a source
-# B) trained ml model (ml metadata)
-# Assume gltf and its up and foward conventions
-# input 2
-# use the incoming untrained bvh
-
-# @solid
-# add animations to the vrm for preview
-
-#########################################
-
-# @solid
-# Train motion targeting model
-
-# @solid
-# rename mixamo rig names to vrm
-
-########################################
 
 @solid
 def return_true(_):
     return True
 
+
+@solid
+def rename_rig_bones_to_vrm(vrm_bones, rig_bvh, common_rigs):
+    pass
+
+
 @composite_solid
-def deep_motion_targeting(m : String)-> DataFrame:
+def deep_motion_targeting(m: String) -> DataFrame:
     content = fetch_vrm_gltf_baserow(m)
     has_frames = check_num_of_vrm_frames(content)
     get_scene_info_of_vrm(content)
