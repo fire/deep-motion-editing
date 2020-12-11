@@ -1,14 +1,17 @@
 import sys
+sys.path.append('.')
+sys.path.append('./utils')
+from option_parser import get_std_bvh
+from models.skeleton import build_edge_topology
+from models.Kinematics import ForwardKinematics
+from Quaternions import Quaternions
+import numpy as np
+import BVH_mod as BVH
+import sys
 import torch
 
 sys.path.append("utils")
 sys.path.append(".")
-import BVH_mod as BVH
-import numpy as np
-from Quaternions import Quaternions
-from models.Kinematics import ForwardKinematics
-from models.skeleton import build_edge_topology
-from option_parser import get_std_bvh
 
 """
 1.
@@ -295,6 +298,48 @@ corps_name_mixamo2_m = [
     "RightForeArm",
     "RightHand",
 ]
+
+corps_name_1 = [
+    "Pelvis",
+    "LeftUpLeg",
+    "LeftLeg",
+    "LeftFoot",
+    "LeftToeBase",
+    "RightUpLeg",
+    "RightLeg",
+    "RightFoot",
+    "RightToeBase",
+    "Hips",
+    "Spine",
+    "Spine1",
+    "Spine2",
+    "Neck",
+    "Head",
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+]
+corps_BerkeleyMHAD = [
+'Hips',
+'LeftUpLeg', 'LeftUpLegRoll', 'LeftLeg', 'LeftLegRoll', 'LeftFoot', 'LeftToeBase',
+'RightUpLeg', 'RightUpLegRoll', 'RightLeg', 'RightLegRoll', 'RightFoot', 'RightToeBase',  
+'spine', 'spine1', 'spine2', 'Neck', 'Head',
+'LeftShoulder', 'LeftArm', 'LeftArmRoll', 'LeftForeArm', 'LeftForeArmRoll', 'LeftHand',
+'RightShoulder', 'RightArm', 'RightArmRoll', 'RightForeArm', 'RightForeArmRoll', 'RightHand']
+
+corps_VRM = [
+'Hips',
+'LeftUpLeg', 'LeftLeg', 'LeftFoot', 'LeftToeBase', 'LeftToeEnd',
+'RightUpLeg', 'RightLeg', 'RightFoot', 'RightToeBase', 'RightToeEnd',
+'Spine', 'Spine1', 'Spine2', 'Spine3', 'Neck', 'Neck1', 'Head',
+'LeftShoulder', 'LeftArm', 'LeftForeArm', 'LeftHand',
+'RightShoulder', 'RightArm', 'RightForeArm', 'RightHand']
+
 # corps_name_example = ['Root', 'LeftUpLeg', ..., 'LeftToe', 'RightUpLeg', ..., 'RightToe', 'Spine', ..., 'Head', 'LeftShoulder', ..., 'LeftHand', 'RightShoulder', ..., 'RightHand']
 
 """
@@ -303,13 +348,15 @@ Specify five end effectors' name.
 Please follow the same order as in 1.
 """
 ee_name_1 = ["LeftToeBase", "RightToeBase", "Head", "LeftHand", "RightHand"]
-ee_name_2 = ["LeftToe_End", "RightToe_End", "HeadTop_End", "LeftHand", "RightHand"]
+ee_name_2 = ["LeftToe_End", "RightToe_End",
+             "HeadTop_End", "LeftHand", "RightHand"]
 ee_name_3 = ["LeftFoot", "RightFoot", "Head", "LeftHand", "RightHand"]
 ee_name_cmu = ["LeftToeBase", "RightToeBase", "Head", "LeftHand", "RightHand"]
-ee_name_monkey = ["LeftToeBase", "RightToeBase", "Head", "LeftHand", "RightHand"]
+ee_name_monkey = ["LeftToeBase", "RightToeBase",
+                  "Head", "LeftHand", "RightHand"]
 ee_name_three_arms_split = [
-    "LeftToeBase",
-    "RightToeBase",
+    "LeftToeEnd",
+    "RightToeEnd",
     "Head",
     "LeftHand_split",
     "RightHand_split",
@@ -321,6 +368,22 @@ ee_name_Prisoner = [
     "LeftHand",
     "RightForeArm",
 ]
+
+ee_BerkeleyMHAD = [
+    "LeftToeBase",
+    "RightToeBase",
+    "Head",
+    "LeftHand",
+    "RightHand",
+]
+ee_VRM = [
+    "LeftToeBase",
+    "RightToeBase",
+    "Head",
+    "LeftHand",
+    "RightHand",
+]
+
 # ee_name_example = ['LeftToe', 'RightToe', 'Head', 'LeftHand', 'RightHand']
 
 
@@ -336,6 +399,8 @@ corps_names = [
     corps_name_three_arms_split,
     corps_name_Prisoner,
     corps_name_mixamo2_m,
+    corps_BerkeleyMHAD,
+    corps_VRM,
 ]
 ee_names = [
     ee_name_1,
@@ -349,6 +414,8 @@ ee_names = [
     ee_name_three_arms_split,
     ee_name_Prisoner,
     ee_name_2,
+    ee_BerkeleyMHAD,
+    ee_VRM,
 ]
 """
 3.
@@ -362,6 +429,7 @@ class BVH_file:
     def __init__(self, file_path=None, args=None, dataset=None, new_root=None):
         if file_path is None:
             file_path = get_std_bvh(dataset=dataset)
+        print(file_path)
         self.anim, self._names, self.frametime = BVH.load(file_path)
         if new_root is not None:
             self.set_new_root(new_root)
@@ -374,7 +442,7 @@ class BVH_file:
 
         for i, name in enumerate(self._names):
             if ":" in name:
-                name = name[name.find(":") + 1 :]
+                name = name[name.find(":") + 1:]
                 self._names[i] = name
 
         full_fill = [1] * len(corps_names)
@@ -413,13 +481,19 @@ class BVH_file:
         if "Spine1_split" in self._names:
             self.skeleton_type = 10
 
+        if "LeftUpLegRoll" in self._names:
+            self.skeleton_type = 11
+
+        if "Spine3" in self._names:
+            self.skeleton_type = 12
+
         """
         4. 
         Here, you need to assign self.skeleton_type the corresponding index of your own dataset in corps_names or ee_names list.
         You can use self._names, which contains the joints name in original bvh file, to write your own if statement.
         """
         # if ...:
-        #     self.skeleton_type = 11
+        #     self.skeleton_type = 12
 
         if self.skeleton_type == -1:
             print(self._names)
@@ -431,7 +505,7 @@ class BVH_file:
         self.details = []
         for i, name in enumerate(self._names):
             if ":" in name:
-                name = name[name.find(":") + 1 :]
+                name = name[name.find(":") + 1:]
             if name not in corps_names[self.skeleton_type]:
                 self.details.append(i)
         self.joint_num = self.anim.shape[1]
@@ -475,7 +549,8 @@ class BVH_file:
         global_position[1:, :] += (1 - alpha) * global_position[0, :]
 
     def rotate(self, theta, axis):
-        q = Quaternions(np.hstack((np.cos(theta / 2), np.sin(theta / 2) * axis)))
+        q = Quaternions(
+            np.hstack((np.cos(theta / 2), np.sin(theta / 2) * axis)))
         position = self.anim.positions[:, 0, :].copy()
         rotation = self.anim.rotations[:, 0, :]
         position[1:, ...] -= position[0:-1, ...]
@@ -497,7 +572,10 @@ class BVH_file:
             self._topology = self.anim.parents[self.corps].copy()
             for i in range(self._topology.shape[0]):
                 if i >= 1:
-                    self._topology[i] = self.simplify_map[self._topology[i]]
+                    key = self._topology[i]
+                    if key >= 1:
+                        simplify_map_get = self.simplify_map[key]
+                        self._topology[i] = simplify_map_get
             self._topology = tuple(self._topology)
         return self._topology
 
