@@ -167,8 +167,55 @@ def return_true(_):
 
 
 @solid
-def rename_rig_bones_to_vrm(vrm_bones, rig_bvh, common_rigs):
+def rename_rig_bones_to_vrm(_, vrm_bones, rig_bvh, common_rigs):
     pass
+
+@solid 
+def train_one_motion_targeting_epoch(_):
+    import sys
+    sys.path.append('.')
+    import os
+    import time
+    from posixpath import join as pjoin
+
+    from torch.utils.data.dataloader import DataLoader
+
+    import option_parser
+    from datasets import create_dataset, get_character_names
+    from models import create_model
+    from option_parser import try_mkdir
+
+    args = option_parser.get_args()
+    characters = get_character_names(args)
+
+    # Logs for tensorboard
+    log_path = pjoin(args.save_dir, 'logs/')
+    try_mkdir(args.save_dir)
+    try_mkdir(log_path)
+
+    # Save metadata in dataframe
+    # with open(pjoin(args.save_dir, 'para.txt'), 'w') as para_file:
+    #     para_file.write(' '.join(sys.argv))
+
+    dataset = create_dataset(args, characters)
+    # https://github.com/fastai/fastbook/issues/85
+    # You always need to set num_workers=0 when creating a DataLoaders because Pytorch multiprocessing does not work on Windows.
+    data_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=0)
+
+    model = create_model(args, characters, dataset)
+
+    if args.epoch_begin:
+        model.load(epoch=args.epoch_begin, download=False)
+
+    model.setup()
+
+    for step, motions in enumerate(data_loader):
+        model.set_input(motions)
+        model.optimize_parameters()
+        #print('[{}/{}]\t[{}/{}]\t'.format(epoch, args.epoch_num, step, len(data_loader)), res)
+
+    model.epoch()
+    # Save epoch number
 
 
 @composite_solid
