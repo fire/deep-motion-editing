@@ -1,0 +1,151 @@
+Capoeira.bvh
+Capoeira(1).bvh
+Capoeira(2).bvh
+Capoeira(3).bvh
+Defeated.bvh
+Defeated(1).bvh
+Defeated(2).bvh
+Defeated(3).bvh
+Dodging.bvh
+Dodging(1).bvh
+Drunk Idle Variation.bvh
+Drunk Idle Variation(1).bvh
+Drunk Idle Variation(2).bvh
+Dying.bvh
+Dying(1).bvh
+Female Laying Pose.bvh
+Female Laying Pose(1).bvh
+Female Laying Pose(2).bvh
+Female Laying Pose(3).bvh
+Female Sitting Pose.bvh
+Female Sitting Pose(1).bvh
+Jumping Down.bvh
+Jumping Down(1).bvh
+Jumping Down(2).bvh
+LICENSE.md
+Look Over Shoulder.bvh
+Look Over Shoulder(1).bvh
+Male Action Pose.bvh
+Male Action Pose(1).bvh
+Male Dynamic Pose.bvh
+Male Dynamic Pose(1).bvh
+Male Sitting Pose.bvh
+Old Man Idle.bvh
+Old Man Idle(1).bvh
+Old Man Idle(2).bvh
+Running.bvh
+Running(1).bvh
+Shoved Reaction With Spin(2).bvh
+Strafing.bvh
+skl_s01_a01_r01.bvh
+skl_s01_a01_r02.bvh
+skl_s01_a01_r03.bvh
+skl_s01_a01_r04.bvh
+skl_s01_a01_r05.bvh
+skl_s01_a02_r01.bvh
+skl_s01_a02_r02.bvh
+skl_s01_a02_r03.bvh
+skl_s01_a02_r04.bvh
+skl_s01_a02_r05.bvh
+skl_s01_a03_r01.bvh
+skl_s01_a03_r02.bvh
+skl_s01_a03_r03.bvh
+skl_s01_a03_r04.bvh
+skl_s01_a03_r05.bvh
+skl_s01_a04_r01.bvh
+skl_s01_a04_r02.bvh
+skl_s01_a04_r03.bvh
+skl_s01_a04_r04.bvh
+skl_s01_a04_r05.bvh
+skl_s01_a05_r01.bvh
+skl_s01_a05_r02.bvh
+skl_s01_a05_r03.bvh
+skl_s01_a05_r04.bvh
+skl_s01_a05_r05.bvh
+skl_s01_a06_r01.bvh
+skl_s01_a06_r02.bvh
+skl_s01_a06_r03.bvh
+skl_s01_a06_r04.bvh
+skl_s01_a06_r05.bvh
+skl_s01_a07_r01.bvh
+skl_s01_a07_r02.bvh
+skl_s01_a07_r03.bvh
+skl_s01_a07_r04.bvh
+skl_s01_a07_r05.bvh
+skl_s01_a08_r01.bvh
+skl_s01_a08_r02.bvh
+skl_s01_a08_r03.bvh
+skl_s01_a08_r04.bvh
+skl_s01_a08_r05.bvh
+skl_s01_a09_r01.bvh
+skl_s01_a09_r02.bvh
+skl_s01_a09_r03.bvh
+skl_s01_a09_r04.bvh
+skl_s01_a09_r05.bvh
+skl_s01_a10_r01.bvh
+skl_s01_a10_r02.bvh
+skl_s01_a10_r03.bvh
+skl_s01_a10_r04.bvh
+skl_s01_a10_r05.bvh
+skl_s01_a11_r01.bvh
+skl_s01_a11_r02.bvh
+skl_s01_a11_r03.bvh
+skl_s01_a11_r04.bvh
+skl_s01_a11_r05.bvh
+skl_s01_t-pose.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a01_r01.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a01_r02.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a01_r03.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a01_r04.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a01_r05.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a02_r01.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a02_r02.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a02_r03.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a02_r04.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a02_r05.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a03_r01.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a03_r02.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a03_r03.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a03_r04.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a03_r05.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a04_r01.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a04_r02.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a04_r03.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a04_r04.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a04_r05.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a05_r01.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a05_r02.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a05_r03.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a05_r04.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a05_r05.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a06_r01.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a06_r02.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a06_r03.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a06_r04.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a06_r05.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a07_r01.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a07_r02.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a07_r03.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a07_r04.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a07_r05.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a08_r01.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a08_r02.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a08_r03.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a08_r04.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a08_r05.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a09_r01.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a09_r02.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a09_r03.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a09_r04.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a09_r05.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a10_r01.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a10_r02.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a10_r03.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a10_r04.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a10_r05.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a11_r01.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a11_r02.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a11_r03.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a11_r04.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_a11_r05.bvh
+datasets\Motions\BerkeleyMHAD_skl_s03\skl_s03_t-pose.bvh

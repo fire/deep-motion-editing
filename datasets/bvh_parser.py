@@ -429,7 +429,6 @@ class BVH_file:
     def __init__(self, file_path=None, args=None, dataset=None, new_root=None):
         if file_path is None:
             file_path = get_std_bvh(dataset=dataset)
-        print(file_path)
         self.anim, self._names, self.frametime = BVH.load(file_path)
         if new_root is not None:
             self.set_new_root(new_root)
