@@ -52,13 +52,11 @@ def example(
 
 
 if __name__ == "__main__":
-    err = 0
-    if err == 0:
-        example(
-            src_name="BerkeleyMHAD_skl_s01",
-            src_bvh="skl_s01_a07_r03.bvh",
-            dst_name="BerkeleyMHAD_skl_s02",
-            dst_bvh="skl_s02_a09_r05.bvh",
-            test_type="cross",
-            output_path="./examples",
-        )
+    example(
+        src_name="BerkeleyMHAD_skl_s01",
+        src_bvh="skl_s01_a07_r03.bvh",
+        dst_name="BerkeleyMHAD_skl_s05",
+        dst_bvh="skl_s05_a03_r05.bvh",
+        test_type="cross",
+        output_path="./examples",
+    )
