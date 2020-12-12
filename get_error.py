@@ -35,7 +35,7 @@ def batch(char, suffix, prefix):
         f
         for f in os.listdir(new_p)
         if f.endswith("_{}.bvh".format(suffix))
-        and not f.endswith("_gt.bvh")
+        and not f.endswith("_reference.bvh")
         and "fix" not in f
         and not f.endswith("_input.bvh")
     ]
@@ -50,7 +50,7 @@ def batch(char, suffix, prefix):
                 continue
             index.append(i)
 
-        file_ref = file_full[:-6] + "_gt.bvh"
+        file_ref = file_full[:-6] + "_reference.bvh"
         anim_ref, _, _ = BVH.load(file_ref)
 
         pos = Animation.positions_global(anim)  # [T, J, 3]

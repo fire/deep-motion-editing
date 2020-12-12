@@ -32,7 +32,7 @@ def example(
     copy_ref_file(input_file, pjoin(output_path, "input.bvh"))
 
     ref_file = f'./datasets/Motions/{dst_name}/{dst_bvh}'
-    copy_ref_file(ref_file, pjoin(output_path, 'gt.bvh'))
+    copy_ref_file(ref_file, pjoin(output_path, 'reference.bvh'))
     height = get_height(input_file)
 
     input_file = f"./datasets/Motions/{src_name}/{src_bvh}"
@@ -53,8 +53,8 @@ def example(
 if __name__ == "__main__":
     example(
         src_name="BerkeleyMHAD_skl_s04",
-        src_bvh="skl_s04_a01_r04.bvh",
+        src_bvh="skl_s04_a02_r04.bvh",
         dst_name="BerkeleyMHAD_skl_s07",
-        dst_bvh="skl_s07_a07_r03.bvh",
+        dst_bvh="skl_s07_a01_r04.bvh",
         output_path="./examples",
     )

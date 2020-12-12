@@ -54,13 +54,13 @@ if __name__ == '__main__':
             cross_error += full_batch(0, prefix)
             for char in test_characters:
                 batch_copy(pjoin(source_path, char), 0, pjoin(cross_dest_path, char))
-                batch_copy(pjoin(source_path, char), 'gt', pjoin(cross_dest_path, char), 'gt')
+                batch_copy(pjoin(source_path, char), 'reference', pjoin(cross_dest_path, char), 'reference')
 
         intra_dest = pjoin(intra_dest_path, 'from_{}'.format(test_characters[i]))
         for char in test_characters:
             for char in test_characters:
                 batch_copy(pjoin(source_path, char), 1, pjoin(intra_dest, char))
-                batch_copy(pjoin(source_path, char), 'gt', pjoin(intra_dest, char), 'gt')
+                batch_copy(pjoin(source_path, char), 'reference', pjoin(intra_dest, char), 'reference')
 
         intra_error += full_batch(1, prefix)
 
