@@ -41,14 +41,24 @@ def create_dataset(args, character_names=None):
 
 
 def get_test_set():
-    with open("./datasets/Motions/test_list.txt", "r") as file:
+    open_test_list = []
+    try:
+        open_test_list = open("./datasets/Motions/test_list.txt", "r")
+    except FileNotFoundError as e:
+        return []
+    with open_test_list as file:
         list = file.readlines()
         list = [f[:-1] for f in list]
         return list
 
 
-def get_train_list():
-    with open("./datasets/Motions/train_list.txt", "r") as file:
+def get_train_list():    
+    open_train_list = []
+    try:
+        open_train_list = open("./datasets/Motions/train_list.txt", "r")
+    except FileNotFoundError as e:
+        return []
+    with open_train_list as file:
         list = file.readlines()
         list = [f[:-1] for f in list]
         return list

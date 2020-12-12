@@ -362,7 +362,7 @@ def main(input_file, ref_file, output_file_name, test_type):
     dataset = create_dataset(args, character_names)
 
     model = create_script_model(args, character_names, dataset)
-    model.load(epoch=20000)
+    model.load(epoch=0)
 
     input_motion = []
     for i, character_group in enumerate(character_names):

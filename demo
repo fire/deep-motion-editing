@@ -24,24 +24,23 @@ def get_height(file):
 
 
 def example(
-    src_name, src_bvh, dest_armature, dest_name, bvh_name, test_type, output_path
+    src_name, src_bvh, dst_name, dst_bvh, test_type, output_path
 ):
     if not os.path.exists(output_path):
         os.makedirs(output_path)
 
-    input_file = "./datasets/Motions/{}/{}".format(src_name, src_bvh)
+    input_file = f"./datasets/Motions/{src_name}/{src_bvh}"
     copy_ref_file(input_file, pjoin(output_path, "input.bvh"))
 
-    ref_file = './datasets/Motions/{}/{}'.format(dest_name, bvh_name)
+    ref_file = f'./datasets/Motions/{dst_name}/{dst_bvh}'
     copy_ref_file(ref_file, pjoin(output_path, 'gt.bvh'))
     height = get_height(input_file)
 
     bvh_name = bvh_name.replace(" ", "_")
-    input_file = "./datasets/Motions/{}/{}".format(src_name, bvh_name)
-    ref_file = "./datasets/Motions/{}/{}".format(dest_name, bvh_name)
-    cmd = "python eval_single_pair.py --input_bvh={} --target_armature={} --target_bvh={} --output_filename={} --test_type={}".format(
-        input_file, dest_armature, ref_file, pjoin(output_path, "result.bvh"), test_type
-    )
+    input_file = f"./datasets/Motions/{src_name}/{src_bvh}"
+    ref_file = f"./datasets/Motions/{dst_name}/{dst_bvh}"
+    joined_output_path = pjoin(output_path, "result.bvh")
+    cmd = f"python eval_single_pair.py --input_bvh={input_file} --target_bvh={ref_file} --output_filename={joined_output_path} --test_type={test_type}"
     err = os.system(cmd)
     if err:
         return err
@@ -59,9 +58,8 @@ if __name__ == "__main__":
         example(
             src_name="BerkeleyMHAD_skl_s01",
             src_bvh="skl_s01_a07_r03.bvh",
-            dest_armature="Alicia_m",
-            dest_name="Alicia_m",
-            bvh_name="Dodging.bvh",
+            dst_name="Alicia",
+            dst_bvh="Dodging.bvh",
             test_type="cross",
             output_path="./examples/cross_structure",
         )

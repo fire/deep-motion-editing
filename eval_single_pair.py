@@ -9,32 +9,15 @@ from datasets import create_dataset
 from models import create_model
 
 
-def eval_prepare(args):
+def eval_prepare(input_bvh, target_bvh):
     character = []
     file_id = []
     character_names = []
-    character_names.append(args.input_bvh.split("/")[-2])
-    character_names.append(args.target_bvh.split("/")[-2])
-    if args.test_type == "intra":
-        if character_names[0].endswith("_m"):
-            character = [["BigVegas", "BigVegas"], character_names]
-            file_id = [[0, 0], [args.input_bvh, args.input_bvh]]
-            src_id = 1
-        else:
-            character = [character_names, ["Goblin_m", "Goblin_m"]]
-            file_id = [[args.input_bvh, args.input_bvh], [0, 0]]
-            src_id = 0
-    elif args.test_type == "cross":
-        if character_names[0].endswith("_m"):
-            character = [[character_names[1]], [character_names[0]]]
-            file_id = [[0], [args.input_bvh]]
-            src_id = 1
-        else:
-            character = [[character_names[0]], [character_names[1]]]
-            file_id = [[args.input_bvh], [0]]
-            src_id = 0
-    else:
-        raise Exception("Unknown test type")
+    character_names.append(input_bvh.split("/")[-2])
+    character_names.append(target_bvh.split("/")[-2])
+    character = [[character_names[0]], [character_names[1]]]
+    file_id = [[input_bvh], [target_bvh]]
+    src_id = 0
     return character, file_id, src_id
 
 
@@ -47,25 +30,21 @@ def recover_space(file):
 def main():
     parser = option_parser.get_parser()
     parser.add_argument("--input_bvh", type=str, required=True)
-    parser.add_argument("--target_armature", type=str, required=True)
     parser.add_argument("--target_bvh", type=str, required=False)
     parser.add_argument("--test_type", type=str, required=True)
     parser.add_argument("--output_filename", type=str, required=True)
-
+ 
     args = parser.parse_args()
-
-    # argsparse can't take space character as part of the argument
-    args.input_bvh = recover_space(args.input_bvh)
-    args.target_bvh = recover_space(args.target_bvh)
-    args.output_filename = recover_space(args.output_filename)
-
-    character_names, file_id, src_id = eval_prepare(args)
+    
+    input_bvh = args.input_bvh
+    target_bvh = args.target_bvh
+  
+    character_names, file_id, src_id = eval_prepare(input_bvh, target_bvh)
     output_filename = args.output_filename
-    target_armature = args.target_armature
 
     test_device = args.cuda_device
     eval_seq = args.eval_seq
-
+    
     para_path = pjoin(args.save_dir, "para.txt")
     with open(para_path, "r") as para_file:
         argv_ = para_file.readline().split()[1:]
@@ -77,15 +56,20 @@ def main():
     args.eval_seq = eval_seq
 
     dataset = create_dataset(args, character_names)
-
     model = create_model(args, character_names, dataset)
-    model.load(epoch=1000)
+    model.load(epoch=3600)
     input_motion = []
-    print(file_id)
+
+    print(f"Input motion: {input_bvh}")
+    if not os.path.exists(input_bvh):
+        error = f'Cannot find file {input_bvh}'
+        print(error)
+        return
+
     for i, character_group in enumerate(character_names):
         input_group = []
-        for j in range(1):
-            new_motion = dataset.get_item(i, j, file_id[i][j])
+        for j, _motion in enumerate(character_group):
+            new_motion = dataset.get_item_string(input_bvh)
             new_motion.unsqueeze_(0)
             new_motion = (new_motion - dataset.mean[i][j]) / dataset.var[i][j]
             input_group.append(new_motion)
@@ -94,7 +78,8 @@ def main():
 
     model.set_input(input_motion)
     model.test()
-    bvh_path = "{}/{}/0_{}.bvh".format(model.bvh_path, target_armature, src_id)
+    character_name = target_bvh.split("/")[-2]
+    bvh_path = f"{model.bvh_path}/{character_name}/0_{src_id}.bvh"
     copyfile(bvh_path, output_filename)
 
 
