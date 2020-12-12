@@ -8,25 +8,6 @@ import option_parser
 from datasets import create_dataset
 from models import create_model
 
-
-def eval_prepare(input_bvh, target_bvh):
-    character = []
-    file_id = []
-    character_names = []
-    character_names.append(input_bvh.split("/")[-2])
-    character_names.append(target_bvh.split("/")[-2])
-    character = [[character_names[0]], [character_names[1]]]
-    file_id = [[input_bvh], [0]]
-    src_id = 0
-    return character, file_id, src_id
-
-
-def recover_space(file):
-    l = file.split("/")
-    l[-1] = l[-1].replace("_", " ")
-    return "/".join(l)
-
-
 def main():
     parser = option_parser.get_parser()
     parser.add_argument("--input_bvh", type=str, required=True)
@@ -39,7 +20,12 @@ def main():
     input_bvh = args.input_bvh
     target_bvh = args.target_bvh
   
-    character_names, file_id, src_id = eval_prepare(input_bvh, target_bvh)
+    src_character = input_bvh.split("/")[-2]
+    target_character = target_bvh.split("/")[-2]
+    character_names = [[src_character], [target_character]]
+    file_id = [[input_bvh], [target_bvh]]
+    src_id = 0
+
     output_filename = args.output_filename
 
     test_device = args.cuda_device
@@ -57,7 +43,7 @@ def main():
 
     dataset = create_dataset(args, character_names)
     model = create_model(args, character_names, dataset)
-    model.load(epoch=0)
+    model.load(epoch=8600)
     input_motion = []
 
     if not os.path.exists(input_bvh):
@@ -65,10 +51,11 @@ def main():
         print(error)
         return
 
+    input_motion = []
     for i, character_group in enumerate(character_names):
         input_group = []
-        for j, _ in enumerate(character_group):
-            new_motion = dataset.get_item_string(input_bvh)
+        for j in range(len(character_group)):
+            new_motion = dataset.get_item_string(file_id[i][j])
             new_motion.unsqueeze_(0)
             new_motion = (new_motion - dataset.mean[i][j]) / dataset.var[i][j]
             input_group.append(new_motion)
@@ -77,8 +64,7 @@ def main():
 
     model.set_input(input_motion)
     model.test()
-    character_name = target_bvh.split("/")[-2]
-    bvh_path = f"{model.bvh_path}/{character_name}/0_{src_id}.bvh"
+    bvh_path = f"{model.bvh_path}/{target_character}/0_{src_id}.bvh"
     copyfile(bvh_path, output_filename)
 
 
