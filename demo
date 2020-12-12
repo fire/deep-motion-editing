@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
+from models.IK import fix_foot_contact
+from datasets.bvh_writer import BVH_writer
+from datasets.bvh_parser import BVH_file
+from posixpath import join as pjoin
 import os
 import sys
 
 sys.path.append(".")
-from posixpath import join as pjoin
-
-from datasets.bvh_parser import BVH_file
-from datasets.bvh_writer import BVH_writer
-from models.IK import fix_foot_contact
 
 
 # downsampling and remove redundant joints
@@ -53,9 +52,9 @@ def example(
 
 if __name__ == "__main__":
     example(
-        src_name="BerkeleyMHAD_skl_s01",
-        src_bvh="skl_s01_a07_r03.bvh",
-        dst_name="BerkeleyMHAD_skl_s05",
-        dst_bvh="skl_s05_a03_r05.bvh",
+        src_name="BerkeleyMHAD_skl_s11",
+        src_bvh="skl_s11_a09_r04.bvh",
+        dst_name="BerkeleyMHAD_skl_s01",
+        dst_bvh="skl_s01_a07_r03.bvh",
         output_path="./examples",
     )
