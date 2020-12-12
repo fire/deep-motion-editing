@@ -30,7 +30,7 @@ def example(
 
     input_file = f"./datasets/Motions/{src_name}/{src_bvh}"
     input_path = f"{src_name}_{src_bvh}_input.bvh"
-    copy_ref_file(input_file, pjoin(output_path,))
+    copy_ref_file(input_file, pjoin(output_path, input_path))
 
     ref_file = f'./datasets/Motions/{dst_name}/{dst_bvh}'
     reference_path = f'{dst_name}_{dst_bvh}_reference.bvh'
