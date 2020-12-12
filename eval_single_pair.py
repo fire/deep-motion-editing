@@ -57,10 +57,9 @@ def main():
 
     dataset = create_dataset(args, character_names)
     model = create_model(args, character_names, dataset)
-    model.load(epoch=3600)
+    model.load(epoch=0)
     input_motion = []
 
-    print(f"Input motion: {input_bvh}")
     if not os.path.exists(input_bvh):
         error = f'Cannot find file {input_bvh}'
         print(error)
@@ -68,7 +67,7 @@ def main():
 
     for i, character_group in enumerate(character_names):
         input_group = []
-        for j, _motion in enumerate(character_group):
+        for j, _ in enumerate(character_group):
             new_motion = dataset.get_item_string(input_bvh)
             new_motion.unsqueeze_(0)
             new_motion = (new_motion - dataset.mean[i][j]) / dataset.var[i][j]
