@@ -7,7 +7,6 @@ def get_character_names(args):
                "BerkeleyMHAD_skl_s06",
                "BerkeleyMHAD_skl_s07",
                "BerkeleyMHAD_skl_s08",
-               'Alica',
                ]
     if args.is_train:
         """
