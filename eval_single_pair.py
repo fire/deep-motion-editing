@@ -43,7 +43,7 @@ def main():
 
     dataset = create_dataset(args, character_names)
     model = create_model(args, character_names, dataset)
-    model.load(epoch=8600)
+    model.load(epoch=0)
     input_motion = []
 
     if not os.path.exists(input_bvh):
