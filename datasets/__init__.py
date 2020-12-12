@@ -4,15 +4,15 @@ def get_character_names(args):
         Put the name of subdirectory in retargeting/datasets/Mixamo as [[names of group A], [names of group B]]
         """
         characters = [
-            [   "BerkeleyMHAD_skl_s01", 
-                "BerkeleyMHAD_skl_s02", 
-                "BerkeleyMHAD_skl_s03", 
+            ["BerkeleyMHAD_skl_s01",
+                "BerkeleyMHAD_skl_s02",
+                "BerkeleyMHAD_skl_s03",
                 "BerkeleyMHAD_skl_s04",
                 "BerkeleyMHAD_skl_s05",
                 "BerkeleyMHAD_skl_s06",
                 "BerkeleyMHAD_skl_s07",
                 "BerkeleyMHAD_skl_s08",
-            ],
+             ],
             ["Alicia_m"],
         ]
 
@@ -21,8 +21,17 @@ def get_character_names(args):
         To run evaluation successfully, number of characters in both groups must be the same. Repeat is okay.
         """
         characters = [
-            ["BerkeleyMHAD_skl_s09", "BerkeleyMHAD_skl_s10", "BerkeleyMHAD_skl_s11", "BerkeleyMHAD_skl_s12"],
-            ["Alicia_m", "Alicia_m", "Alicia_m", "Alicia_m",],
+            ["BerkeleyMHAD_skl_s01",
+                "BerkeleyMHAD_skl_s02",
+                "BerkeleyMHAD_skl_s03",
+                "BerkeleyMHAD_skl_s04",
+                "BerkeleyMHAD_skl_s05",
+                "BerkeleyMHAD_skl_s06",
+                "BerkeleyMHAD_skl_s07",
+                "BerkeleyMHAD_skl_s08",
+             ],
+            ["Alicia_m", "Alicia_m", "Alicia_m", "Alicia_m",
+                "Alicia_m", "Alicia_m", "Alicia_m", "Alicia_m"],
         ]
         tmp = characters[1][args.eval_seq]
         characters[1][args.eval_seq] = characters[1][0]
@@ -52,7 +61,7 @@ def get_test_set():
         return list
 
 
-def get_train_list():    
+def get_train_list():
     open_train_list = []
     try:
         open_train_list = open("./datasets/Motions/train_list.txt", "r")
