@@ -13,7 +13,7 @@ def get_character_names(args):
                 "BerkeleyMHAD_skl_s07",
                 "BerkeleyMHAD_skl_s08",
             ],
-            ["Alicia_m","Alicia_m","Alicia_m","Alicia_m","Alicia_m","Alicia_m","Alicia_m","Alicia_m"],
+            ["Alicia_m"],
         ]
 
     else:
