@@ -143,7 +143,8 @@ class TestData(Dataset):
             var_group = []
             offsets_group = []
             for j, character in enumerate(character_group):
-                file = BVH_file(get_std_bvh(dataset=character))
+                std_bvh = get_std_bvh(dataset=character)
+                file = BVH_file(std_bvh)
                 if j == 0:
                     self.joint_topologies.append(file.topology)
                     self.ee_ids.append(file.get_ee_id())
@@ -151,6 +152,7 @@ class TestData(Dataset):
                 new_offset = torch.tensor(new_offset, dtype=torch.float)
                 new_offset = new_offset.reshape((1,) + new_offset.shape)
                 offsets_group.append(new_offset)
+                print(f'Load character {character}, group {i}, index {j}')
                 mean = np.load(
                     f'./datasets/Motions/mean_var/{character}_mean.npy')
                 var = np.load(
