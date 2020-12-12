@@ -211,25 +211,6 @@ class TestData(Dataset):
         length = length // 4 * 4
         return motion[..., :length].to(self.device)
 
-    def get_item_id(self, gid, pid, item_id): 
-        if not isinstance(item_id, int):
-            print(f'Input type: {item_id}')
-            raise Exception('Wrong input file type')
-        character_i = self.characters[gid]
-        character = character_i[pid]
-        path = f'./datasets/Motions/{character}/'
-        item_file = path + self.file_list[item_id]
-        if not os.path.exists(item_file):
-            error = f'Cannot find file {item_file}'
-            print(error)
-            raise Exception(error)
-        item_file = BVH_file(item_file)
-        motion = item_file.to_tensor(quater=self.args.rotation == 'quaternion')
-        motion = motion[:, ::2]
-        length = motion.shape[-1]
-        length = length // 4 * 4
-        return motion[..., :length].to(self.device)
-
     def denorm(self, gid, pid, data):
         means = self.mean[gid][pid, ...]
         var = self.var[gid][pid, ...]
