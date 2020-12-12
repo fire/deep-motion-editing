@@ -12,7 +12,6 @@ def main():
     parser = option_parser.get_parser()
     parser.add_argument("--input_bvh", type=str, required=True)
     parser.add_argument("--target_bvh", type=str, required=False)
-    parser.add_argument("--test_type", type=str, required=True)
     parser.add_argument("--output_filename", type=str, required=True)
  
     args = parser.parse_args()
