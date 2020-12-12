@@ -51,7 +51,7 @@ We provide instructions for retraining our models
 
 * Install cuda. `conda install -y pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch -c=conda-forge`
 
-* Enter `datasets` directory and run `blender -b -P fbx2bvh.py` to convert fbx files to bvh files. If you already have bvh file as dataset, please skip this step.
+* Enter `datasets` directory and run `blender -b -P fbx2bvh.py` or `blender -b -P gltf2bvh.py` to convert fbx files to bvh files. If you already have bvh file as dataset, please skip this step.
 
 * Run `python datasets/preprocess.py` to simplify the skeleton by removing some less interesting joints, e.g. fingers and convert bvh files into npy files. If you use your own data, you'll need to define simplified structure in `datasets/bvh_parser.py` . This information currently is hard-coded in the code. See the comment in source file for more details. There are four steps to make your own dataset work.
 
