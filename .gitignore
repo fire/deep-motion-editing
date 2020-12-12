@@ -111,3 +111,7 @@ venv.bak/
 # result and datasets for retargeting
 pretrained/results/*
 examples
+
+training/
+*.npy
+datasets/Motions/std_bvhs/
