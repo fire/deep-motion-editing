@@ -34,12 +34,19 @@ for _, dirs, _ in sorted([f for f in walk(data_path)]):
                     frame_start = action.frame_range[0]
 
                 frame_end = np.max([60, frame_end])
-                bpy.ops.export_anim.bvh(
-                    filepath=dumppath,
-                    frame_start=frame_start,
-                    frame_end=frame_end,
-                    root_transform_only=True,
-                )
-                bpy.data.actions.remove(bpy.data.actions[-1])
+                                
+                for i in range(len(bpy.context.scene.objects)):
+                    element = bpy.context.scene.objects[i]
+                    if element.type != "ARMATURE":
+                        continue
+                    bpy.context.view_layer.objects.active = element
+                    element.select_set(state=True)
+                    bpy.ops.export_anim.bvh(
+                        filepath=dumppath,
+                        frame_start=frame_start,
+                        frame_end=frame_end,
+                        root_transform_only=True,
+                    )
+                    bpy.data.actions.remove(bpy.data.actions[-1])
 
-                print(data_path + d + "/" + f + " processed.")
+                    print(data_path + d + "/" + f + " processed.")
