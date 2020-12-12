@@ -65,11 +65,10 @@ class MixedData(Dataset):
                 new_args.dataset = dataset
 
                 tmp.append(MotionData(new_args))
-
                 mean = np.load(
-                    './datasets/Motions/mean_var/{}_mean.npy'.format(dataset))
+                    f'./datasets/Motions/mean_var/{dataset}_mean.npy')
                 var = np.load(
-                    './datasets/Motions/mean_var/{}_var.npy'.format(dataset))
+                    f'./datasets/Motions/mean_var/{dataset}_var.npy')
                 mean = torch.tensor(mean)
                 mean = mean.reshape((1,) + mean.shape)
                 var = torch.tensor(var)
@@ -153,9 +152,9 @@ class TestData(Dataset):
                 new_offset = new_offset.reshape((1,) + new_offset.shape)
                 offsets_group.append(new_offset)
                 mean = np.load(
-                    './datasets/Motions/mean_var/{}_mean.npy'.format(character))
+                    f'./datasets/Motions/mean_var/{character}_mean.npy')
                 var = np.load(
-                    './datasets/Motions/mean_var/{}_var.npy'.format(character))
+                    f'./datasets/Motions/mean_var/{character}_var.npy')
                 mean = torch.tensor(mean)
                 mean = mean.reshape((1, ) + mean.shape)
                 var = torch.tensor(var)
@@ -202,17 +201,22 @@ class TestData(Dataset):
     def __len__(self):
         return len(self.file_list)
 
-    def get_item(self, gid, pid, item_id):
+    def get_item_string(self, item_string):
+        item_file = BVH_file(item_string)
+        motion = item_file.to_tensor(quater=self.args.rotation == 'quaternion')
+        motion = motion[:, ::2]
+        length = motion.shape[-1]
+        length = length // 4 * 4
+        return motion[..., :length].to(self.device)
+
+    def get_item_id(self, gid, pid, item_id): 
+        if not isinstance(item_id, int):
+            print(f'Input type: {item_id}')
+            raise Exception('Wrong input file type')
         character_i = self.characters[gid]
         character = character_i[pid]
         path = f'./datasets/Motions/{character}/'
-        item_file = ""
-        if isinstance(item_id, int):
-            item_file = path + self.file_list[item_id] 
-        elif isinstance(item_id, str):
-            item_file = item_id
-        else:
-            raise Exception('Wrong input file type')
+        item_file = path + self.file_list[item_id]
         if not os.path.exists(item_file):
             error = f'Cannot find file {item_file}'
             print(error)

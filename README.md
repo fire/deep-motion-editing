@@ -19,16 +19,6 @@ This library was written by [Kfir Aberman](https://kfiraberman.github.io), [Peiz
 
 Retarget one animation.
 
-```
-scoop install miniconda3
-# restart prompt
-# install cuda
-conda install -y pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch -c=conda-forge
-python3 .\datasets\preprocess.py
-python3 train --save_dir=./training/
-python3 demo
-``` 
-
 ### Motion Retargeting
 
 Download and extract the test dataset from https://github.com/fire/deep-motion-editing/releases/download/v0.1-alpha/training_set.tar.bz2. Then place the `Mixamo` directory within `datasets` .
@@ -57,9 +47,13 @@ We provide instructions for retraining our models
 
 #### Dataset
 
+* `scoop install miniconda3` Install miniconda.
+
+* Install cuda. `conda install -y pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch -c=conda-forge`
+
 * Enter `datasets` directory and run `blender -b -P fbx2bvh.py` to convert fbx files to bvh files. If you already have bvh file as dataset, please skip this step.
 
-* Run `python3 datasets/preprocess.py` to simplify the skeleton by removing some less interesting joints, e.g. fingers and convert bvh files into npy files. If you use your own data, you'll need to define simplified structure in `datasets/bvh_parser.py` . This information currently is hard-coded in the code. See the comment in source file for more details. There are four steps to make your own dataset work.
+* Run `python datasets/preprocess.py` to simplify the skeleton by removing some less interesting joints, e.g. fingers and convert bvh files into npy files. If you use your own data, you'll need to define simplified structure in `datasets/bvh_parser.py` . This information currently is hard-coded in the code. See the comment in source file for more details. There are four steps to make your own dataset work.
 
 * Training and testing character are hard-coded in `datasets/__init__.py` . You'll need to modify it if you want to use your own dataset.
 
