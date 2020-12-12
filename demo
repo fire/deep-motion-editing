@@ -52,9 +52,9 @@ def example(
 
 if __name__ == "__main__":
     example(
-        src_name="BerkeleyMHAD_skl_s04",
-        src_bvh="skl_s04_a02_r04.bvh",
-        dst_name="BerkeleyMHAD_skl_s07",
-        dst_bvh="skl_s07_a01_r04.bvh",
+        src_name="BerkeleyMHAD_skl_s11",
+        src_bvh="skl_s11_a09_r04.bvh",
+        dst_name="BerkeleyMHAD_skl_s01",
+        dst_bvh="skl_s01_a07_r03.bvh",
         output_path="./examples",
     )
