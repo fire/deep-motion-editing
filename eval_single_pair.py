@@ -16,7 +16,7 @@ def eval_prepare(input_bvh, target_bvh):
     character_names.append(input_bvh.split("/")[-2])
     character_names.append(target_bvh.split("/")[-2])
     character = [[character_names[0]], [character_names[1]]]
-    file_id = [[input_bvh], [target_bvh]]
+    file_id = [[input_bvh], [0]]
     src_id = 0
     return character, file_id, src_id
 

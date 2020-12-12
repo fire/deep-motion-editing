@@ -36,7 +36,6 @@ def example(
     copy_ref_file(ref_file, pjoin(output_path, 'gt.bvh'))
     height = get_height(input_file)
 
-    bvh_name = bvh_name.replace(" ", "_")
     input_file = f"./datasets/Motions/{src_name}/{src_bvh}"
     ref_file = f"./datasets/Motions/{dst_name}/{dst_bvh}"
     joined_output_path = pjoin(output_path, "result.bvh")
