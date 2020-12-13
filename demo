@@ -54,8 +54,8 @@ def example(
 if __name__ == "__main__":
     src_name = "BerkeleyMHAD_skl_s05"
     src_bvh = "skl_s05_a01_r02.bvh"
-    dst_name = "BerkeleyMHAD_skl_s01"
-    dst_bvh = "skl_s01_a01_r02.bvh"
+    dst_name = "BerkeleyMHAD_skl_s07"
+    dst_bvh = "skl_s07_t-pose.bvh"
     example(
         src_name=src_name,
         src_bvh=src_bvh,

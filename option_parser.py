@@ -4,7 +4,7 @@ import argparse
 def get_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--save_dir", type=str, default="./training", help="directory for all savings"
+        "--save_dir", type=str, default="./pretrained", help="directory for all savings"
     )
     parser.add_argument(
         "--cuda_device",
@@ -45,7 +45,7 @@ def get_parser():
     parser.add_argument(
         "--data_augment", type=int, default=1, help="data_augment: 1 or 0"
     )
-    parser.add_argument("--epoch_num", type=int, default=5001, help="epoch_num")
+    parser.add_argument("--epoch_num", type=int, default=51, help="epoch_num")
     parser.add_argument(
         "--window_size", type=int, default=64, help="length of time axis per window"
     )

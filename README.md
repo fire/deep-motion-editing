@@ -26,7 +26,7 @@ The test dataset is included in the Motions directory within `datasets`.
 To generate the demo examples with the pretrained model, run
 
 ```bash
-python3 demo
+python3 demo --save_dir=pretrained
 ```
 
 The results will be saved in `examples` .
