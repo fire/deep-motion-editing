@@ -379,8 +379,8 @@ ee_name_Prisoner = [
 ]
 
 ee_BerkeleyMHAD = [
-    "LeftToeBase",
-    "RightToeBase",
+    "LeftFoot",
+    "RightFoot",
     "Head",
     "LeftHand",
     "RightHand",
