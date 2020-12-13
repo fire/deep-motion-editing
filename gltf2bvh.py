@@ -46,6 +46,7 @@ for _, dirs, _ in sorted([f for f in walk(data_path)]):
                         frame_start=frame_start,
                         frame_end=frame_end,
                         root_transform_only=True,
+                        rotate_mode='YXZ',
                     )
                     bpy.data.actions.remove(bpy.data.actions[-1])
 
