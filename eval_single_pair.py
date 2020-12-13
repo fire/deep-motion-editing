@@ -13,11 +13,13 @@ def main():
     parser.add_argument("--input_bvh", type=str, required=True)
     parser.add_argument("--target_bvh", type=str, required=False)
     parser.add_argument("--output_filename", type=str, required=True)
+    parser.add_argument("--cpu", type=bool, required=False)
  
     args = parser.parse_args()
     
     input_bvh = args.input_bvh
     target_bvh = args.target_bvh
+    cpu = args.cpu
   
     src_character = input_bvh.split("/")[-2]
     target_character = target_bvh.split("/")[-2]
@@ -35,7 +37,10 @@ def main():
         argv_ = para_file.readline().split()[1:]
         args = option_parser.get_parser().parse_args(argv_)
 
-    args.cuda_device = test_device if torch.cuda.is_available() else "cpu"
+    args.cuda_device = test_device if torch.cuda.is_available() else "cpu"    
+    if cpu:
+        args.cuda_device = "cpu"
+    print(f'Cuda device is {args.cuda_device}')
     args.is_train = False
     args.rotation = "quaternion"
     args.eval_seq = eval_seq
