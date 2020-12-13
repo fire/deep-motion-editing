@@ -1,11 +1,12 @@
-import os
-import numpy as np
-import torch
 from torch.utils.data import Dataset
 import copy
 from datasets.motion_dataset import MotionData
+import os
+import numpy as np
+import torch
 from datasets.bvh_parser import BVH_file
 from option_parser import get_std_bvh
+from datasets import get_test_set
 
 
 class MixedData0(Dataset):
@@ -52,48 +53,48 @@ class MixedData(Dataset):
         seed = 19260817
         total_length = 10000000
         all_datas = []
-        for group in datasets_groups:
-            for datasets in group:
-                offsets_group = []
-                means_group = []
-                vars_group = []
-                # dataset_num = len(datasets)
-                for i, dataset in enumerate(datasets):
-                    new_args = copy.copy(args)
-                    new_args.data_augment = 0
-                    new_args.dataset = dataset
-                    tmp = []
-                    tmp.append(MotionData(new_args))
-                    mean = np.load(
-                        f'./datasets/Motions/mean_var/{dataset}_mean.npy')
-                    var = np.load(
-                        f'./datasets/Motions/mean_var/{dataset}_var.npy')
-                    mean = torch.tensor(mean)
-                    mean = mean.reshape((1,) + mean.shape)
-                    var = torch.tensor(var)
-                    var = var.reshape((1,) + var.shape)
+        for datasets in datasets_groups:
+            offsets_group = []
+            means_group = []
+            vars_group = []
+            dataset_num += len(datasets)
+            tmp = []
+            for i, dataset in enumerate(datasets):
+                new_args = copy.copy(args)
+                new_args.data_augment = 0
+                new_args.dataset = dataset
 
-                    means_group.append(mean)
-                    vars_group.append(var)
+                tmp.append(MotionData(new_args))
+                mean = np.load(
+                    f'./datasets/Motions/mean_var/{dataset}_mean.npy')
+                var = np.load(
+                    f'./datasets/Motions/mean_var/{dataset}_var.npy')
+                mean = torch.tensor(mean)
+                mean = mean.reshape((1,) + mean.shape)
+                var = torch.tensor(var)
+                var = var.reshape((1,) + var.shape)
 
-                    file = BVH_file(get_std_bvh(dataset=dataset))
-                    if i == 0:
-                        self.joint_topologies.append(file.topology)
-                        self.ee_ids.append(file.get_ee_id())
-                    new_offset = file.offset
-                    new_offset = torch.tensor(new_offset, dtype=torch.float)
-                    new_offset = new_offset.reshape((1,) + new_offset.shape)
-                    offsets_group.append(new_offset)
+                means_group.append(mean)
+                vars_group.append(var)
 
-                    total_length = min(total_length, len(tmp[-1]))
-                all_datas.append(tmp)
-                offsets_group = torch.cat(offsets_group, dim=0)
-                offsets_group = offsets_group.to(device)
-                means_group = torch.cat(means_group, dim=0).to(device)
-                vars_group = torch.cat(vars_group, dim=0).to(device)
-                self.offsets.append(offsets_group)
-                self.means.append(means_group)
-                self.vars.append(vars_group)
+                file = BVH_file(get_std_bvh(dataset=dataset))
+                if i == 0:
+                    self.joint_topologies.append(file.topology)
+                    self.ee_ids.append(file.get_ee_id())
+                new_offset = file.offset
+                new_offset = torch.tensor(new_offset, dtype=torch.float)
+                new_offset = new_offset.reshape((1,) + new_offset.shape)
+                offsets_group.append(new_offset)
+
+                total_length = min(total_length, len(tmp[-1]))
+            all_datas.append(tmp)
+            offsets_group = torch.cat(offsets_group, dim=0)
+            offsets_group = offsets_group.to(device)
+            means_group = torch.cat(means_group, dim=0).to(device)
+            vars_group = torch.cat(vars_group, dim=0).to(device)
+            self.offsets.append(offsets_group)
+            self.means.append(means_group)
+            self.vars.append(vars_group)
 
         for datasets in all_datas:
             pt = 0
