@@ -326,9 +326,9 @@ corps_name_1 = [
 ]
 corps_BerkeleyMHAD = [
 'Hips',
-'LeftUpLeg_virtual', 'LeftUpLeg', 'LeftUpLegRoll', 'LeftLeg', 'LeftLegRoll', 'LeftFoot',
-'RightUpLeg_virtual','RightUpLeg', 'RightUpLegRoll', 'RightLeg', 'RightLegRoll', 'RightFoot',  
-'spine_virtual', 'spine', 'spine1', 'spine2', 'Neck_virtual', 'Neck', 'Head',
+'LeftUpLeg', 'LeftUpLegRoll', 'LeftLeg', 'LeftLegRoll', 'LeftFoot',
+'RightUpLeg', 'RightUpLegRoll', 'RightLeg', 'RightLegRoll', 'RightFoot',  
+'spine', 'spine1', 'spine2', 'Neck', 'Head',
 'LeftShoulder', 'LeftArm', 'LeftArmRoll', 'LeftForeArm', 'LeftForeArmRoll', 'LeftHand',
 'RightShoulder', 'RightArm', 'RightArmRoll', 'RightForeArm', 'RightForeArmRoll', 'RightHand']
 
