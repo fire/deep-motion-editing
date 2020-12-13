@@ -13,7 +13,7 @@ This library was written by [Kfir Aberman](https://kfiraberman.github.io), [Peiz
 
 ## Prerequisites
 
-* Linux or macOS
+* Windows 10, Linux or macOS
 * Python 3
 * CPU or NVIDIA GPU + CUDA CuDNN
 
