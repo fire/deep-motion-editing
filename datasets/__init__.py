@@ -1,14 +1,14 @@
 def get_character_names(args):
     group_a = [
-        "BerkeleyMHAD_skl_s01",
-        "BerkeleyMHAD_skl_s02",
-        "BerkeleyMHAD_skl_s03",
-        "BerkeleyMHAD_skl_s04",
         "BerkeleyMHAD_skl_s05",
         "BerkeleyMHAD_skl_s06",
         "BerkeleyMHAD_skl_s07",
         "BerkeleyMHAD_skl_s08", ]
-    group_b = ["BigVegas", "Kaya"]
+    group_b = [
+        "BerkeleyMHAD_skl_s01",
+        "BerkeleyMHAD_skl_s02",
+        "BerkeleyMHAD_skl_s03",
+        "BerkeleyMHAD_skl_s04",]
     if args.is_train:
         """
         Put the name of subdirectory in retargeting/datasets/Mixamo as [[names of group A], [names of group B]]
