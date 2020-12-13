@@ -1,17 +1,17 @@
 import sys
 sys.path.append('.')
 sys.path.append('./utils')
-from option_parser import get_std_bvh
-from models.skeleton import build_edge_topology
-from models.Kinematics import ForwardKinematics
-from Quaternions import Quaternions
-import numpy as np
-import BVH_mod as BVH
-import sys
-import torch
 
 sys.path.append("utils")
 sys.path.append(".")
+
+import torch
+import BVH_mod as BVH
+import numpy as np
+from Quaternions import Quaternions
+from models.Kinematics import ForwardKinematics
+from models.skeleton import build_edge_topology
+from option_parser import get_std_bvh
 
 """
 1.
@@ -19,424 +19,384 @@ Specify the joints that you want to use in training and test. Other joints will 
 Please start with root joint, then left leg chain, right leg chain, head chain, left shoulder chain and right shoulder chain.
 See the examples below.
 """
-corps_name_1 = [
-    "Pelvis",
-    "LeftUpLeg",
-    "LeftLeg",
-    "LeftFoot",
-    "LeftToeBase",
-    "RightUpLeg",
-    "RightLeg",
-    "RightFoot",
-    "RightToeBase",
-    "Hips",
-    "Spine",
-    "Spine1",
-    "Spine2",
-    "Neck",
-    "Head",
-    "LeftShoulder",
-    "LeftArm",
-    "LeftForeArm",
-    "LeftHand",
-    "RightShoulder",
-    "RightArm",
-    "RightForeArm",
-    "RightHand",
-]
-corps_name_2 = [
-    "Hips",
-    "LeftUpLeg",
-    "LeftLeg",
-    "LeftFoot",
-    "LeftToeBase",
-    "LeftToe_End",
-    "RightUpLeg",
-    "RightLeg",
-    "RightFoot",
-    "RightToeBase",
-    "RightToe_End",
-    "Spine",
-    "Spine1",
-    "Spine2",
-    "Neck",
-    "Head",
-    "HeadTop_End",
-    "LeftShoulder",
-    "LeftArm",
-    "LeftForeArm",
-    "LeftHand",
-    "RightShoulder",
-    "RightArm",
-    "RightForeArm",
-    "RightHand",
-]
-corps_name_3 = [
-    "Hips",
-    "LeftUpLeg",
-    "LeftLeg",
-    "LeftFoot",
-    "RightUpLeg",
-    "RightLeg",
-    "RightFoot",
-    "Spine",
-    "Spine1",
-    "Neck",
-    "Head",
-    "LeftShoulder",
-    "LeftArm",
-    "LeftForeArm",
-    "LeftHand",
-    "RightShoulder",
-    "RightArm",
-    "RightForeArm",
-    "RightHand",
-]
-corps_name_boss = [
-    "Hips",
-    "LeftUpLeg",
-    "LeftLeg",
-    "LeftFoot",
-    "LeftToeBase",
-    "RightUpLeg",
-    "RightLeg",
-    "RightFoot",
-    "RightToeBase",
-    "Spine",
-    "Spine1",
-    "Spine2",
-    "Neck",
-    "Neck1",
-    "Head",
-    "LeftShoulder",
-    "LeftArm",
-    "LeftForeArm",
-    "LeftHand",
-    "RightShoulder",
-    "RightArm",
-    "RightForeArm",
-    "RightHand",
-]
-corps_name_boss2 = [
-    "Hips",
-    "LeftUpLeg",
-    "LeftLeg",
-    "LeftFoot",
-    "LeftToeBase",
-    "Left_End",
-    "RightUpLeg",
-    "RightLeg",
-    "RightFoot",
-    "RightToeBase",
-    "Right_End",
-    "Spine",
-    "Spine1",
-    "Spine2",
-    "Neck",
-    "Neck1",
-    "Head",
-    "LeftShoulder",
-    "LeftArm",
-    "LeftForeArm",
-    "LeftHand",
-    "RightShoulder",
-    "RightArm",
-    "RightForeArm",
-    "RightHand",
-]
-corps_name_cmu = [
-    "Hips",
-    "LHipJoint",
-    "LeftUpLeg",
-    "LeftLeg",
-    "LeftFoot",
-    "LeftToeBase",
-    "RHipJoint",
-    "RightUpLeg",
-    "RightLeg",
-    "RightFoot",
-    "RightToeBase",
-    "LowerBack",
-    "Spine",
-    "Spine1",
-    "Neck",
-    "Neck1",
-    "Head",
-    "LeftShoulder",
-    "LeftArm",
-    "LeftForeArm",
-    "LeftHand",
-    "RightShoulder",
-    "RightArm",
-    "RightForeArm",
-    "RightHand",
-]
-corps_name_monkey = [
-    "Hips",
-    "LeftUpLeg",
-    "LeftLeg",
-    "LeftFoot",
-    "LeftToeBase",
-    "RightUpLeg",
-    "RightLeg",
-    "RightFoot",
-    "RightToeBase",
-    "Spine",
-    "Spine1",
-    "Neck",
-    "Head",
-    "LeftShoulder",
-    "LeftArm",
-    "LeftForeArm",
-    "LeftHand",
-    "RightShoulder",
-    "RightArm",
-    "RightForeArm",
-    "RightHand",
-]
-corps_name_three_arms = [
-    "Three_Arms_Hips",
-    "LeftUpLeg",
-    "LeftLeg",
-    "LeftFoot",
-    "LeftToeBase",
-    "RightUpLeg",
-    "RightLeg",
-    "RightFoot",
-    "RightToeBase",
-    "Spine",
-    "Spine1",
-    "Neck",
-    "Head",
-    "LeftShoulder",
-    "LeftArm",
-    "LeftForeArm",
-    "LeftHand",
-    "RightShoulder",
-    "RightArm",
-    "RightForeArm",
-    "RightHand",
-]
-corps_name_three_arms_split = [
-    "Three_Arms_split_Hips",
-    "LeftUpLeg",
-    "LeftLeg",
-    "LeftFoot",
-    "LeftToeBase",
-    "RightUpLeg",
-    "RightLeg",
-    "RightFoot",
-    "RightToeBase",
-    "Spine",
-    "Spine1",
-    "Neck",
-    "Head",
-    "LeftShoulder",
-    "LeftArm",
-    "LeftForeArm",
-    "LeftHand",
-    "LeftHand_split",
-    "RightShoulder",
-    "RightArm",
-    "RightForeArm",
-    "RightHand",
-    "RightHand_split",
-]
-corps_name_Prisoner = [
-    "HipsPrisoner",
-    "LeftUpLeg",
-    "LeftLeg",
-    "LeftFoot",
-    "LeftToeBase",
-    "LeftToe_End",
-    "RightUpLeg",
-    "RightLeg",
-    "RightFoot",
-    "RightToeBase",
-    "RightToe_End",
-    "Spine",
-    "Spine1",
-    "Spine2",
-    "Neck",
-    "Head",
-    "HeadTop_End",
-    "LeftShoulder",
-    "LeftArm",
-    "LeftForeArm",
-    "LeftHand",
-    "RightShoulder",
-    "RightArm",
-    "RightForeArm",
-]
-corps_name_mixamo2_m = [
-    "Hips",
-    "LeftUpLeg",
-    "LeftLeg",
-    "LeftFoot",
-    "LeftToeBase",
-    "LeftToe_End",
-    "RightUpLeg",
-    "RightLeg",
-    "RightFoot",
-    "RightToeBase",
-    "RightToe_End",
-    "Spine",
-    "Spine1",
-    "Spine1_split",
-    "Spine2",
-    "Neck",
-    "Head",
-    "HeadTop_End",
-    "LeftShoulder",
-    "LeftShoulder_split",
-    "LeftArm",
-    "LeftForeArm",
-    "LeftHand",
-    "RightShoulder",
-    "RightShoulder_split",
-    "RightArm",
-    "RightForeArm",
-    "RightHand",
-]
 
-corps_name_1 = [
-    "Pelvis",
-    "LeftUpLeg",
-    "LeftLeg",
-    "LeftFoot",
-    "LeftToeBase",
-    "RightUpLeg",
-    "RightLeg",
-    "RightFoot",
-    "RightToeBase",
-    "Hips",
-    "Spine",
-    "Spine1",
-    "Spine2",
-    "Neck",
-    "Head",
-    "LeftShoulder",
-    "LeftArm",
-    "LeftForeArm",
-    "LeftHand",
-    "RightShoulder",
-    "RightArm",
-    "RightForeArm",
-    "RightHand",
-]
-corps_BerkeleyMHAD = [
-'Hips',
-'LeftUpLeg', 'LeftUpLegRoll', 'LeftLeg', 'LeftLegRoll', 'LeftFoot',
-'RightUpLeg', 'RightUpLegRoll', 'RightLeg', 'RightLegRoll', 'RightFoot',  
-'spine', 'spine1', 'spine2', 'Neck', 'Head',
-'LeftShoulder', 'LeftArm', 'LeftArmRoll', 'LeftForeArm', 'LeftForeArmRoll', 'LeftHand',
-'RightShoulder', 'RightArm', 'RightArmRoll', 'RightForeArm', 'RightForeArmRoll', 'RightHand']
+corps_names = {
+    "corps_name_1": [
+        "Pelvis",
+        "LeftUpLeg",
+        "LeftLeg",
+        "LeftFoot",
+        "LeftToeBase",
+        "RightUpLeg",
+        "RightLeg",
+        "RightFoot",
+        "RightToeBase",
+        "Hips",
+        "Spine",
+        "Spine1",
+        "Spine2",
+        "Neck",
+        "Head",
+        "LeftShoulder",
+        "LeftArm",
+        "LeftForeArm",
+        "LeftHand",
+        "RightShoulder",
+        "RightArm",
+        "RightForeArm",
+        "RightHand",
+    ],
+    "corps_name_2": [
+        "Hips",
+        "LeftUpLeg",
+        "LeftLeg",
+        "LeftFoot",
+        "LeftToeBase",
+        "LeftToe_End",
+        "RightUpLeg",
+        "RightLeg",
+        "RightFoot",
+        "RightToeBase",
+        "RightToe_End",
+        "Spine",
+        "Spine1",
+        "Spine2",
+        "Neck",
+        "Head",
+        "HeadTop_End",
+        "LeftShoulder",
+        "LeftArm",
+        "LeftForeArm",
+        "LeftHand",
+        "RightShoulder",
+        "RightArm",
+        "RightForeArm",
+        "RightHand",
+    ],
+    "corps_name_3": [
+        "Hips",
+        "LeftUpLeg",
+        "LeftLeg",
+        "LeftFoot",
+        "RightUpLeg",
+        "RightLeg",
+        "RightFoot",
+        "Spine",
+        "Spine1",
+        "Neck",
+        "Head",
+        "LeftShoulder",
+        "LeftArm",
+        "LeftForeArm",
+        "LeftHand",
+        "RightShoulder",
+        "RightArm",
+        "RightForeArm",
+        "RightHand",
+    ],
+    "corps_name_boss": [
+        "Hips",
+        "LeftUpLeg",
+        "LeftLeg",
+        "LeftFoot",
+        "LeftToeBase",
+        "RightUpLeg",
+        "RightLeg",
+        "RightFoot",
+        "RightToeBase",
+        "Spine",
+        "Spine1",
+        "Spine2",
+        "Neck",
+        "Neck1",
+        "Head",
+        "LeftShoulder",
+        "LeftArm",
+        "LeftForeArm",
+        "LeftHand",
+        "RightShoulder",
+        "RightArm",
+        "RightForeArm",
+        "RightHand",
+    ],
+    "corps_name_boss2": [
+        "Hips",
+        "LeftUpLeg",
+        "LeftLeg",
+        "LeftFoot",
+        "LeftToeBase",
+        "Left_End",
+        "RightUpLeg",
+        "RightLeg",
+        "RightFoot",
+        "RightToeBase",
+        "Right_End",
+        "Spine",
+        "Spine1",
+        "Spine2",
+        "Neck",
+        "Neck1",
+        "Head",
+        "LeftShoulder",
+        "LeftArm",
+        "LeftForeArm",
+        "LeftHand",
+        "RightShoulder",
+        "RightArm",
+        "RightForeArm",
+        "RightHand",
+    ],
+    "corps_name_cmu": [
+        "Hips",
+        "LHipJoint",
+        "LeftUpLeg",
+        "LeftLeg",
+        "LeftFoot",
+        "LeftToeBase",
+        "RHipJoint",
+        "RightUpLeg",
+        "RightLeg",
+        "RightFoot",
+        "RightToeBase",
+        "LowerBack",
+        "Spine",
+        "Spine1",
+        "Neck",
+        "Neck1",
+        "Head",
+        "LeftShoulder",
+        "LeftArm",
+        "LeftForeArm",
+        "LeftHand",
+        "RightShoulder",
+        "RightArm",
+        "RightForeArm",
+        "RightHand",
+    ],
+    "corps_name_monkey": [
+        "Hips",
+        "LeftUpLeg",
+        "LeftLeg",
+        "LeftFoot",
+        "LeftToeBase",
+        "RightUpLeg",
+        "RightLeg",
+        "RightFoot",
+        "RightToeBase",
+        "Spine",
+        "Spine1",
+        "Neck",
+        "Head",
+        "LeftShoulder",
+        "LeftArm",
+        "LeftForeArm",
+        "LeftHand",
+        "RightShoulder",
+        "RightArm",
+        "RightForeArm",
+        "RightHand",
+    ],
+    "corps_name_three_arms": [
+        "Three_Arms_Hips",
+        "LeftUpLeg",
+        "LeftLeg",
+        "LeftFoot",
+        "LeftToeBase",
+        "RightUpLeg",
+        "RightLeg",
+        "RightFoot",
+        "RightToeBase",
+        "Spine",
+        "Spine1",
+        "Neck",
+        "Head",
+        "LeftShoulder",
+        "LeftArm",
+        "LeftForeArm",
+        "LeftHand",
+        "RightShoulder",
+        "RightArm",
+        "RightForeArm",
+        "RightHand",
+    ],
+    "corps_name_three_arms_split": [
+        "Three_Arms_split_Hips",
+        "LeftUpLeg",
+        "LeftLeg",
+        "LeftFoot",
+        "LeftToeBase",
+        "RightUpLeg",
+        "RightLeg",
+        "RightFoot",
+        "RightToeBase",
+        "Spine",
+        "Spine1",
+        "Neck",
+        "Head",
+        "LeftShoulder",
+        "LeftArm",
+        "LeftForeArm",
+        "LeftHand",
+        "LeftHand_split",
+        "RightShoulder",
+        "RightArm",
+        "RightForeArm",
+        "RightHand",
+        "RightHand_split",
+    ],
+    "corps_name_Prisoner": [
+        "HipsPrisoner",
+        "LeftUpLeg",
+        "LeftLeg",
+        "LeftFoot",
+        "LeftToeBase",
+        "LeftToe_End",
+        "RightUpLeg",
+        "RightLeg",
+        "RightFoot",
+        "RightToeBase",
+        "RightToe_End",
+        "Spine",
+        "Spine1",
+        "Spine2",
+        "Neck",
+        "Head",
+        "HeadTop_End",
+        "LeftShoulder",
+        "LeftArm",
+        "LeftForeArm",
+        "LeftHand",
+        "RightShoulder",
+        "RightArm",
+        "RightForeArm",
+    ],
+    "corps_name_mixamo2_m": [
+        "Hips",
+        "LeftUpLeg",
+        "LeftLeg",
+        "LeftFoot",
+        "LeftToeBase",
+        "LeftToe_End",
+        "RightUpLeg",
+        "RightLeg",
+        "RightFoot",
+        "RightToeBase",
+        "RightToe_End",
+        "Spine",
+        "Spine1",
+        "Spine1_split",
+        "Spine2",
+        "Neck",
+        "Head",
+        "HeadTop_End",
+        "LeftShoulder",
+        "LeftShoulder_split",
+        "LeftArm",
+        "LeftForeArm",
+        "LeftHand",
+        "RightShoulder",
+        "RightShoulder_split",
+        "RightArm",
+        "RightForeArm",
+        "RightHand",
+    ],
 
-corps_VRM = [
-'Hips',
-'LeftUpLeg', 'LeftLeg', 'LeftFoot', 'LeftToeBase', 'LeftToeEnd',
-'RightUpLeg', 'RightLeg', 'RightFoot', 'RightToeBase', 'RightToeEnd',
-'Spine', 'Spine1', 'Spine2', 'Spine3', 'Neck', 'Neck1', 'Head',
-'LeftShoulder', 'LeftArm', 'LeftForeArm', 'LeftHand',
-'RightShoulder', 'RightArm', 'RightForeArm', 'RightHand']
-
-corps_name_4 = [
-    "CC_Base_BoneRoot",
-	"CC_Base_Hip", "CC_Base_Pelvis", "CC_Base_L_Thigh", "CC_Base_L_Calf", "CC_Base_L_Foot",
-	"CC_Base_Hip", "CC_Base_Pelvis", "CC_Base_R_Thigh", "CC_Base_R_Calf", "CC_Base_R_Foot",
-    "CC_Base_Hip", "CC_Base_Spine01", "CC_Base_Spine02", "CC_Base_NeckTwist01", "CC_Base_NeckTwist02", "CC_Base_Head", "CC_Base_HeadNub",
-    "CC_Base_L_Clavicle", "CC_Base_L_Upperarm", "CC_Base_L_Forearm", "CC_Base_L_Hand",
-	"CC_Base_R_Clavicle", "CC_Base_R_Upperarm", "CC_Base_R_Forearm", "CC_Base_R_Hand",
-]
-
-# corps_name_example = ['Root', 'LeftUpLeg', ..., 'LeftToe', 'RightUpLeg', ..., 'RightToe', 'Spine', ..., 'Head', 'LeftShoulder', ..., 'LeftHand', 'RightShoulder', ..., 'RightHand']
-
+    "corps_name_1": [
+        "Pelvis",
+        "LeftUpLeg",
+        "LeftLeg",
+        "LeftFoot",
+        "LeftToeBase",
+        "RightUpLeg",
+        "RightLeg",
+        "RightFoot",
+        "RightToeBase",
+        "Hips",
+        "Spine",
+        "Spine1",
+        "Spine2",
+        "Neck",
+        "Head",
+        "LeftShoulder",
+        "LeftArm",
+        "LeftForeArm",
+        "LeftHand",
+        "RightShoulder",
+        "RightArm",
+        "RightForeArm",
+        "RightHand",
+    ],
+    "corps_BerkeleyMHAD": [
+        'Hips',
+        'LeftUpLeg', 'LeftUpLegRoll', 'LeftLeg', 'LeftLegRoll', 'LeftFoot',
+        'RightUpLeg', 'RightUpLegRoll', 'RightLeg', 'RightLegRoll', 'RightFoot',
+        'spine', 'spine1', 'spine2', 'Neck', 'Head',
+        'LeftShoulder', 'LeftArm', 'LeftArmRoll', 'LeftForeArm', 'LeftForeArmRoll', 'LeftHand',
+        'RightShoulder', 'RightArm', 'RightArmRoll', 'RightForeArm', 'RightForeArmRoll', 'RightHand'],
+    "corps_VRM": [
+        'Hips',
+        'LeftUpLeg', 'LeftLeg', 'LeftFoot', 'LeftToeBase', 'LeftToeEnd',
+        'RightUpLeg', 'RightLeg', 'RightFoot', 'RightToeBase', 'RightToeEnd',
+        'Spine', 'Spine1', 'Spine2', 'Spine3', 'Neck', 'Neck1', 'Head',
+        'LeftShoulder', 'LeftArm', 'LeftForeArm', 'LeftHand',
+        'RightShoulder', 'RightArm', 'RightForeArm', 'RightHand'],
+    "corps_motion_project": [
+        "Hips",
+        "LeftUpLeg", "LeftLeg", "LeftFoot", "LeftToeBase",
+        "RightUpLeg", "RightLeg", "RightFoot", "RightToeBase",
+        "Hips", "ToSpine", "Spine", "Spine1", "Neck", "Head",
+        "LeftShoulder", "LeftArm", "LeftForeArm", "LeftHand",
+        "RightShoulder", "RightArm", "RightForeArm", "RightHand",
+    ],
+    # "corps_name_example": ['Root', 'LeftUpLeg', ..., 'LeftToe', 'RightUpLeg', ..., 'RightToe', 'Spine', ..., 'Head', 'LeftShoulder', ..., 'LeftHand', 'RightShoulder', ..., 'RightHand'],
+}
 """
 2.
 Specify five end effectors' name.
 Please follow the same order as in 1.
 """
-ee_name_1 = ["LeftToeBase", "RightToeBase", "Head", "LeftHand", "RightHand"]
-ee_name_2 = ["LeftToe_End", "RightToe_End",
-             "HeadTop_End", "LeftHand", "RightHand"]
-ee_name_3 = ["LeftFoot", "RightFoot", "Head", "LeftHand", "RightHand"]
-ee_name_cmu = ["LeftToeBase", "RightToeBase", "Head", "LeftHand", "RightHand"]
-ee_name_monkey = ["LeftToeBase", "RightToeBase",
-                  "Head", "LeftHand", "RightHand"]
-ee_name_three_arms_split = [
-    "LeftToeEnd",
-    "RightToeEnd",
-    "Head",
-    "LeftHand_split",
-    "RightHand_split",
-]
-ee_name_Prisoner = [
-    "LeftToe_End",
-    "RightToe_End",
-    "HeadTop_End",
-    "LeftHand",
-    "RightForeArm",
-]
-
-ee_BerkeleyMHAD = [
-    "LeftFoot",
-    "RightFoot",
-    "Head",
-    "LeftHand",
-    "RightHand",
-]
-ee_VRM = [
-    "LeftToeBase",
-    "RightToeBase",
-    "Head",
-    "LeftHand",
-    "RightHand",
-]
-
-ee_name_4 = [
-	"CC_Base_L_Foot",
-	"CC_Base_R_Foot",
-    "CC_Base_Head",
-    "CC_Base_L_Hand",
-    "CC_Base_R_Hand",
-]
 
 
-# ee_name_example = ['LeftToe', 'RightToe', 'Head', 'LeftHand', 'RightHand']
-
-
-corps_names = [
-    corps_name_1,
-    corps_name_2,
-    corps_name_3,
-    corps_name_cmu,
-    corps_name_monkey,
-    corps_name_boss,
-    corps_name_boss,
-    corps_name_three_arms,
-    corps_name_three_arms_split,
-    corps_name_Prisoner,
-    corps_name_mixamo2_m,
-    corps_BerkeleyMHAD,
-    corps_VRM,
-    corps_name_4,
-]
-ee_names = [
-    ee_name_1,
-    ee_name_2,
-    ee_name_3,
-    ee_name_cmu,
-    ee_name_monkey,
-    ee_name_1,
-    ee_name_1,
-    ee_name_1,
-    ee_name_three_arms_split,
-    ee_name_Prisoner,
-    ee_name_2,
-    ee_BerkeleyMHAD,
-    ee_VRM,
-    ee_name_4,
-]
+ee_names = {
+    "corps_name_1": ["LeftToeBase", "RightToeBase", "Head", "LeftHand", "RightHand"],
+    "corps_name_2": ["LeftToe_End", "RightToe_End",
+                  "HeadTop_End", "LeftHand", "RightHand"],
+    "corps_name_3": ["LeftFoot", "RightFoot", "Head", "LeftHand", "RightHand"],
+    "corps_name_cmu": ["LeftToeBase", "RightToeBase", "Head", "LeftHand", "RightHand"],
+    "corps_name_monkey": ["LeftToeBase", "RightToeBase",
+                       "Head", "LeftHand", "RightHand"],
+    "corps_name_three_arms_split": [
+        "LeftToeEnd",
+        "RightToeEnd",
+        "Head",
+        "LeftHand_split",
+        "RightHand_split",
+    ],
+    "corps_name_Prisoner": [
+        "LeftToe_End",
+        "RightToe_End",
+        "HeadTop_End",
+        "LeftHand",
+        "RightForeArm",
+    ],
+    "corps_BerkeleyMHAD": [
+        "LeftFoot",
+        "RightFoot",
+        "Head",
+        "LeftHand",
+        "RightHand",
+    ],
+    "corps_VRM": [
+        "LeftToeBase",
+        "RightToeBase",
+        "Head",
+        "LeftHand",
+        "RightHand",
+    ],
+    "corps_motion_project": ["LeftToeBase",
+                                "RightToeBase", "Head", "LeftHand", "RightHand"],
+    # "corps_name_example": ['LeftToe', 'RightToe', 'Head', 'LeftHand', 'RightHand'],
+}
 """
 3.
 Add previously added corps_name and ee_name at the end of the two above lists.
@@ -452,7 +412,7 @@ class BVH_file:
         self.anim, self._names, self.frametime = BVH.load(file_path)
         if new_root is not None:
             self.set_new_root(new_root)
-        self.skeleton_type = -1
+        self.skeleton_type = ""
         self.edges = []
         self.edge_mat = []
         self.edge_num = 0
@@ -470,48 +430,25 @@ class BVH_file:
                 if ref_name not in self._names:
                     full_fill[i] = 0
                     break
-
-        if full_fill[3]:
-            self.skeleton_type = 3
-        elif self.skeleton_type == 2 and full_fill[4]:
-            self.skeleton_type = 4
-
-        elif "Neck1" in self._names:
-            self.skeleton_type = 5
-        elif "Left_End" in self._names:
-            self.skeleton_type = 6
-        elif "Three_Arms_Hips" in self._names:
-            self.skeleton_type = 7
-        elif "Three_Arms_Hips_split" in self._names:
-            self.skeleton_type = 8
-
-        elif "LHipJoint" in self._names:
-            self.skeleton_type = 3
-
-        elif "HipsPrisoner" in self._names:
-            self.skeleton_type = 9
-
-        elif "Spine1_split" in self._names:
-            self.skeleton_type = 10
-        elif "LeftUpLegRoll" in self._names:
-            self.skeleton_type = 11
+        if "LeftUpLegRoll" in self._names:
+            self.skeleton_type = "corps_BerkeleyMHAD"
+        elif "ToSpine" in self._names:
+            self.skeleton_type = "corps_motion_project"
         elif "Spine3" in self._names:
-            self.skeleton_type = 12
-        elif "CC_Base_Hip" in self._names:
-            self.skeleton_type = 13
+            self.skeleton_type = "corps_VRM"
         else:
             for i, _ in enumerate(full_fill):
                 if full_fill[i]:
                     self.skeleton_type = i
                     break
-
+        # print(f'Skeleton {self.skeleton_type}')
         """
-        4. 
-        Here, you need to assign self.skeleton_type the corresponding index of your own dataset in corps_names or ee_names list.
-        You can use self._names, which contains the joints name in original bvh file, to write your own if statement.
-        """
+  4. 
+  Here, you need to assign self.skeleton_type the corresponding index of your own dataset in corps_names or ee_names list.
+  You can use self._names, which contains the joints name in original bvh file, to write your own if statement.
+  """
         # if ...:
-        #     self.skeleton_type = 12
+        #  self.skeleton_type = 12
 
         if self.skeleton_type == -1:
             print(self._names)
