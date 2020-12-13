@@ -21,7 +21,7 @@ Retarget one animation.
 
 ### Motion Retargeting
 
-Download and extract the test dataset from https://github.com/fire/deep-motion-editing/releases/download/v0.1-alpha/training_set.tar.bz2. Then place the `Mixamo` directory within `datasets` .
+The test dataset is included in the Motions directory within `datasets`.
 
 To generate the demo examples with the pretrained model, run
 
@@ -36,8 +36,6 @@ To reconstruct the quantitative result with the pretrained model, run
 ``` bash
 python3 test
 ```
-
-The retargeted demo results, that consists both intra-structual retargeting and cross-structural retargeting, will be saved in `pretrained/results` .
 
 ## Train from scratch
 
@@ -74,7 +72,8 @@ tensorboard --logdir=./training/logs/
 ## Acknowledgments
 
 The code in the utils directory is mostly taken from [Holden et al. [2016]](http://theorangeduck.com/page/deep-learning-framework-character-motion-synthesis-and-editing).  
-In addition, part of the MoCap dataset is taken from [Adobe Mixamo](https://www.mixamo.com/) and from the work of [Xia et al.](http://faculty.cs.tamu.edu/jchai/projects/SIG15/style-final.pdf).
+
+In addition, part of the MoCap dataset is taken from [Adobe Mixamo](https://www.mixamo.com/) and from the work of [Xia et al.](http://faculty.cs.tamu.edu/jchai/projects/SIG15/style-final.pdf), however these MoCap datasets have been removed from the git HEAD.
 
 ## Citation
 
