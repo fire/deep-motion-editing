@@ -340,6 +340,15 @@ corps_VRM = [
 'LeftShoulder', 'LeftArm', 'LeftForeArm', 'LeftHand',
 'RightShoulder', 'RightArm', 'RightForeArm', 'RightHand']
 
+corps_name_4 = [
+    "CC_Base_BoneRoot",
+	"CC_Base_Hip", "CC_Base_Pelvis", "CC_Base_L_Thigh", "CC_Base_L_Calf", "CC_Base_L_Foot",
+	"CC_Base_Hip", "CC_Base_Pelvis", "CC_Base_R_Thigh", "CC_Base_R_Calf", "CC_Base_R_Foot",
+    "CC_Base_Hip", "CC_Base_Spine01", "CC_Base_Spine02", "CC_Base_NeckTwist01", "CC_Base_NeckTwist02", "CC_Base_Head", "CC_Base_HeadNub",
+    "CC_Base_L_Clavicle", "CC_Base_L_Upperarm", "CC_Base_L_Forearm", "CC_Base_L_Hand",
+	"CC_Base_R_Clavicle", "CC_Base_R_Upperarm", "CC_Base_R_Forearm", "CC_Base_R_Hand",
+]
+
 # corps_name_example = ['Root', 'LeftUpLeg', ..., 'LeftToe', 'RightUpLeg', ..., 'RightToe', 'Spine', ..., 'Head', 'LeftShoulder', ..., 'LeftHand', 'RightShoulder', ..., 'RightHand']
 
 """
@@ -384,6 +393,15 @@ ee_VRM = [
     "RightHand",
 ]
 
+ee_name_4 = [
+	"CC_Base_L_Foot",
+	"CC_Base_R_Foot",
+    "CC_Base_Head",
+    "CC_Base_L_Hand",
+    "CC_Base_R_Hand",
+]
+
+
 # ee_name_example = ['LeftToe', 'RightToe', 'Head', 'LeftHand', 'RightHand']
 
 
@@ -401,6 +419,7 @@ corps_names = [
     corps_name_mixamo2_m,
     corps_BerkeleyMHAD,
     corps_VRM,
+    corps_name_4,
 ]
 ee_names = [
     ee_name_1,
@@ -416,6 +435,7 @@ ee_names = [
     ee_name_2,
     ee_BerkeleyMHAD,
     ee_VRM,
+    ee_name_4,
 ]
 """
 3.
@@ -453,38 +473,37 @@ class BVH_file:
 
         if full_fill[3]:
             self.skeleton_type = 3
+        elif self.skeleton_type == 2 and full_fill[4]:
+            self.skeleton_type = 4
+
+        elif "Neck1" in self._names:
+            self.skeleton_type = 5
+        elif "Left_End" in self._names:
+            self.skeleton_type = 6
+        elif "Three_Arms_Hips" in self._names:
+            self.skeleton_type = 7
+        elif "Three_Arms_Hips_split" in self._names:
+            self.skeleton_type = 8
+
+        elif "LHipJoint" in self._names:
+            self.skeleton_type = 3
+
+        elif "HipsPrisoner" in self._names:
+            self.skeleton_type = 9
+
+        elif "Spine1_split" in self._names:
+            self.skeleton_type = 10
+        elif "LeftUpLegRoll" in self._names:
+            self.skeleton_type = 11
+        elif "Spine3" in self._names:
+            self.skeleton_type = 12
+        elif "CC_Base_Hip" in self._names:
+            self.skeleton_type = 13
         else:
             for i, _ in enumerate(full_fill):
                 if full_fill[i]:
                     self.skeleton_type = i
                     break
-
-        if self.skeleton_type == 2 and full_fill[4]:
-            self.skeleton_type = 4
-
-        if "Neck1" in self._names:
-            self.skeleton_type = 5
-        if "Left_End" in self._names:
-            self.skeleton_type = 6
-        if "Three_Arms_Hips" in self._names:
-            self.skeleton_type = 7
-        if "Three_Arms_Hips_split" in self._names:
-            self.skeleton_type = 8
-
-        if "LHipJoint" in self._names:
-            self.skeleton_type = 3
-
-        if "HipsPrisoner" in self._names:
-            self.skeleton_type = 9
-
-        if "Spine1_split" in self._names:
-            self.skeleton_type = 10
-
-        if "LeftUpLegRoll" in self._names:
-            self.skeleton_type = 11
-
-        if "Spine3" in self._names:
-            self.skeleton_type = 12
 
         """
         4. 
@@ -624,12 +643,12 @@ class BVH_file:
 
         res = 0
         p = self.ee_id[0]
-        while p != 0:
+        while p > 0:
             res += np.dot(offset[p], offset[p]) ** 0.5
             p = topo[p]
 
         p = self.ee_id[2]
-        while p != 0:
+        while p > 0:
             res += np.dot(offset[p], offset[p]) ** 0.5
             p = topo[p]
 

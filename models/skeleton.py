@@ -250,7 +250,8 @@ class SkeletonUnpool(nn.Module):
         for i, pair in enumerate(self.pooling_list):
             for j in pair:
                 for c in range(channels_per_edge):
-                    key = j * channels_per_edge + c, i * channels_per_edge + c
+                    count = i * channels_per_edge + c
+                    key = count, count
                     self.weight[key] = 1
 
         self.weight = nn.Parameter(self.weight)
