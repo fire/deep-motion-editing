@@ -47,7 +47,7 @@ def main():
 
             if args.verbose:
                 res = model.verbose()
-                print('[{}/{}]\t[{}/{}]\t'.format(epoch, args.epoch_num, step, len(data_loader)), res)
+                print(f'[{epoch}/{args.epoch_num}]\t[{step}/{len(data_loader), res}]\t')
 
         if epoch % 50 == 0 or epoch == args.epoch_num - 1:
             model.save()

@@ -52,7 +52,7 @@ def get_parser():
     parser.add_argument("--kernel_size", type=int, default=15, help="must be odd")
     parser.add_argument("--base_channel_num", type=int, default=-1)
     parser.add_argument("--normalization", type=int, default=1)
-    parser.add_argument("--verbose", type=int, default=0)
+    parser.add_argument("--verbose", type=int, default=1)
     parser.add_argument("--skeleton_dist", type=int, default=2)
     parser.add_argument("--skeleton_pool", type=str, default="mean")
     parser.add_argument("--extra_conv", type=int, default=0)
