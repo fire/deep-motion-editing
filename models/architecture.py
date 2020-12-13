@@ -24,7 +24,6 @@ class GAN_model(BaseModel):
         self.args = args
 
         for i in range(self.n_topology):
-            print(character_names[i])
             model = IntegratedModel(
                 args, dataset.joint_topologies[i], None, self.device, character_names[i]
             )
