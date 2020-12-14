@@ -4,15 +4,15 @@ def get_character_names(args):
     group_a = [
         "BerkeleyMHAD_skl_s05",
         "BerkeleyMHAD_skl_s06",
+        "BerkeleyMHAD_skl_s03",
         # "BerkeleyMHAD_skl_s07",
         # "BerkeleyMHAD_skl_s08",
         # "BerkeleyMHAD_skl_s01",
         # "BerkeleyMHAD_skl_s02",
         # "BerkeleyMHAD_skl_s03",
     ]
-    group_c = [
-        "Aj",
-        "Mremireh_m",
+    group_b = [
+        "BerkeleyMHAD_skl_s04",
     ]
     characters = []
 
@@ -20,21 +20,19 @@ def get_character_names(args):
         """
         Put the name of subdirectory in retargeting/datasets/Mixamo as [[names of group A], [names of group B]]
         """
-        all_groups = [group_a, group_c]
-        characters = [list(x) for x in it.permutations(all_groups, 2)]
+        all_groups = [group_a, group_b]
+        characters = [list(x) for x in it.combinations(all_groups, 2)]
     else:
         """
         To run evaluation successfully, number of characters in both groups must be the same. Repeat is okay.
         """
         characters = [
-            [
-                "BerkeleyMHAD_skl_s09",
-                "BerkeleyMHAD_skl_s10",
+            [[
+                "BerkeleyMHAD_skl_s04",
             ],
             [
-                "BerkeleyMHAD_skl_s07",
-                "BerkeleyMHAD_skl_s08",
-            ],
+                "BerkeleyMHAD_skl_s05",
+            ]],
         ]
         tmp = characters[1][args.eval_seq]
         characters[1][args.eval_seq] = characters[1][0]
