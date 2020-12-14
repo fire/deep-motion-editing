@@ -23,7 +23,7 @@ class MotionData(Dataset):
         if args.debug:
             file_path = file_path[:-4] + "_debug" + file_path[-4:]
 
-        print("load from file {}".format(file_path))
+        print("Load from file {}".format(file_path))
         self.total_frame = 0
         self.std_bvh = get_std_bvh(args)
         self.args = args

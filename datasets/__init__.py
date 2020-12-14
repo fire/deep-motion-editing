@@ -22,7 +22,7 @@ def get_character_names(args):
         Put the name of subdirectory in retargeting/datasets/Mixamo as [[names of group A], [names of group B]]
         """
         characters = [
-            group_c,
+            group_d,
             group_a,
         ]
 
@@ -32,10 +32,10 @@ def get_character_names(args):
         """
         characters = [
             [
-                "Kaya",
+                "Kaya", "Kaya",
             ],
             [
-                "BerkeleyMHAD_skl_s05",
+                "BerkeleyMHAD_skl_s05", "BerkeleyMHAD_skl_s06"
             ],
         ]
         tmp = characters[1][args.eval_seq]
