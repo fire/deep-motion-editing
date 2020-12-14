@@ -34,7 +34,7 @@ def main():
     model = create_model(args, characters, dataset)
 
     if args.epoch_begin:
-        model.load(epoch=args.epoch_begin, download=False)
+        model.load(epoch=args.epoch_begin)
 
     model.setup()
 
