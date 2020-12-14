@@ -24,7 +24,7 @@ def main():
     src_character = input_bvh.split("/")[-2]
     target_character = target_bvh.split("/")[-2]
     character_names = [[src_character], [target_character]]
-    file_id = [[input_bvh], [0]]
+    file_id = [[input_bvh], [target_bvh]]
     src_id = 0
 
     output_filename = args.output_filename
