@@ -31,7 +31,6 @@ corps_names = {
         "RightFoot",
         "RightToeBase",
         #
-        "Pelvis",
         "Spine",
         "Spine1",
         "Spine2",
@@ -112,6 +111,7 @@ class BVH_file:
         if file_path is None:
             file_path = get_std_bvh(dataset=dataset)
         self.anim, self._names, self.frametime = BVH.load(file_path)
+        print(f'Path {file_path}')
         if new_root is not None:
             self.set_new_root(new_root)
         self.skeleton_type = ""
@@ -284,12 +284,12 @@ class BVH_file:
 
         res = 0
         p = self.ee_id[0]
-        while p > 0:
+        while p != 0:
             res += np.dot(offset[p], offset[p]) ** 0.5
             p = topo[p]
 
         p = self.ee_id[2]
-        while p > 0:
+        while p != 0:
             res += np.dot(offset[p], offset[p]) ** 0.5
             p = topo[p]
 
