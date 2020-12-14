@@ -59,7 +59,7 @@ def main():
     for i, character_group in enumerate(character_names):
         input_group = []
         for j in range(len(character_group)):
-            new_motion = dataset.get_item(i, j, file_id[i][j])
+            new_motion = dataset.get_item_string(file_id[i][j])
             new_motion.unsqueeze_(0)
             new_motion = (new_motion - dataset.mean[i][j]) / dataset.var[i][j]
             input_group.append(new_motion)
