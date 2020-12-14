@@ -1,15 +1,8 @@
-# Deep-motion-targeting
+# Deep-Kinetic-Transfer-GAN
 
 This library provides fundamental and advanced functions to work with 3D character animation in deep learning with Pytorch.
 
 This library is maintained by [K. S. Ernest (iFire) Lee](https://github.com/fire).
-
-The main deep editing operations provided here, motion retargeting, are based on work published in SIGGRAPH 2020:
-
-This library was written by [Kfir Aberman](https://kfiraberman.github.io), [Peizhuo Li](https://peizhuoli.github.io/) and [Yijia Weng](https://halfsummer11.github.io/).
-
-**Skeleton-Aware Networks for Deep Motion Retargeting**: [Project](https://deepmotionediting.github.io/retargeting) | [Paper](https://arxiv.org/abs/2005.05732) |
-[Video](https://www.youtube.com/watch?v=ym8Tnmiz5N8)
 
 ## Prerequisites
 
@@ -75,9 +68,8 @@ The code in the utils directory is mostly taken from [Holden et al. [2016]](http
 
 In addition, part of the MoCap dataset is taken from [Adobe Mixamo](https://www.mixamo.com/) and from the work of [Xia et al.](http://faculty.cs.tamu.edu/jchai/projects/SIG15/style-final.pdf), however these MoCap datasets have been removed from the git HEAD.
 
-## Citation
-
-If you use this code for your research, please cite our papers:
+The main deep editing operations provided here, motion retargeting, are based on work published in SIGGRAPH 2020 by [Kfir Aberman](https://kfiraberman.github.io), [Peizhuo Li](https://peizhuoli.github.io/) and [Yijia Weng](https://halfsummer11.github.io/). Skeleton-Aware Networks for Deep Motion Retargeting: [Project](https://deepmotionediting.github.io/retargeting) | [Paper](https://arxiv.org/abs/2005.05732) |
+[Video](https://www.youtube.com/watch?v=ym8Tnmiz5N8)
 
 ``` bibtex
 @article{aberman2020skeleton,
