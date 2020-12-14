@@ -182,7 +182,7 @@ class BVH_file:
         if len(self.corps) != len(corps_names[self.skeleton_type]):
             for i in self.corps:
                 print(self._names[i], end=" ")
-            print(self.corps, self.skeleton_type, len(self.corps), sep="\n")
+            print(self.corps, self.skeleton_type, len(self.corps), sep="\t")
             raise Exception("Problem in file", file_path)
 
         self.ee_id = []
