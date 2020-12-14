@@ -334,12 +334,12 @@ corps_names = {
         'LeftShoulder', 'LeftArm', 'LeftArmRoll', 'LeftForeArm', 'LeftForeArmRoll', 'LeftHand',
         'RightShoulder', 'RightArm', 'RightArmRoll', 'RightForeArm', 'RightForeArmRoll', 'RightHand'],
     "corps_VRM": [
-        'Hips',
-        'LeftUpLeg', 'LeftLeg', 'LeftFoot', 'LeftToeBase', 'LeftToeEnd',
-        'RightUpLeg', 'RightLeg', 'RightFoot', 'RightToeBase', 'RightToeEnd',
-        'Spine', 'Spine1', 'Spine2', 'Spine3', 'Neck', 'Neck1', 'Head',
-        'LeftShoulder', 'LeftArm', 'LeftForeArm', 'LeftHand',
-        'RightShoulder', 'RightArm', 'RightForeArm', 'RightHand'],
+        'hips',
+        'leftUpperLeg', 'leftLowerLeg', 'leftFoot',
+        'rightUpperLeg', 'rightLowerLeg', 'rightFoot',
+        'spine', 'chest', 'neck', 'head',
+        'leftShoulder', 'leftUpperArm', 'leftLowerArm', 'leftHand',
+        'rightShoulder', 'rightUpperArm', 'rightLowerArm', 'rightHand'],
     "corps_motion_project": [
         "Hips",
         "LeftUpLeg", "LeftLeg", "LeftFoot", "LeftToeBase",
@@ -387,11 +387,11 @@ ee_names = {
         "RightHand",
     ],
     "corps_VRM": [
-        "LeftToeBase",
-        "RightToeBase",
-        "Head",
-        "LeftHand",
-        "RightHand",
+        "leftFoot",
+        "rightFoot",
+        "head",
+        "leftHand",
+        "rightHand",
     ],
     "corps_motion_project": ["LeftToeBase",
                                 "RightToeBase", "Head", "LeftHand", "RightHand"],
@@ -434,14 +434,14 @@ class BVH_file:
             self.skeleton_type = "corps_BerkeleyMHAD"
         elif "ToSpine" in self._names:
             self.skeleton_type = "corps_motion_project"
-        elif "Spine3" in self._names:
+        elif "leftLowerLeg" in self._names:
             self.skeleton_type = "corps_VRM"
         else:
             for i, _ in enumerate(full_fill):
                 if full_fill[i]:
                     self.skeleton_type = i
                     break
-        # print(f'Skeleton {self.skeleton_type}')
+        print(f'Skeleton {self.skeleton_type}')
         """
   4. 
   Here, you need to assign self.skeleton_type the corresponding index of your own dataset in corps_names or ee_names list.

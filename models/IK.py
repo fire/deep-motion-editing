@@ -47,7 +47,7 @@ def get_foot_contact(file_name, ref_height):
 
 
 def get_ee_id_by_names(joint_names):
-    ees = ["RightToe", "LeftToe", "LeftFoot", "RightFoot"]
+    ees = ["RightToeBase", "LeftToeBase", "LeftFoot", "RightFoot"]
     ee_id = []
     for i, ee in enumerate(ees):
         if ee in joint_names:
