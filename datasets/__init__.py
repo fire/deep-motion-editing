@@ -1,16 +1,12 @@
 def get_character_names(args):
     group_a = [
-        "BerkeleyMHAD_skl_s05",
-        # "BerkeleyMHAD_skl_s06",
-        # "BerkeleyMHAD_skl_s07",
-        # "BerkeleyMHAD_skl_s08",
+        "BigVegas",
+        "Kaya",
+        "SportyGranny",
+        "Aj",
     ]
     group_b = [
-        "BerkeleyMHAD_skl_s01",
-        "BerkeleyMHAD_skl_s02",
-        # "BerkeleyMHAD_skl_s03",
-        # "BerkeleyMHAD_skl_s04", 
-        ]
+    ]
     group_c = [
         "Vita",
     ]
@@ -30,7 +26,7 @@ def get_character_names(args):
         """
         characters = [
             group_a,
-            group_c,
+            group_d,
         ]
 
     else:
