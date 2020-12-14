@@ -23,9 +23,12 @@ class GAN_model(BaseModel):
         self.G_para = []
         self.args = args
 
-        for i in range(self.n_topology):
+        print(character_names)
+
+        print(self.n_topology)
+        for i in range(0, self.n_topology):
             model = IntegratedModel(
-                args, dataset.joint_topologies[i], None, self.device, character_names[i]
+                args, dataset.joint_topologies[i], None, self.device, character_names
             )
             self.models.append(model)
             self.D_para += model.D_parameters()
