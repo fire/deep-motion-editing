@@ -360,11 +360,11 @@ Please follow the same order as in 1.
 ee_names = {
     "corps_name_1": ["LeftToeBase", "RightToeBase", "Head", "LeftHand", "RightHand"],
     "corps_name_2": ["LeftToe_End", "RightToe_End",
-                  "HeadTop_End", "LeftHand", "RightHand"],
+                     "HeadTop_End", "LeftHand", "RightHand"],
     "corps_name_3": ["LeftFoot", "RightFoot", "Head", "LeftHand", "RightHand"],
     "corps_name_cmu": ["LeftToeBase", "RightToeBase", "Head", "LeftHand", "RightHand"],
     "corps_name_monkey": ["LeftToeBase", "RightToeBase",
-                       "Head", "LeftHand", "RightHand"],
+                          "Head", "LeftHand", "RightHand"],
     "corps_name_three_arms_split": [
         "LeftToeEnd",
         "RightToeEnd",
@@ -394,7 +394,7 @@ ee_names = {
         "rightHand",
     ],
     "corps_motion_project": ["LeftToeBase",
-                                "RightToeBase", "Head", "LeftHand", "RightHand"],
+                             "RightToeBase", "Head", "LeftHand", "RightHand"],
     # "corps_name_example": ['LeftToe', 'RightToe', 'Head', 'LeftHand', 'RightHand'],
 }
 """
