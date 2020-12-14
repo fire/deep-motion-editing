@@ -20,11 +20,11 @@ def main():
     input_bvh = args.input_bvh
     target_bvh = args.target_bvh
     cpu = args.cpu
-  
+
     src_character = input_bvh.split("/")[-2]
     target_character = target_bvh.split("/")[-2]
-    character_names = [[src_character], [target_character]]
-    file_id = [[input_bvh], [target_bvh]]
+    character_names = [[target_character], [src_character]]
+    file_id = [[args.input_bvh], [0]]
     src_id = 0
 
     output_filename = args.output_filename
@@ -44,32 +44,41 @@ def main():
     args.is_train = False
     args.rotation = "quaternion"
     args.eval_seq = eval_seq
+    for c, char in enumerate(character_names):
+        dataset = create_dataset(args, char)
+        model = create_model(args, char, dataset)
+        model.load(c, epoch=10)
+        input_motion = []
 
-    dataset = create_dataset(args, character_names)
-    model = create_model(args, character_names, dataset)
-    model.load(epoch=250)
-    input_motion = []
 
-    if not os.path.exists(input_bvh):
-        error = f'Cannot find file {input_bvh}'
-        print(error)
-        return
 
-    input_motion = []
-    for i, character_group in enumerate(character_names):
-        input_group = []
-        for j in range(len(character_group)):
+        if not os.path.exists(input_bvh):
+            error = f'Cannot find file {input_bvh}'
+            print(error)
+            return
+
+        input_motion = []
+        for i, character_group in range(len(char)):
+            input_group = []
+            # if backwards 
+            for j in range(len(character_group)):
+                new_motion = dataset.get_item_string(file_id[i][j])
+                new_motion.unsqueeze_(0)
+                new_motion = (new_motion - dataset.mean[i][j]) / dataset.var[i][j]
+                input_group.append(new_motion)
+            # else
             new_motion = dataset.get_item_string(file_id[i][j])
             new_motion.unsqueeze_(0)
             new_motion = (new_motion - dataset.mean[i][j]) / dataset.var[i][j]
             input_group.append(new_motion)
-        input_group = torch.cat(input_group, dim=0)
-        input_motion.append([input_group, list(range(len(character_group)))])
+            #end
+            input_group = torch.cat(input_group, dim=0)
+            input_motion.append([input_group, list(range(len(character_group)))])
 
-    model.set_input(input_motion)
-    model.test()
-    bvh_path = f"{model.bvh_path}/{target_character}/0_{src_id}.bvh"
-    copyfile(bvh_path, output_filename)
+        model.set_input(input_motion)
+        model.test()
+        bvh_path = f"{model.bvh_path}/{target_character}/0_{src_id}.bvh"
+        copyfile(bvh_path, output_filename)
 
 
 if __name__ == "__main__":

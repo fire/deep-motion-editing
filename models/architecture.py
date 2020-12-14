@@ -23,9 +23,12 @@ class GAN_model(BaseModel):
         self.G_para = []
         self.args = args
 
-        for i in range(self.n_topology):
+        print(character_names)
+
+        print(self.n_topology)
+        for i in range(0, self.n_topology):
             model = IntegratedModel(
-                args, dataset.joint_topologies[i], None, self.device, character_names[i]
+                args, dataset.joint_topologies[i], None, self.device, character_names
             )
             self.models.append(model)
             self.D_para += model.D_parameters()
@@ -329,27 +332,27 @@ class GAN_model(BaseModel):
         }
         return sorted(res.items(), key=lambda x: x[0])
 
-    def save(self):
+    def save(self, c):
         for i, model in enumerate(self.models):
             model.save(
-                pjoin(self.model_save_dir, "topology{}".format(i)), self.epoch_cnt
+                pjoin(self.model_save_dir, "topology_{}_{}".format(c, i)), self.epoch_cnt
             )
 
         for i, optimizer in enumerate(self.optimizers):
             file_name = pjoin(
-                self.model_save_dir, "optimizers/{}/{}.pt".format(self.epoch_cnt, i)
+                self.model_save_dir, "optimizers_{}/{}_{}.pt".format(self.epoch_cnt, c, i)
             )
             try_mkdir(psplit(file_name)[0])
             torch.save(optimizer.state_dict(), file_name)
 
-    def load(self, epoch=None):
+    def load(self, c, epoch=None):
         for i, model in enumerate(self.models):
-            model.load(pjoin(self.model_save_dir, "topology{}".format(i)), epoch)
+            model.load(pjoin(self.model_save_dir, "topology_{}_{}".format(c, i)), epoch)
 
         if self.is_train:
             for i, optimizer in enumerate(self.optimizers):
                 file_name = pjoin(
-                    self.model_save_dir, "optimizers/{}/{}.pt".format(epoch, i)
+                    self.model_save_dir, "optimizers/{}/{}_{}.pt".format(epoch, c, i)
                 )
                 optimizer.load_state_dict(torch.load(file_name))
         self.epoch_cnt = epoch

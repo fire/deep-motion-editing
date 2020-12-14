@@ -39,7 +39,6 @@ def example(
     ref_file = f"./datasets/Motions/{dst_name}/{dst_bvh}"
     joined_output_path = pjoin(output_path, "result.bvh")
     cmd = f"python eval_single_pair.py --input_bvh=\"{input_file}\" --target_bvh=\"{ref_file}\" --output_filename=\"{joined_output_path}\" --cpu=True"
-
     err = os.system(cmd)
     if err:
         return err
