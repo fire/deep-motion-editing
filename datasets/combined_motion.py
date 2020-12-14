@@ -120,23 +120,14 @@ class MixedData(Dataset):
         return self.length
 
     
-    def get_item(self, gid, pid, id):
-        character = self.characters[gid][pid]
-        path = './datasets/Mixamo/{}/'.format(character)
-        if isinstance(id, int):
-            file = path + self.file_list[id]
-        elif isinstance(id, str):
-            file = id
-        else:
-            raise Exception('Wrong input file type')
-        if not os.path.exists(file):
-            raise Exception('Cannot find file')
-        file = BVH_file(file)
-        motion = file.to_tensor(quater=self.args.rotation == 'quaternion')
+    def get_item_string(self, item_string):
+        item_file = BVH_file(item_string)
+        motion = item_file.to_tensor(quater=self.args.rotation == 'quaternion')
         motion = motion[:, ::2]
         length = motion.shape[-1]
         length = length // 4 * 4
         return motion[..., :length].to(self.device)
+
 
     def __getitem__(self, item):
         res = []
@@ -220,19 +211,9 @@ class TestData(Dataset):
         return res
 
 
-    def get_item(self, gid, pid, id):
-        character = self.characters[gid][pid]
-        path = './datasets/Mixamo/{}/'.format(character)
-        if isinstance(id, int):
-            file = path + self.file_list[id]
-        elif isinstance(id, str):
-            file = id
-        else:
-            raise Exception('Wrong input file type')
-        if not os.path.exists(file):
-            raise Exception('Cannot find file')
-        file = BVH_file(file)
-        motion = file.to_tensor(quater=self.args.rotation == 'quaternion')
+    def get_item_string(self, item_string):
+        item_file = BVH_file(item_string)
+        motion = item_file.to_tensor(quater=self.args.rotation == 'quaternion')
         motion = motion[:, ::2]
         length = motion.shape[-1]
         length = length // 4 * 4
