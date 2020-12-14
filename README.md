@@ -1,4 +1,4 @@
-# Deep-Kinetic-Transfer-GAN
+# DeepKineticTransfer-GAN
 
 This library provides fundamental and advanced functions to work with 3D character animation in deep learning with Pytorch.
 
@@ -10,7 +10,9 @@ This library is maintained by [K. S. Ernest (iFire) Lee](https://github.com/fire
 * Python 3
 * CPU or NVIDIA GPU + CUDA CuDNN
 
-Retarget one animation.
+Retarget one animation to another animation. 
+
+Each animation must belong to a certain skeleton topology and each skeleton topology should have 9,000 frames of animation. The required frames per topology may be reduced but these frame requirements were the reported numbers.
 
 ### Motion Retargeting
 
@@ -29,12 +31,6 @@ To reconstruct the quantitative result with the pretrained model, run
 ``` bash
 python3 test
 ```
-
-## Train from scratch
-
-We provide instructions for retraining our models
-
-### Motion Retargeting
 
 #### Dataset
 
@@ -61,6 +57,10 @@ It will use default hyper-parameters to train the model and save trained model i
 ``` bash
 tensorboard --logdir=./training/logs/
 ```
+
+## Train from scratch
+
+We provide instructions for retraining our models.
 
 ## Acknowledgments
 
