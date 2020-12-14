@@ -25,7 +25,7 @@ def eval(eval_seq, save_dir, test_device="cpu"):
     dataset = create_dataset(args, character_names)
 
     model = create_model(args, character_names, dataset)
-    model.load(epoch=8600)
+    model.load(epoch=0)
 
     for i, motions in tqdm(enumerate(dataset), total=len(dataset)):
         model.set_input(motions)

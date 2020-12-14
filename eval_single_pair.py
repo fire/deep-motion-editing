@@ -24,7 +24,7 @@ def main():
     src_character = input_bvh.split("/")[-2]
     target_character = target_bvh.split("/")[-2]
     character_names = [[src_character], [target_character]]
-    file_id = [[input_bvh], [target_bvh]]
+    file_id = [[input_bvh], [0]]
     src_id = 0
 
     output_filename = args.output_filename
@@ -47,7 +47,7 @@ def main():
 
     dataset = create_dataset(args, character_names)
     model = create_model(args, character_names, dataset)
-    model.load(epoch=250)
+    model.load(epoch=1)
     input_motion = []
 
     if not os.path.exists(input_bvh):
