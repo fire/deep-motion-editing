@@ -62,12 +62,10 @@ if __name__ == "__main__":
     try_mkdir(pjoin(prefix, "std_bvhs"))
     try_mkdir(pjoin(prefix, "mean_var"))
 
-    import itertools as it
-    characters = [x for x in it.chain.from_iterable(it.permutations(characters, 2))]
-    characters = set(characters)
     for character in characters:
         data_path = pjoin(prefix, character)
         files = sorted([f for f in os.listdir(data_path) if f.endswith(".bvh")])
+
         collect_bvh(prefix, character, files)
-        copy_std_bvh(prefix, character, files)        
+        copy_std_bvh(prefix, character, files)
         write_statistics(character, "./datasets/Motions/mean_var/")

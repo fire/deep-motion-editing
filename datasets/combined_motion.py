@@ -6,6 +6,7 @@ import numpy as np
 import torch
 from datasets.bvh_parser import BVH_file
 from option_parser import get_std_bvh
+from datasets import get_test_set
 
 
 class MixedData0(Dataset):
@@ -128,6 +129,7 @@ class MixedData(Dataset):
 class TestData(Dataset):
     def __init__(self, args, characters):
         self.characters = characters
+        self.file_list = get_test_set()
         self.mean = []
         self.joint_topologies = []
         self.var = []
@@ -136,37 +138,38 @@ class TestData(Dataset):
         self.args = args
         self.device = torch.device(args.cuda_device)
 
-        mean_group = []
-        var_group = []
-        offsets_group = []
-        for j, character in enumerate(characters):
-            std_bvh = get_std_bvh(dataset=character)
-            file = BVH_file(std_bvh)
-            if j == 0:
-                self.joint_topologies.append(file.topology)
-                self.ee_ids.append(file.get_ee_id())
-            new_offset = file.offset
-            new_offset = torch.tensor(new_offset, dtype=torch.float)
-            new_offset = new_offset.reshape((1,) + new_offset.shape)
-            offsets_group.append(new_offset)
-            print(f'Load character {character}, index {j}')
-            mean = np.load(
-                f'./datasets/Motions/mean_var/{character}_mean.npy')
-            var = np.load(
-                f'./datasets/Motions/mean_var/{character}_var.npy')
-            mean = torch.tensor(mean)
-            mean = mean.reshape((1, ) + mean.shape)
-            var = torch.tensor(var)
-            var = var.reshape((1, ) + var.shape)
-            mean_group.append(mean)
-            var_group.append(var)
+        for i, character_group in enumerate(characters):
+            mean_group = []
+            var_group = []
+            offsets_group = []
+            for j, character in enumerate(character_group):
+                std_bvh = get_std_bvh(dataset=character)
+                file = BVH_file(std_bvh)
+                if j == 0:
+                    self.joint_topologies.append(file.topology)
+                    self.ee_ids.append(file.get_ee_id())
+                new_offset = file.offset
+                new_offset = torch.tensor(new_offset, dtype=torch.float)
+                new_offset = new_offset.reshape((1,) + new_offset.shape)
+                offsets_group.append(new_offset)
+                print(f'Load character {character}, group {i}, index {j}')
+                mean = np.load(
+                    f'./datasets/Motions/mean_var/{character}_mean.npy')
+                var = np.load(
+                    f'./datasets/Motions/mean_var/{character}_var.npy')
+                mean = torch.tensor(mean)
+                mean = mean.reshape((1, ) + mean.shape)
+                var = torch.tensor(var)
+                var = var.reshape((1, ) + var.shape)
+                mean_group.append(mean)
+                var_group.append(var)
 
-        mean_group = torch.cat(mean_group, dim=0).to(self.device)
-        var_group = torch.cat(var_group, dim=0).to(self.device)
-        offsets_group = torch.cat(offsets_group, dim=0).to(self.device)
-        self.mean.append(mean_group)
-        self.var.append(var_group)
-        self.offsets.append(offsets_group)
+            mean_group = torch.cat(mean_group, dim=0).to(self.device)
+            var_group = torch.cat(var_group, dim=0).to(self.device)
+            offsets_group = torch.cat(offsets_group, dim=0).to(self.device)
+            self.mean.append(mean_group)
+            self.var.append(var_group)
+            self.offsets.append(offsets_group)
 
     def __getitem__(self, item):
         res = []
