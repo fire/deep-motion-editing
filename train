@@ -25,37 +25,38 @@ def main():
 
     with open(pjoin(args.save_dir, 'para.txt'), 'w') as para_file:
         para_file.write(' '.join(sys.argv))
+    models = []
+    print(characters)
+    for c, char in enumerate(characters):
+        dataset = create_dataset(args, char)
+        # https://github.com/fastai/fastbook/issues/85
+        # You always need to set num_workers=0 when creating a DataLoaders because Pytorch multiprocessing does not work on Windows.
+        data_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=0)
 
-    dataset = create_dataset(args, characters)
-    # https://github.com/fastai/fastbook/issues/85
-    # You always need to set num_workers=0 when creating a DataLoaders because Pytorch multiprocessing does not work on Windows.
-    data_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=0)
+        models.append(create_model(args, char, dataset))
 
-    model = create_model(args, characters, dataset)
+        if args.epoch_begin:
+            models[c].load(c, epoch=args.epoch_begin, download=False)
 
-    if args.epoch_begin:
-        model.load(epoch=args.epoch_begin, download=False)
+        models[c].setup()
 
-    model.setup()
+        start_time = time.time()
+        for epoch in range(args.epoch_begin, args.epoch_num):
+            for step, motions in enumerate(data_loader):
+                models[c].set_input(motions)
+                models[c].optimize_parameters()
 
-    start_time = time.time()
+                if args.verbose:
+                    res = models[c].verbose()
+                    print(f'[{epoch}/{args.epoch_num}]\t[{step}/{len(data_loader), res}]\t')
 
-    for epoch in range(args.epoch_begin, args.epoch_num):
-        for step, motions in enumerate(data_loader):
-            model.set_input(motions)
-            model.optimize_parameters()
+            if epoch % 50 == 0 or epoch == args.epoch_num - 1:
+                models[c].save(c)
 
-            if args.verbose:
-                res = model.verbose()
-                print(f'[{epoch}/{args.epoch_num}]\t[{step}/{len(data_loader), res}]\t')
+            models[c].epoch()
 
-        if epoch % 50 == 0 or epoch == args.epoch_num - 1:
-            model.save()
-
-        model.epoch()
-
-    end_tiem = time.time()
-    print('training time', end_tiem - start_time)
+        end_tiem = time.time()
+        print('training time', end_tiem - start_time)
 
 
 if __name__ == '__main__':

@@ -6,7 +6,6 @@ import numpy as np
 import torch
 from datasets.bvh_parser import BVH_file
 from option_parser import get_std_bvh
-from datasets import get_test_set
 
 
 class MixedData0(Dataset):
