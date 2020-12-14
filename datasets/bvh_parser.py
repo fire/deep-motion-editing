@@ -441,12 +441,11 @@ class BVH_file:
                 if full_fill[i]:
                     self.skeleton_type = i
                     break
-        print(f'Skeleton {self.skeleton_type}')
         """
-  4. 
-  Here, you need to assign self.skeleton_type the corresponding index of your own dataset in corps_names or ee_names list.
-  You can use self._names, which contains the joints name in original bvh file, to write your own if statement.
-  """
+        4. 
+        Here, you need to assign self.skeleton_type the corresponding index of your own dataset in corps_names or ee_names list.
+        You can use self._names, which contains the joints name in original bvh file, to write your own if statement.
+        """
         # if ...:
         #  self.skeleton_type = 12
 
