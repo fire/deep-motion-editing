@@ -436,6 +436,8 @@ class BVH_file:
             self.skeleton_type = "corps_motion_project"
         elif "leftLowerLeg" in self._names:
             self.skeleton_type = "corps_VRM"
+        elif "LeftToeBase" in self._names:            
+            self.skeleton_type = "corps_name_1"
         else:
             for i, _ in enumerate(full_fill):
                 if full_fill[i]:
