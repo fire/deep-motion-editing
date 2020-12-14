@@ -337,7 +337,7 @@ corps_names = {
         'hips',
         'leftUpperLeg', 'leftLowerLeg', 'leftFoot',
         'rightUpperLeg', 'rightLowerLeg', 'rightFoot',
-        'spine', 'chest', 'neck', 'head',
+        'spine', 'chest', 'upperChest', 'neck', 'head',
         'leftShoulder', 'leftUpperArm', 'leftLowerArm', 'leftHand',
         'rightShoulder', 'rightUpperArm', 'rightLowerArm', 'rightHand'],
     "corps_motion_project": [
