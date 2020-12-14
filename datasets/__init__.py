@@ -12,7 +12,7 @@ def get_character_names(args):
         # "BerkeleyMHAD_skl_s04", 
         ]
     group_c = [
-        "Vita",
+        "Female1",
     ]
     group_d = [
         "BerkeleyMHAD_skl_s05",

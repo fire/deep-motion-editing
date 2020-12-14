@@ -344,7 +344,7 @@ corps_names = {
         "Hips",
         "LeftUpLeg", "LeftLeg", "LeftFoot", "LeftToeBase",
         "RightUpLeg", "RightLeg", "RightFoot", "RightToeBase",
-        "Hips", "ToSpine", "Spine", "Spine1", "Neck", "Head",
+        "ToSpine", "Spine", "Spine1", "Neck", "Head",
         "LeftShoulder", "LeftArm", "LeftForeArm", "LeftHand",
         "RightShoulder", "RightArm", "RightForeArm", "RightHand",
     ],
