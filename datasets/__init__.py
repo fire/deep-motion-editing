@@ -10,11 +10,9 @@ def get_character_names(args):
         # "BerkeleyMHAD_skl_s02",
         # "BerkeleyMHAD_skl_s03",
     ]
-    # group_b = [
-    #     "Female1",
-    # ]
     group_c = [
-        "BerkeleyMHAD_skl_s04", 
+        "Aj",
+        "Mremireh_m",
     ]
     characters = []
 
@@ -24,8 +22,6 @@ def get_character_names(args):
         """
         all_groups = [group_a, group_c]
         characters = [list(x) for x in it.permutations(all_groups, 2)]
-        print(characters)
-
     else:
         """
         To run evaluation successfully, number of characters in both groups must be the same. Repeat is okay.

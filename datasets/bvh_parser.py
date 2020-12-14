@@ -436,6 +436,10 @@ class BVH_file:
             self.skeleton_type = "corps_motion_project"
         elif "Spine3" in self._names:
             self.skeleton_type = "corps_VRM"
+        elif "HeadTop_End" in self._names:
+            self.skeleton_type = "corps_name_2"
+        elif "RightToeBase" in self._names:
+            self.skeleton_type = "corps_name_1"
         else:
             for i, _ in enumerate(full_fill):
                 if full_fill[i]:
@@ -450,7 +454,7 @@ class BVH_file:
         # if ...:
         #  self.skeleton_type = 12
 
-        if self.skeleton_type == -1:
+        if self.skeleton_type == "":
             print(self._names)
             raise Exception("Unknown skeleton")
 
