@@ -23,7 +23,9 @@ class GAN_model(BaseModel):
         self.G_para = []
         self.args = args
 
-        for i in range(self.n_topology):
+        for i in range(self.n_topology):            
+            print(f"Current \"{character_names[i][0]}\" joint topology. Check for duplicate and mismatched bones in the skeleton parser. {dataset.joint_topologies[i]}")
+
             model = IntegratedModel(
                 args, dataset.joint_topologies[i], None, self.device, character_names[i]
             )
