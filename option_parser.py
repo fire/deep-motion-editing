@@ -45,7 +45,7 @@ def get_parser():
     parser.add_argument(
         "--data_augment", type=int, default=1, help="data_augment: 1 or 0"
     )
-    parser.add_argument("--epoch_num", type=int, default=2, help="epoch_num")
+    parser.add_argument("--epoch_num", type=int, default=5001, help="epoch_num")
     parser.add_argument(
         "--window_size", type=int, default=64, help="length of time axis per window"
     )
