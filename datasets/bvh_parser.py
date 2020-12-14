@@ -111,7 +111,6 @@ class BVH_file:
         if file_path is None:
             file_path = get_std_bvh(dataset=dataset)
         self.anim, self._names, self.frametime = BVH.load(file_path)
-        print(f'Path {file_path}')
         if new_root is not None:
             self.set_new_root(new_root)
         self.skeleton_type = ""
