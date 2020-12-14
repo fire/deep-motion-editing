@@ -43,19 +43,19 @@ def example(
     err = os.system(cmd)
     if err:
         return err
-    # fix_foot_contact(
-    #     pjoin(output_path, "result.bvh"),
-    #     pjoin(output_path, "input.bvh"),
-    #     pjoin(output_path, "result.bvh"),
-    #     height,
-    # )
+    fix_foot_contact(
+        pjoin(output_path, "result.bvh"),
+        pjoin(output_path, "input.bvh"),
+        pjoin(output_path, "result.bvh"),
+        height,
+    )
 
 
 if __name__ == "__main__":
     src_name = "BerkeleyMHAD_skl_s03"
-    src_bvh = "skl_s03_a04_r02.bvh"
+    src_bvh = "skl_s03_a01_r02.bvh"
     dst_name = "BerkeleyMHAD_skl_s05"
-    dst_bvh = "skl_s05_a01_r02.bvh"
+    dst_bvh = "skl_s05_a05_r02.bvh"
     example(
         src_name=src_name,
         src_bvh=src_bvh,
