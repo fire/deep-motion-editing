@@ -1,31 +1,32 @@
 def get_character_names(args):
-    group_a = [
-        "Kaya",
-    ]
     group_b = [
-    ]
-    group_c = [
-        "Female1",
-    ]
-    group_d = [
         "BerkeleyMHAD_skl_s05",
         "BerkeleyMHAD_skl_s06",
-        "BerkeleyMHAD_skl_s07",
-        "BerkeleyMHAD_skl_s08",
-        "BerkeleyMHAD_skl_s01",
-        "BerkeleyMHAD_skl_s02",
+    ]
+    group_c = [
         "BerkeleyMHAD_skl_s03",
-        "BerkeleyMHAD_skl_s04", ]
+        "BerkeleyMHAD_skl_s04",
+    ]
+    group_d = [
+        "BerkeleyMHAD_skl_s07",
+        "BerkeleyMHAD_skl_s08"
+    ]
+    # "BerkeleyMHAD_skl_s07",
+    # "BerkeleyMHAD_skl_s08",
+    # "BerkeleyMHAD_skl_s01",
+    # "BerkeleyMHAD_skl_s02",
+    # "BerkeleyMHAD_skl_s03",
+    # "BerkeleyMHAD_skl_s04",
 
     if args.is_train:
         """
         Put the name of subdirectory in retargeting/datasets/Mixamo as [[names of group A], [names of group B]]
         """
         characters = [
+            group_b,
             group_d,
-            group_d,
+            group_c,
         ]
-
     else:
         """
         To run evaluation successfully, number of characters in both groups must be the same. Repeat is okay.
@@ -42,12 +43,14 @@ def get_character_names(args):
         characters[1][args.eval_seq] = characters[1][0]
         characters[1][0] = tmp
 
+    import itertools as it
+    characters = [list(x) for x in it.permutations(characters, 2)]
+    print(characters)
     return characters
 
 
 def create_dataset(args, character_names=None):
     from datasets.combined_motion import TestData, MixedData
-
     if args.is_train:
         return MixedData(args, character_names)
     else:

@@ -26,12 +26,13 @@ class GAN_model(BaseModel):
         for i in range(self.n_topology):            
             print(f"Current \"{character_names[i][0]}\" joint topology. Check for duplicate and mismatched bones in the skeleton parser. {dataset.joint_topologies[i]}")
 
-            model = IntegratedModel(
-                args, dataset.joint_topologies[i], None, self.device, character_names[i]
-            )
-            self.models.append(model)
-            self.D_para += model.D_parameters()
-            self.G_para += model.G_parameters()
+            for char in character_names:
+                model = IntegratedModel(
+                    args, dataset.joint_topologies[i], None, self.device, char
+                )
+                self.models.append(model)
+                self.D_para += model.D_parameters()
+                self.G_para += model.G_parameters()
 
         if self.is_train:
             self.fake_pools = []
