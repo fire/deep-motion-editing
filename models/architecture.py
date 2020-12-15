@@ -26,8 +26,8 @@ class GAN_model(BaseModel):
         print(train_list)
         topology = train_list.keys()
         topology = list(topology)
-        for i in range(self.n_topology):            
-            print(f"Current \"{topology[i]}\" joint topology. Check for duplicate and mismatched bones in the skeleton parser. {dataset.joint_topologies[i]}")
+        for i, topo in enumerate(character_names):            
+            print(f"Current \"{topo}\" joint topology. Check for duplicate and mismatched bones in the skeleton parser. {dataset.joint_topologies[i]}")
             print(f'Has bone count {len(dataset.joint_topologies[i])}')      
             model = IntegratedModel(
                 args, dataset.joint_topologies[i], None, self.device, character_names[i]

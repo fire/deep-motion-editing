@@ -6,6 +6,10 @@ trained_characters = {
     "corps_motion_project": [
         "Female1",
         "Female1"
+    ],
+    "corps_VRM": [
+        "BerkeleyMHAD_skl_s02",
+        "BerkeleyMHAD_skl_s03",
     ]
 }
 def get_character_names(args):
@@ -28,10 +32,6 @@ def get_character_names(args):
             "Female1",
             "Female1"
         ],
-        "corps_VRM": [
-            "Female1",
-            "Female1"
-        ]
     }
     
     import itertools as it
