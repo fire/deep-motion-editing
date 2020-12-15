@@ -27,7 +27,8 @@ class GAN_model(BaseModel):
         topology = train_list.keys()
         topology = list(topology)
         for i in range(self.n_topology):            
-            print(f"Current \"{topology[i]}\" joint topology. Check for duplicate and mismatched bones in the skeleton parser. {dataset.joint_topologies[i]}")          
+            print(f"Current \"{topology[i]}\" joint topology. Check for duplicate and mismatched bones in the skeleton parser. {dataset.joint_topologies[i]}")
+            print(f'Has bone count {len(dataset.joint_topologies[i])}')      
             model = IntegratedModel(
                 args, dataset.joint_topologies[i], None, self.device, character_names[i]
             )
@@ -333,29 +334,51 @@ class GAN_model(BaseModel):
         }
         return sorted(res.items(), key=lambda x: x[0])
 
-    def save(self):
-        for i, model in enumerate(self.models):
-            model.save(
-                pjoin(self.model_save_dir, "topology{}".format(i)), self.epoch_cnt
+    def save(self, topology=-1):        
+        if self.is_train:    
+            for i, model in enumerate(self.models):
+                model.save(
+                    pjoin(self.model_save_dir, "topology{}".format(i)), self.epoch_cnt
+                )
+
+            for i, optimizer in enumerate(self.optimizers):
+                file_name = pjoin(
+                    self.model_save_dir, "optimizers/{}/{}.pt".format(self.epoch_cnt, i)
+                )
+                try_mkdir(psplit(file_name)[0])
+                torch.save(optimizer.state_dict(), file_name)
+        elif topology != -1:            
+            self.models[topology].save(
+                pjoin(self.model_save_dir, "topology{}".format(topology)), self.epoch_cnt
             )
 
-        for i, optimizer in enumerate(self.optimizers):
             file_name = pjoin(
-                self.model_save_dir, "optimizers/{}/{}.pt".format(self.epoch_cnt, i)
+                self.model_save_dir, "optimizers/{}/{}.pt".format(self.epoch_cnt, topology)
             )
             try_mkdir(psplit(file_name)[0])
-            torch.save(optimizer.state_dict(), file_name)
+            torch.save(self.optimizers[topology].state_dict(), file_name)
 
-    def load(self, epoch=None):
-        for i, model in enumerate(self.models):
-            model.load(pjoin(self.model_save_dir, "topology{}".format(i)), epoch)
 
-        if self.is_train:
+    def load(self, epoch=None, topology=-1):
+        if self.is_train:        
+            for i, model in enumerate(self.models):
+                model.load(pjoin(self.model_save_dir, "topology{}".format(i)), epoch)
+
             for i, optimizer in enumerate(self.optimizers):
                 file_name = pjoin(
                     self.model_save_dir, "optimizers/{}/{}.pt".format(epoch, i)
                 )
                 optimizer.load_state_dict(torch.load(file_name))
+        elif topology != -1:            
+            for i, model in enumerate(self.models):
+                if topology == i:
+                    model.load(pjoin(self.model_save_dir, "topology{}".format(topology)), epoch)
+            for i, optimizer in enumerate(self.optimizers):
+                if topology == i:
+                    file_name = pjoin(
+                        self.model_save_dir, "optimizers/{}/{}.pt".format(epoch, i)
+                    )
+                    optimizer.load_state_dict(torch.load(file_name))
         self.epoch_cnt = epoch
 
     def compute_test_result(self):

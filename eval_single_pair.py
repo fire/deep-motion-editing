@@ -24,8 +24,24 @@ def main():
 
     src_character = input_bvh.split("/")[-2]
     target_character = target_bvh.split("/")[-2]
-    character_names = [[src_character], [target_character]]
-    file_id = [[input_bvh], [target_bvh]]
+    print(f'Source character {src_character}')
+    print(f'Target character {target_character}')
+    character_names = []
+    file_id = []
+    topo_index = -1
+    for t, topo in enumerate(get_character_names(args)):
+        print(topo)
+        if target_character in topo[1]:  
+            character_names.append([target_character])
+            file_id.append([target_bvh])
+            character_names.append([src_character])
+            file_id.append([input_bvh]) 
+            topo_index = t
+            break
+
+    print(character_names)
+    print(file_id)
+    print(topo_index)
     src_id = 0
 
     output_filename = args.output_filename
@@ -48,7 +64,7 @@ def main():
 
     dataset = create_dataset(args, [character_names])
     model = create_model(args, [character_names], dataset, get_train_list())
-    model.load(epoch=0)
+    model.load(epoch=0, topology=topo_index)
     input_motion = []
 
     if not os.path.exists(input_bvh):
@@ -69,7 +85,7 @@ def main():
 
     model.set_input(input_motion)
     model.test()
-    bvh_path = f"{model.bvh_path}/{src_character}/0_{src_id}.bvh"
+    bvh_path = f"{model.bvh_path}/{target_character}/0_{src_id}.bvh"
     copyfile(bvh_path, output_filename)
 
 
