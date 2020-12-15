@@ -43,7 +43,7 @@ def main():
             file_id.append([input_bvh])         
             character_names.append([target_character])
             file_id.append([target_bvh])
-            final_character = src_character
+            final_character = target_character
             topo_index = t
 
     print(character_names)
@@ -71,7 +71,7 @@ def main():
 
     dataset = create_dataset(args, [character_names])
     model = create_model(args, [character_names], dataset, get_train_list())
-    model.load(epoch=650, topology=topo_index)
+    model.load(epoch=1479, topology=topo_index)
     input_motion = []
 
     if not os.path.exists(input_bvh):
