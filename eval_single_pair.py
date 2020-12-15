@@ -29,13 +29,23 @@ def main():
     character_names = []
     file_id = []
     topo_index = -1
+    final_character = ""
     for t, topo in enumerate(get_character_names(args)):
         print(topo)
-        if target_character in topo[1]:  
+        if src_character in topo[0] and target_character in topo[1]:  
             character_names.append([target_character])
             file_id.append([target_bvh])
             character_names.append([src_character])
             file_id.append([input_bvh]) 
+            final_character = target_character
+            topo_index = t
+            break
+        elif target_character in topo[0] and src_character in topo[1]:    
+            character_names.append([src_character])
+            file_id.append([input_bvh])         
+            character_names.append([target_character])
+            file_id.append([target_bvh])
+            final_character = src_character
             topo_index = t
             break
 
@@ -85,7 +95,7 @@ def main():
 
     model.set_input(input_motion)
     model.test()
-    bvh_path = f"{model.bvh_path}/{target_character}/0_{src_id}.bvh"
+    bvh_path = f"{model.bvh_path}/{final_character}/0_{src_id}.bvh"
     copyfile(bvh_path, output_filename)
 
 
