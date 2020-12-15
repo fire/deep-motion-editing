@@ -54,7 +54,7 @@ def get_character_names(args):
     topo = []
     for key in characters.values():
         topo.append(key)
-    topo = [list(x) for x in it.combinations(topo, 2)]
+    topo = [list(x) for x in it.permutations(topo, 2)]
     return topo
 
 
