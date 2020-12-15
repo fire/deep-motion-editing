@@ -157,7 +157,7 @@ class BVH_file:
             print(self._names)
             raise Exception("Unknown skeleton")
 
-        if self.skeleton_type == 0:
+        if self.skeleton_type == "corps_name_1":
             self.set_new_root(1)
 
         self.details = []
