@@ -1,4 +1,4 @@
-trained_characters = {
+train_set = {
     "corps_BerkeleyMHAD": [
         "BerkeleyMHAD_skl_s01",
         "BerkeleyMHAD_skl_s02",
@@ -9,9 +9,13 @@ trained_characters = {
         "BerkeleyMHAD_skl_s07",
         "BerkeleyMHAD_skl_s08",
     ],
-    "corps_motion_project": [
-        "Female1",
-        "Male1",
+}
+test_set = {
+    "corps_BerkeleyMHAD": [
+        "BerkeleyMHAD_skl_s09",
+        "BerkeleyMHAD_skl_s10",
+        "BerkeleyMHAD_skl_s11",
+        "BerkeleyMHAD_skl_s12",
     ],
 }
 def get_character_names(args):
@@ -53,9 +57,9 @@ def create_dataset(args, character_names=None):
 
 
 def get_test_set():
-    return []
+    return test_set
 
 
 def get_train_list():
-    return trained_characters
+    return train_set
     
