@@ -2,15 +2,12 @@ trained_characters = {
     "corps_BerkeleyMHAD": [
         "BerkeleyMHAD_skl_s05",
         "BerkeleyMHAD_skl_s06",
+        "BerkeleyMHAD_skl_s02",
+        "BerkeleyMHAD_skl_s03",
     ],
     "corps_motion_project": [
         "Female1",
-        "Female1"
     ],
-    "corps_VRM": [
-        "BerkeleyMHAD_skl_s02",
-        "BerkeleyMHAD_skl_s03",
-    ]
 }
 def get_character_names(args):
     characters = {}
