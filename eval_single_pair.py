@@ -31,13 +31,15 @@ def main():
     file_id = []
     topo_index = -1
     final_character = ""
-    for n, names in enumerate(get_character_names(args)):
-        if src_character in names[0] and target_character in names[1]:
-            character_names.append([src_character])
-            file_id.append([input_bvh])        
+    topologies = get_character_names(args)
+    print(f'Topologies are {topologies}')
+    for n, names in enumerate(topologies):
+        if src_character in names[1] and target_character in names[0]:
             character_names.append([target_character])
             file_id.append([target_bvh])
-            final_character = src_character
+            character_names.append([src_character])
+            file_id.append([input_bvh])
+            final_character = target_character
             topo_index = n
             break
 
@@ -77,7 +79,9 @@ def main():
     for i, character_group in enumerate(character_names):
         input_group = []
         for j in range(len(character_group)):
-            new_motion = dataset.get_item_string(file_id[i][j])
+            group_anim = file_id[i][j]
+            print(f'Group anim is {group_anim}')
+            new_motion = dataset.get_item_string(group_anim)
             new_motion.unsqueeze_(0)
             new_motion = (new_motion - dataset.mean[i][j]) / dataset.var[i][j]
             input_group.append(new_motion)
