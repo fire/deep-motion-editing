@@ -31,7 +31,6 @@ def main():
     topo_index = -1
     final_character = ""
     for t, topo in enumerate(get_character_names(args)):
-        print(topo)
         if src_character in topo[0] and target_character in topo[1]:  
             character_names.append([target_character])
             file_id.append([target_bvh])
@@ -39,7 +38,6 @@ def main():
             file_id.append([input_bvh]) 
             final_character = target_character
             topo_index = t
-            break
         elif target_character in topo[0] and src_character in topo[1]:    
             character_names.append([src_character])
             file_id.append([input_bvh])         
@@ -47,7 +45,6 @@ def main():
             file_id.append([target_bvh])
             final_character = src_character
             topo_index = t
-            break
 
     print(character_names)
     print(file_id)
@@ -74,7 +71,7 @@ def main():
 
     dataset = create_dataset(args, [character_names])
     model = create_model(args, [character_names], dataset, get_train_list())
-    model.load(epoch=0, topology=topo_index)
+    model.load(epoch=650, topology=topo_index)
     input_motion = []
 
     if not os.path.exists(input_bvh):
