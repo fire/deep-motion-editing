@@ -33,19 +33,11 @@ def main():
     final_character = ""
     for t, topo in enumerate(get_character_names(args)):
         if src_character in topo[0] and target_character in topo[1]:
-            character_names.append([target_character])
-            file_id.append([target_bvh])
             character_names.append([src_character])
             file_id.append([input_bvh])
+            character_names.append([target_character])
+            file_id.append([target_bvh])
             final_character = target_character
-            topo_index = t
-        elif target_character in topo[0] and src_character in topo[1]:
-            character_names.append([src_character])
-            file_id.append([input_bvh])
-            character_names.append([target_character])
-            file_id.append([target_bvh])
-
-            final_character = src_character
             topo_index = t
 
     print(character_names)
