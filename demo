@@ -52,10 +52,28 @@ def example(
 
 
 if __name__ == "__main__":
-    src_name = "BerkeleyMHAD_skl_s03"
-    src_bvh = "skl_s03_a01_r02.bvh"
-    dst_name = "BerkeleyMHAD_skl_s05"
-    dst_bvh = "skl_s05_a05_r02.bvh"
+
+    group_b = [
+        "BerkeleyMHAD_skl_s05",
+        "BerkeleyMHAD_skl_s06",
+    ]
+    group_d = [
+        "Female1",
+        "Female1"
+    ]
+
+    characters = [
+        group_b,
+        group_d,
+    ]
+    import itertools as it
+    characters = [list(x) for x in it.permutations(characters, 2)]
+    print(characters)
+
+    src_name = "Female1"
+    src_bvh = "Female1_A04_Look.bvh"
+    dst_name= "BerkeleyMHAD_skl_s03"
+    dst_bvh = "skl_s03_a01_r02.bvh"
     example(
         src_name=src_name,
         src_bvh=src_bvh,

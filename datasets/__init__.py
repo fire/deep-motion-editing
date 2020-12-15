@@ -1,81 +1,59 @@
-def get_character_names(args):
-    group_b = [
+trained_characters = {
+    "corps_BerkeleyMHAD": [
         "BerkeleyMHAD_skl_s05",
         "BerkeleyMHAD_skl_s06",
+    ],
+    "corps_motion_project": [
+        "Female1",
+        "Female1"
     ]
-    group_c = [
-        "BerkeleyMHAD_skl_s03",
-        "BerkeleyMHAD_skl_s04",
-    ]
-    group_d = [
-        "BerkeleyMHAD_skl_s07",
-        "BerkeleyMHAD_skl_s08"
-    ]
-    # "BerkeleyMHAD_skl_s07",
-    # "BerkeleyMHAD_skl_s08",
-    # "BerkeleyMHAD_skl_s01",
-    # "BerkeleyMHAD_skl_s02",
-    # "BerkeleyMHAD_skl_s03",
-    # "BerkeleyMHAD_skl_s04",
-
+}
+def get_character_names(args):
+    characters = {}
     if args.is_train:
         """
         Put the name of subdirectory in retargeting/datasets/Mixamo as [[names of group A], [names of group B]]
         """
-        characters = [
-            group_b,
-            group_d,
-            group_c,
-        ]
+        characters = get_train_list()
     else:
         """
         To run evaluation successfully, number of characters in both groups must be the same. Repeat is okay.
         """
-        characters = [
-            [
-                "Kaya", "Kaya",
-            ],
-            [
-                "BerkeleyMHAD_skl_s05", "BerkeleyMHAD_skl_s06"
-            ],
+        characters = {
+        "corps_BerkeleyMHAD": [
+            "BerkeleyMHAD_skl_s05",
+            "BerkeleyMHAD_skl_s06",
+        ],
+        "corps_motion_project": [
+            "Female1",
+            "Female1"
+        ],
+        "corps_VRM": [
+            "Female1",
+            "Female1"
         ]
-        tmp = characters[1][args.eval_seq]
-        characters[1][args.eval_seq] = characters[1][0]
-        characters[1][0] = tmp
-
+    }
+    
     import itertools as it
-    characters = [list(x) for x in it.permutations(characters, 2)]
-    print(characters)
-    return characters
+    topo = []
+    for key in characters.values():
+        topo.append(key)
+    topo = [list(x) for x in it.permutations(topo, 2)]
+    return topo
 
 
 def create_dataset(args, character_names=None):
     from datasets.combined_motion import TestData, MixedData
     if args.is_train:
-        return MixedData(args, character_names)
+        return MixedData(args, character_names, get_train_list())
     else:
-        return TestData(args, character_names)
+        return TestData(args, character_names, get_train_list())
 
 
 def get_test_set():
-    open_test_list = []
-    try:
-        open_test_list = open("./datasets/Motions/test_list.txt", "r")
-    except FileNotFoundError as e:
-        return []
-    with open_test_list as file:
-        list = file.readlines()
-        list = [f[:-1] for f in list]
-        return list
+    return []
 
 
 def get_train_list():
-    open_train_list = []
-    try:
-        open_train_list = open("./datasets/Motions/train_list.txt", "r")
-    except FileNotFoundError as e:
-        return []
-    with open_train_list as file:
-        list = file.readlines()
-        list = [f[:-1] for f in list]
-        return list
+    return trained_characters
+    
