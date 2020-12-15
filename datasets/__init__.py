@@ -1,5 +1,15 @@
 train_set = {
-    "corps_BerkeleyMHAD": [
+    "corps_BerkeleyMHAD_01": [
+        "BerkeleyMHAD_skl_s01",
+        "BerkeleyMHAD_skl_s02",
+        "BerkeleyMHAD_skl_s03",
+        "BerkeleyMHAD_skl_s04",
+        "BerkeleyMHAD_skl_s05",
+        "BerkeleyMHAD_skl_s06",
+        "BerkeleyMHAD_skl_s07",
+        "BerkeleyMHAD_skl_s08",
+    ],    
+    "corps_BerkeleyMHAD_02": [
         "BerkeleyMHAD_skl_s01",
         "BerkeleyMHAD_skl_s02",
         "BerkeleyMHAD_skl_s03",
@@ -44,7 +54,7 @@ def get_character_names(args):
     topo = []
     for key in characters.values():
         topo.append(key)
-    topo = [list(x) for x in it.permutations(topo, 2)]
+    topo = [list(x) for x in it.combinations(topo, 2)]
     return topo
 
 
