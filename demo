@@ -41,8 +41,8 @@ def example(
     cmd = f"python eval_single_pair.py --input_bvh=\"{input_file}\" --target_bvh=\"{ref_file}\" --output_filename=\"{joined_output_path}\""
 
     err = os.system(cmd)
-    # if err:
-    #     return err
+    if err:
+        return err
     # fix_foot_contact(
     #     pjoin(output_path, "result.bvh"),
     #     pjoin(output_path, "input.bvh"),
@@ -53,9 +53,9 @@ def example(
 
 if __name__ == "__main__":
     src_name = "BerkeleyMHAD_skl_s07"
-    src_bvh = "skl_s07_a01_r02.bvh"
-    dst_name = "SportyGranny"
-    dst_bvh = "Catwalk Walk.bvh"
+    src_bvh = "skl_s07_a01_r03.bvh"
+    dst_name = "Kaya"
+    dst_bvh = "Sitting Drinking.bvh"
     example(
         src_name=src_name,
         src_bvh=src_bvh,

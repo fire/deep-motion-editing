@@ -31,14 +31,14 @@ def main():
     file_id = []
     topo_index = -1
     final_character = ""
-    for t, topo in enumerate(get_character_names(args)):
-        if src_character in topo[0] and target_character in topo[1]:
+    for n, names in enumerate(get_character_names(args)):
+        if src_character in names[0] and target_character in names[1]:
             character_names.append([src_character])
-            file_id.append([input_bvh])            
+            file_id.append([input_bvh])        
             character_names.append([target_character])
             file_id.append([target_bvh])
             final_character = src_character
-            topo_index = t
+            topo_index = n
             break
 
     print(character_names)
@@ -65,7 +65,7 @@ def main():
 
     dataset = create_dataset(args, [character_names])
     model = create_model(args, [character_names], dataset, get_train_list())
-    model.load(epoch=50, topology=topo_index)
+    model.load(epoch=5000, topology=topo_index)
     input_motion = []
 
     if not os.path.exists(input_bvh):
@@ -75,8 +75,6 @@ def main():
 
     input_motion = []
     for i, character_group in enumerate(character_names):
-        if i != topo_index:
-            continue
         input_group = []
         for j in range(len(character_group)):
             new_motion = dataset.get_item_string(file_id[i][j])
