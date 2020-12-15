@@ -71,7 +71,7 @@ def main():
 
     dataset = create_dataset(args, [character_names])
     model = create_model(args, [character_names], dataset, get_train_list())
-    model.load(epoch=1479, topology=topo_index)
+    model.load(epoch=0, topology=topo_index)
     input_motion = []
 
     if not os.path.exists(input_bvh):
