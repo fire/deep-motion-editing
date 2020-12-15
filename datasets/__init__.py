@@ -9,16 +9,12 @@ train_set = {
         "BerkeleyMHAD_skl_s07",
         "BerkeleyMHAD_skl_s08",
     ],    
-    "corps_BerkeleyMHAD_02": [
-        "BerkeleyMHAD_skl_s01",
-        "BerkeleyMHAD_skl_s02",
-        "BerkeleyMHAD_skl_s03",
-        "BerkeleyMHAD_skl_s04",
-        "BerkeleyMHAD_skl_s05",
-        "BerkeleyMHAD_skl_s06",
-        "BerkeleyMHAD_skl_s07",
-        "BerkeleyMHAD_skl_s08",
-    ],
+    "corps_name_1": [
+        "AJ",
+        "BigVegas",
+        "Kaya",
+        "SportyGranny",
+    ]
 }
 test_set = {
     "corps_BerkeleyMHAD": [
