@@ -70,10 +70,10 @@ if __name__ == "__main__":
     characters = [list(x) for x in it.permutations(characters, 2)]
     print(characters)
 
-    src_name = "BerkeleyMHAD_skl_s03"
-    src_bvh = "skl_s03_a01_r02.bvh"
-    dst_name= "Female1"
-    dst_bvh = "Female1_A04_Look.bvh"
+    src_name = "BerkeleyMHAD_skl_s06"
+    src_bvh = "skl_s06_a01_r02.bvh"
+    dst_name =  "Female1"
+    dst_bvh = "Female1_B27_SkipToWalk1.bvh"
     example(
         src_name=src_name,
         src_bvh=src_bvh,
