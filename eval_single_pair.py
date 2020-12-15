@@ -9,15 +9,16 @@ from datasets import create_dataset
 from models import create_model
 from datasets import create_dataset, get_character_names, get_train_list
 
+
 def main():
     parser = option_parser.get_parser()
     parser.add_argument("--input_bvh", type=str, required=True)
     parser.add_argument("--target_bvh", type=str, required=False)
     parser.add_argument("--output_filename", type=str, required=True)
     parser.add_argument("--cpu", type=bool, required=False)
- 
+
     args = parser.parse_args()
-    
+
     input_bvh = args.input_bvh
     target_bvh = args.target_bvh
     cpu = args.cpu
@@ -31,18 +32,19 @@ def main():
     topo_index = -1
     final_character = ""
     for t, topo in enumerate(get_character_names(args)):
-        if src_character in topo[0] and target_character in topo[1]:  
-            character_names.append([src_character])
-            file_id.append([input_bvh])         
+        if src_character in topo[0] and target_character in topo[1]:
             character_names.append([target_character])
-            file_id.append([target_bvh]) 
+            file_id.append([target_bvh])
+            character_names.append([src_character])
+            file_id.append([input_bvh])
             final_character = target_character
             topo_index = t
         elif target_character in topo[0] and src_character in topo[1]:
-            character_names.append([target_character])
-            file_id.append([target_bvh])   
             character_names.append([src_character])
-            file_id.append([input_bvh])         
+            file_id.append([input_bvh])
+            character_names.append([target_character])
+            file_id.append([target_bvh])
+
             final_character = src_character
             topo_index = t
 
@@ -54,13 +56,13 @@ def main():
 
     test_device = args.cuda_device
     eval_seq = args.eval_seq
-    
+
     para_path = pjoin(args.save_dir, "para.txt")
     with open(para_path, "r") as para_file:
         argv_ = para_file.readline().split()[1:]
         args = option_parser.get_parser().parse_args(argv_)
 
-    args.cuda_device = test_device if torch.cuda.is_available() else "cpu"    
+    args.cuda_device = test_device if torch.cuda.is_available() else "cpu"
     if cpu:
         args.cuda_device = "cpu"
     print(f'Cuda device is {args.cuda_device}')
