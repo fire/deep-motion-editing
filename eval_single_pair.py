@@ -7,6 +7,7 @@ import torch
 import option_parser
 from datasets import create_dataset
 from models import create_model
+from datasets import create_dataset, get_character_names, get_train_list
 
 def main():
     parser = option_parser.get_parser()
@@ -20,10 +21,10 @@ def main():
     input_bvh = args.input_bvh
     target_bvh = args.target_bvh
     cpu = args.cpu
-  
+
     src_character = input_bvh.split("/")[-2]
     target_character = target_bvh.split("/")[-2]
-    character_names = [[[src_character], [target_character]]]
+    character_names = [[src_character], [target_character]]
     file_id = [[input_bvh], [target_bvh]]
     src_id = 0
 
@@ -45,8 +46,8 @@ def main():
     args.rotation = "quaternion"
     args.eval_seq = eval_seq
 
-    dataset = create_dataset(args, character_names)
-    model = create_model(args, character_names, dataset)
+    dataset = create_dataset(args, [character_names])
+    model = create_model(args, [character_names], dataset, get_train_list())
     model.load(epoch=0)
     input_motion = []
 
@@ -68,7 +69,7 @@ def main():
 
     model.set_input(input_motion)
     model.test()
-    bvh_path = f"{model.bvh_path}/{target_character}/0_{src_id}.bvh"
+    bvh_path = f"{model.bvh_path}/{src_character}/0_{src_id}.bvh"
     copyfile(bvh_path, output_filename)
 
 

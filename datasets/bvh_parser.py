@@ -78,7 +78,6 @@ Specify five end effectors' name.
 Please follow the same order as in 1.
 """
 
-
 ee_names = {
     "corps_name_1": ["LeftToeBase", "RightToeBase", "Head", "LeftHand", "RightHand"],
     "corps_BerkeleyMHAD": [

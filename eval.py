@@ -5,7 +5,7 @@ import torch
 from tqdm import tqdm
 
 import option_parser
-from datasets import create_dataset, get_character_names
+from datasets import create_dataset, get_character_names, get_train_list
 from models import create_model
 
 
@@ -22,9 +22,9 @@ def eval(eval_seq, save_dir, test_device="cpu"):
     args.save_dir = save_dir
     character_names = get_character_names(args)
 
-    dataset = create_dataset(args, character_names)
+    dataset = create_dataset(args, character_names, get_train_list())
 
-    model = create_model(args, character_names, dataset)
+    model = create_model(args, character_names, dataset, get_train_list())
     model.load(epoch=5001)
 
     for i, motions in tqdm(enumerate(dataset), total=len(dataset)):

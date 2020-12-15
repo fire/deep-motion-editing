@@ -13,26 +13,27 @@ from models.utils import (Criterion_EE, Criterion_EE_2, Eval_Criterion,
 
 
 class GAN_model(BaseModel):
-    def __init__(self, args, character_names, dataset):
+    def __init__(self, args, character_names, dataset, train_list):
         super(GAN_model, self).__init__(args)
         self.character_names = character_names
         self.dataset = dataset
-        self.n_topology = len(character_names)
+        self.topology = train_list
+        self.n_topology = len(character_names)   
         self.models = []
         self.D_para = []
         self.G_para = []
         self.args = args
-
+        print(train_list)
+        topology = train_list.keys()
+        topology = list(topology)
         for i in range(self.n_topology):            
-            print(f"Current \"{character_names[i][0]}\" joint topology. Check for duplicate and mismatched bones in the skeleton parser. {dataset.joint_topologies[i]}")
-
-            for char in character_names:
-                model = IntegratedModel(
-                    args, dataset.joint_topologies[i], None, self.device, char
-                )
-                self.models.append(model)
-                self.D_para += model.D_parameters()
-                self.G_para += model.G_parameters()
+            print(f"Current \"{topology[i]}\" joint topology. Check for duplicate and mismatched bones in the skeleton parser. {dataset.joint_topologies[i]}")          
+            model = IntegratedModel(
+                args, dataset.joint_topologies[i], None, self.device, character_names[i]
+            )
+            self.models.append(model)
+            self.D_para += model.D_parameters()
+            self.G_para += model.G_parameters()
 
         if self.is_train:
             self.fake_pools = []
@@ -62,7 +63,7 @@ class GAN_model(BaseModel):
             self.writer = []
             for i in range(self.n_topology):
                 writer_group = []
-                for _, char in enumerate(character_names[i]):
+                for _, char in enumerate(character_names[i][0]):
                     import option_parser
                     from datasets.bvh_parser import BVH_file
                     from datasets.bvh_writer import BVH_writer
@@ -370,26 +371,28 @@ class GAN_model(BaseModel):
             )
             gt_poses.append(gt_pose)
             for i in idx:
-                new_path = pjoin(self.bvh_path, self.character_names[src][i])
-                from option_parser import try_mkdir
+                for group in self.character_names:
+                    new_path = pjoin(self.bvh_path, group[src][i])
+                    from option_parser import try_mkdir
 
-                try_mkdir(new_path)
-                self.writer[src][i].write_raw(
-                    gt[i, ...],
-                    "quaternion",
-                    pjoin(new_path, "{}_gt.bvh".format(self.id_test)),
-                )
+                    try_mkdir(new_path)
+                    self.writer[src][i].write_raw(
+                        gt[i, ...],
+                        "quaternion",
+                        pjoin(new_path, "{}_gt.bvh".format(self.id_test)),
+                    )
 
         p = 0
         for src in range(self.n_topology):
             for dst in range(self.n_topology):
-                for i in range(len(self.character_names[dst])):
-                    dst_path = pjoin(self.bvh_path, self.character_names[dst][i])
-                    self.writer[dst][i].write_raw(
-                        self.fake_res_denorm[p][i, ...],
-                        "quaternion",
-                        pjoin(dst_path, "{}_{}.bvh".format(self.id_test, src)),
-                    )
-                p += 1
+                for group in self.character_names:
+                    for i in range(len([dst])):
+                        dst_path = pjoin(self.bvh_path, group[dst][i])
+                        self.writer[dst][i].write_raw(
+                            self.fake_res_denorm[p][i, ...],
+                            "quaternion",
+                            pjoin(dst_path, "{}_{}.bvh".format(self.id_test, src)),
+                        )
+                    p += 1
 
         self.id_test += 1
