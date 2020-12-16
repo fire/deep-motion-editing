@@ -11,12 +11,12 @@ train_dict = {
         "BerkeleyMHAD_skl_s03",
         "BerkeleyMHAD_skl_s04",
     ],
-    # "corps_name_1": [
-    #     # "AJ",
-    #     # "BigVegas",
-    #     "Kaya",
-    #     "SportyGranny",
-    # ]
+    "corps_name_1": [
+        # "AJ",
+        # "BigVegas",
+        "Kaya",
+        "SportyGranny",
+    ]
 }
 test_dict = train_dict
 

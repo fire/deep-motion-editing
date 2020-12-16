@@ -34,19 +34,19 @@ def main():
     topo_index = -1
     topologies = character_dict_to_list(train_dict)
 
-    order = 1
-    result_character = src_character
+    order = 0
     if pair_type == "intra":
-        pass
+        result_character = target_character
     elif pair_type == "cross":
-        pass
+        order = not order
+        result_character = src_character
 
     for t, topo in enumerate(topologies):
         print(f'Topologies are {topo}')
         if src_character in topo[order] and target_character in topo[not order]:
             topo_index = t
             break
-    if topo_index % 2 == 0:    
+    if topo_index % 2 == order:    
         character_names.append([src_character])
         file_id.append([input_bvh])
         character_names.append([target_character])
