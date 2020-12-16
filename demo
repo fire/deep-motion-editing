@@ -43,12 +43,12 @@ def example(
     err = os.system(cmd)
     if err:
         return err
-    # fix_foot_contact(
-    #     pjoin(output_path, "result.bvh"),
-    #     pjoin(output_path, "input.bvh"),
-    #     pjoin(output_path, "result.bvh"),
-    #     height,
-    # )
+    fix_foot_contact(
+        pjoin(output_path, "result.bvh"),
+        pjoin(output_path, "input.bvh"),
+        pjoin(output_path, "result.bvh"),
+        height,
+    )
 
 
 if __name__ == "__main__":
@@ -76,25 +76,25 @@ if __name__ == "__main__":
     )
 
     # Cross
-    src_name = "BerkeleyMHAD_skl_s01"
-    src_bvh = "skl_s01_a02_r03.bvh"
-    dst_name = "Kaya"
-    dst_bvh = "Catwalk Walk.bvh"
-    example(
-        src_name=src_name,
-        src_bvh=src_bvh,
-        dst_name=dst_name,
-        dst_bvh=dst_bvh,
-        output_path=f"./examples/{dst_name}_{src_bvh}/",
-        type="cross"
-    )
-    src_name, dst_name = dst_name, src_name
-    src_bvh, dst_bvh = dst_bvh, src_bvh
-    example(
-        src_name=src_name,
-        src_bvh=src_bvh,
-        dst_name=dst_name,
-        dst_bvh=dst_bvh,
-        output_path=f"./examples/{dst_name}_{src_bvh}/",
-        type="cross"
-    )
+    # src_name = "BerkeleyMHAD_skl_s01"
+    # src_bvh = "skl_s01_a02_r03.bvh"
+    # dst_name = "Kaya"
+    # dst_bvh = "Cross Jumps Rotation.bvh"
+    # example(
+    #     src_name=src_name,
+    #     src_bvh=src_bvh,
+    #     dst_name=dst_name,
+    #     dst_bvh=dst_bvh,
+    #     output_path=f"./examples/{dst_name}_{src_bvh}/",
+    #     type="cross"
+    # )
+    # src_name, dst_name = dst_name, src_name
+    # src_bvh, dst_bvh = dst_bvh, src_bvh
+    # example(
+    #     src_name=src_name,
+    #     src_bvh=src_bvh,
+    #     dst_name=dst_name,
+    #     dst_bvh=dst_bvh,
+    #     output_path=f"./examples/{dst_name}_{src_bvh}/",
+    #     type="cross"
+    # )
