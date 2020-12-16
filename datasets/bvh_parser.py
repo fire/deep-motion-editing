@@ -107,7 +107,7 @@ Add previously added corps_name and ee_name at the end of the two above lists.
 
 
 class BVH_file:
-    def __init__(self, file_path=None, args=None, dataset=None, new_root=None):
+    def __init__(self, file_path="", args=None, dataset=None, new_root=None):
         if file_path is None:
             file_path = get_std_bvh(dataset=dataset)
         self.anim, self._names, self.frametime = BVH.load(file_path)

@@ -27,6 +27,7 @@ class IntegratedModel:
         self.real_height = []
         for group in characters:
             for char in group:
+                print(f'Char {char}')
                 if args.use_sep_ee:
                     h = BVH_file(get_std_bvh(dataset=char)).get_ee_length()
                 else:

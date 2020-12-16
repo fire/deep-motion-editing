@@ -6,7 +6,7 @@ import numpy as np
 import torch
 from datasets.bvh_parser import BVH_file
 from option_parser import get_std_bvh
-from datasets import get_test_set
+from datasets import get_test_list
 
 
 class MixedData0(Dataset):
@@ -32,6 +32,7 @@ class MixedData0(Dataset):
             return [self.motions[item], self.skeleton_idx[item]]
         else:
             return [self.motions_reverse[item], self.skeleton_idx[item]]
+
 
 class MixedData(Dataset):
     """
@@ -120,7 +121,6 @@ class MixedData(Dataset):
     def __len__(self):
         return self.length
 
-
     def get_item_string(self, item_string):
         item_file = BVH_file(item_string)
         motion = item_file.to_tensor(quater=self.args.rotation == 'quaternion')
@@ -128,7 +128,6 @@ class MixedData(Dataset):
         length = motion.shape[-1]
         length = length // 4 * 4
         return motion[..., :length].to(self.device)
-
 
     def __getitem__(self, item):
         res = []
@@ -138,9 +137,9 @@ class MixedData(Dataset):
 
 
 class TestData(Dataset):
-    def __init__(self, args, characters, test_list):
+    def __init__(self, args, characters, test_list : list):
         self.characters = characters
-        self.file_list = get_test_set()
+        self.file_list = test_list
         self.mean = []
         self.joint_topologies = []
         self.topologies = test_list
@@ -212,15 +211,14 @@ class TestData(Dataset):
             res.append([res_group, list(range(len(character_group)))])
         return res
 
- 
-    def get_item_string(self, item_string):
-        item_file = BVH_file(item_string)
-        motion = item_file.to_tensor(quater=self.args.rotation == 'quaternion')
+    def get_item(self, path: str):
+        print(f'Path {path}')
+        file = BVH_file(path)
+        motion = file.to_tensor(quater=self.args.rotation == 'quaternion')
         motion = motion[:, ::2]
         length = motion.shape[-1]
         length = length // 4 * 4
         return motion[..., :length].to(self.device)
-
 
     def __len__(self):
         return len(self.file_list)

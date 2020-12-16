@@ -30,22 +30,21 @@ def main():
     character_names = []
     file_id = []
     topo_index = -1
-    final_character = ""
     topologies = get_character_names(args)
-    print(f'Topologies are {topologies}')
-    for n, names in enumerate(topologies):
-        if src_character in names[1] and target_character in names[0]:
-            character_names.append([target_character])
-            file_id.append([target_bvh])
+    for t, topo in enumerate(topologies):
+        print(f'Topologies are {topo}')
+        if src_character in topo[0] and target_character in topo[1]:
+            topo_index = t
             character_names.append([src_character])
             file_id.append([input_bvh])
-            final_character = target_character
-            topo_index = n
+            character_names.append([target_character])
+            file_id.append([target_bvh])
             break
-
-    print(character_names)
-    print(file_id)
-    print(topo_index)
+    
+    character_names = [character_names]
+    print(f'Character names {character_names}')
+    print(f'File id {file_id}')
+    print(f'Topo index {topo_index}')
 
     output_filename = args.output_filename
 
@@ -64,10 +63,10 @@ def main():
     args.is_train = False
     args.rotation = "quaternion"
     args.eval_seq = eval_seq
-
-    dataset = create_dataset(args, [character_names])
-    model = create_model(args, [character_names], dataset, get_train_list())
-    model.load(epoch=5000, topology=topo_index)
+    print(f'Characters {character_names}')
+    dataset = create_dataset(args, character_names)
+    model = create_model(args, character_names, dataset, get_train_list())
+    model.load(epoch=2, topology=topo_index)
     input_motion = []
 
     if not os.path.exists(input_bvh):
@@ -75,21 +74,19 @@ def main():
         print(error)
         return
 
-    input_motion = []
-    for i, character_group in enumerate(character_names):
+    for i in range(2):
+        input_motion = []
         input_group = []
-        for j in range(len(character_group)):
-            group_anim = file_id[i][j]
-            print(f'Group anim is {group_anim}')
-            new_motion = dataset.get_item_string(group_anim)
-            new_motion.unsqueeze_(0)
-            new_motion = (new_motion - dataset.mean[i][j]) / dataset.var[i][j]
-            input_group.append(new_motion)
+        new_motion = dataset.get_item(file_id[i][0])
+        new_motion.unsqueeze_(0)
+        new_motion = (new_motion - dataset.mean[i][0]) / dataset.var[i][0]
+        input_group.append(new_motion) 
         input_group = torch.cat(input_group, dim=0)
-        input_motion.append([input_group, list(range(len(character_group)))])
+        input_motion.append([input_group, list(range(1))])    
         model.set_input(input_motion)
         model.test()
-    bvh_path = f"{model.bvh_path}/{final_character}/{topo_index}_0.bvh"
+    # ---- Output 
+    bvh_path = f"{model.bvh_path}/{src_character}/{topo_index}_0.bvh"
     copyfile(bvh_path, output_filename)
 
 

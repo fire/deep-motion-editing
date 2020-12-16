@@ -23,18 +23,17 @@ class GAN_model(BaseModel):
         self.D_para = []
         self.G_para = []
         self.args = args
-        print(train_list)
-        topology = train_list.keys()
-        topology = list(topology)
-        for i, topo in enumerate(character_names):            
-            print(f"Current \"{topo}\" joint topology. Check for duplicate and mismatched bones in the skeleton parser. {dataset.joint_topologies[i]}")
-            print(f'Has bone count {len(dataset.joint_topologies[i])}')      
-            model = IntegratedModel(
-                args, dataset.joint_topologies[i], None, self.device, character_names[i]
-            )
-            self.models.append(model)
-            self.D_para += model.D_parameters()
-            self.G_para += model.G_parameters()
+        print(f'Train list {train_list}')
+        for n, names in enumerate(character_names):
+            for _n, topo in enumerate(names):
+                print(f"Current \"{topo[0]}\" joint topology. Check for duplicate and mismatched bones in the skeleton parser. {dataset.joint_topologies[n]}")
+                print(f'Has bone count {len(dataset.joint_topologies[n])}')      
+                model = IntegratedModel(
+                    args, dataset.joint_topologies[n], None, self.device, names
+                )
+                self.models.append(model)
+                self.D_para += model.D_parameters()
+                self.G_para += model.G_parameters()
 
         if self.is_train:
             self.fake_pools = []
@@ -402,7 +401,7 @@ class GAN_model(BaseModel):
                     self.writer[src][i].write_raw(
                         gt[i, ...],
                         "quaternion",
-                        pjoin(new_path, "{}_gt.bvh".format(self.id_test)),
+                        pjoin(new_path, "{}_reference.bvh".format(self.id_test)),
                     )
 
         p = 0
