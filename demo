@@ -52,10 +52,10 @@ def example(
 
 
 if __name__ == "__main__":
-    src_name = "BerkeleyMHAD_skl_s03"
-    src_bvh = "skl_s03_a02_r03.bvh"
-    dst_name = "BerkeleyMHAD_skl_s01"
-    dst_bvh = "skl_s01_a02_r03.bvh"
+    src_name = "BerkeleyMHAD_skl_s01"
+    src_bvh = "skl_s01_a02_r03.bvh"
+    dst_name = "BerkeleyMHAD_skl_s03"
+    dst_bvh = "skl_s03_a02_r03.bvh"
     example(
         src_name=src_name,
         src_bvh=src_bvh,
@@ -63,3 +63,13 @@ if __name__ == "__main__":
         dst_bvh=dst_bvh,
         output_path=f"./examples/{dst_name}_{src_bvh}/",
     )
+    src_name, dst_name = dst_name, src_name
+    src_bvh, dst_bvh = dst_bvh, src_bvh
+    example(
+        src_name=src_name,
+        src_bvh=src_bvh,
+        dst_name=dst_name,
+        dst_bvh=dst_bvh,
+        output_path=f"./examples/{dst_name}_{src_bvh}/",
+    )
+
