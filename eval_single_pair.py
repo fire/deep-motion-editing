@@ -91,7 +91,7 @@ def main():
     model.set_input(input_motion)
     model.test()
     # ---- Output 
-    bvh_path = f"{model.bvh_path}/{target_character}/0_0.bvh"
+    bvh_path = f"{model.bvh_path}/{topologies[topo_index][1][0]}/0_{topo_index}.bvh"
     print(f'BVH path {bvh_path}')
     copyfile(bvh_path, output_filename)
 

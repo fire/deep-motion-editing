@@ -18,15 +18,16 @@ class GAN_model(BaseModel):
         self.character_names = character_names
         self.dataset = dataset
         self.topology = train_list
-        self.n_topology = len(train_list)   
+        self.n_topology = len(train_list)
         self.models = []
         self.D_para = []
         self.G_para = []
         self.args = args
         print(f'Train list {train_list}')
         for n, names in enumerate(train_list):
-            print(f"Current \"{names}\" joint topology. Check for duplicate and mismatched bones in the skeleton parser. {dataset.joint_topologies[n]}")
-            print(f'Has bone count {len(dataset.joint_topologies[n])}')      
+            print(
+                f"Current \"{names}\" joint topology. Check for duplicate and mismatched bones in the skeleton parser. {dataset.joint_topologies[n]}")
+            print(f'Has bone count {len(dataset.joint_topologies[n])}')
             model = IntegratedModel(
                 args, dataset.joint_topologies[n], None, self.device, names
             )
@@ -54,7 +55,8 @@ class GAN_model(BaseModel):
 
             self.err_crit = []
             for i in range(self.n_topology):
-                self.err_crit.append(Eval_Criterion(dataset.joint_topologies[i]))
+                self.err_crit.append(Eval_Criterion(
+                    dataset.joint_topologies[i]))
             self.id_test = 0
             self.bvh_path = pjoin(args.save_dir, "results/bvh")
             option_parser.try_mkdir(self.bvh_path)
@@ -153,7 +155,8 @@ class GAN_model(BaseModel):
             for dst in range(self.n_topology):
                 if self.is_train:
                     rnd_idx = torch.randint(
-                        len(self.character_names[dst]), (self.latents[src].shape[0],)
+                        len(self.character_names[dst]
+                            ), (self.latents[src].shape[0],)
                     )
                 else:
                     rnd_idx = list(range(self.latents[0].shape[0]))
@@ -181,7 +184,8 @@ class GAN_model(BaseModel):
                     from_root=self.args.ee_from_root,
                 )
                 height = self.models[dst].height[rnd_idx]
-                height = height.reshape((height.shape[0], 1, height.shape[1], 1))
+                height = height.reshape(
+                    (height.shape[0], 1, height.shape[1], 1))
                 fake_ee = fake_ee / height
 
                 self.fake_latent.append(fake_latent)
@@ -224,7 +228,8 @@ class GAN_model(BaseModel):
                 )
             )
             self.loss_D += self.loss_Ds[-1]
-            self.loss_recoder.add_scalar("D_loss_{}".format(i), self.loss_Ds[-1])
+            self.loss_recoder.add_scalar(
+                "D_loss_{}".format(i), self.loss_Ds[-1])
 
     def backward_G(self):
         # rec_loss and gan loss
@@ -236,14 +241,16 @@ class GAN_model(BaseModel):
         self.loss_G_total = 0
         for i in range(self.n_topology):
             rec_loss1 = self.criterion_rec(self.motions[i], self.res[i])
-            self.loss_recoder.add_scalar("rec_loss_quater_{}".format(i), rec_loss1)
+            self.loss_recoder.add_scalar(
+                "rec_loss_quater_{}".format(i), rec_loss1)
 
             height = self.models[i].real_height[self.motions_input[i][1]]
             height = height.reshape(height.shape + (1, 1,))
             input_pos = self.motion_denorm[i][:, -3:, :] / height
             rec_pos = self.res_denorm[i][:, -3:, :] / height
             rec_loss2 = self.criterion_rec(input_pos, rec_pos)
-            self.loss_recoder.add_scalar("rec_loss_global_{}".format(i), rec_loss2)
+            self.loss_recoder.add_scalar(
+                "rec_loss_global_{}".format(i), rec_loss2)
 
             pos_ref_global = self.models[i].fk.from_local_to_world(
                 self.pos_ref[i]
@@ -252,7 +259,8 @@ class GAN_model(BaseModel):
                 self.res_pos[i]
             ) / height.reshape(height.shape + (1,))
             rec_loss3 = self.criterion_rec(pos_ref_global, res_pos_global)
-            self.loss_recoder.add_scalar("rec_loss_position_{}".format(i), rec_loss3)
+            self.loss_recoder.add_scalar(
+                "rec_loss_position_{}".format(i), rec_loss3)
 
             rec_loss = (
                 rec_loss1
@@ -278,13 +286,15 @@ class GAN_model(BaseModel):
                 self.cycle_loss += cycle_loss
 
                 ee_loss = self.criterion_ee(self.ee_ref[src], self.fake_ee[p])
-                self.loss_recoder.add_scalar("ee_loss_{}_{}".format(src, dst), ee_loss)
+                self.loss_recoder.add_scalar(
+                    "ee_loss_{}_{}".format(src, dst), ee_loss)
                 self.ee_loss += ee_loss
 
                 if src != dst:
                     if self.args.gan_mode != "none":
                         loss_G = self.criterion_gan(
-                            self.models[dst].discriminator(self.fake_pos[p]), True
+                            self.models[dst].discriminator(
+                                self.fake_pos[p]), True
                         )
                     else:
                         loss_G = torch.tensor(0)
@@ -332,49 +342,55 @@ class GAN_model(BaseModel):
         }
         return sorted(res.items(), key=lambda x: x[0])
 
-    def save(self, topology=-1):        
-        if self.is_train:    
+    def save(self, topology=-1):
+        if self.is_train:
             for i, model in enumerate(self.models):
                 model.save(
-                    pjoin(self.model_save_dir, "topology{}".format(i)), self.epoch_cnt
+                    pjoin(self.model_save_dir,
+                          "topology{}".format(i)), self.epoch_cnt
                 )
 
             for i, optimizer in enumerate(self.optimizers):
                 file_name = pjoin(
-                    self.model_save_dir, "optimizers/{}/{}.pt".format(self.epoch_cnt, i)
+                    self.model_save_dir, "optimizers/{}/{}.pt".format(
+                        self.epoch_cnt, i)
                 )
                 try_mkdir(psplit(file_name)[0])
                 torch.save(optimizer.state_dict(), file_name)
-        elif topology != -1:            
+        elif topology != -1:
             self.models[topology].save(
-                pjoin(self.model_save_dir, "topology{}".format(topology)), self.epoch_cnt
+                pjoin(self.model_save_dir, "topology{}".format(
+                    topology)), self.epoch_cnt
             )
 
             file_name = pjoin(
-                self.model_save_dir, "optimizers/{}/{}.pt".format(self.epoch_cnt, topology)
+                self.model_save_dir, "optimizers/{}/{}.pt".format(
+                    self.epoch_cnt, topology)
             )
             try_mkdir(psplit(file_name)[0])
             torch.save(self.optimizers[topology].state_dict(), file_name)
 
-
     def load(self, epoch=None, topology=-1):
-        if self.is_train:        
+        if self.is_train:
             for i, model in enumerate(self.models):
-                model.load(pjoin(self.model_save_dir, "topology{}".format(i)), epoch)
+                model.load(pjoin(self.model_save_dir,
+                                 "topology{}".format(i)), epoch)
 
             for i, optimizer in enumerate(self.optimizers):
                 file_name = pjoin(
                     self.model_save_dir, "optimizers/{}/{}.pt".format(epoch, i)
                 )
                 optimizer.load_state_dict(torch.load(file_name))
-        elif topology != -1:            
+        elif topology != -1:
             for i, model in enumerate(self.models):
                 if topology == i:
-                    model.load(pjoin(self.model_save_dir, "topology{}".format(topology)), epoch)
+                    model.load(pjoin(self.model_save_dir,
+                                     "topology{}".format(topology)), epoch)
             for i, optimizer in enumerate(self.optimizers):
                 if topology == i:
                     file_name = pjoin(
-                        self.model_save_dir, "optimizers/{}/{}.pt".format(epoch, i)
+                        self.model_save_dir, "optimizers/{}/{}.pt".format(
+                            epoch, i)
                     )
                     optimizer.load_state_dict(torch.load(file_name))
         self.epoch_cnt = epoch
@@ -404,16 +420,15 @@ class GAN_model(BaseModel):
                     )
 
         p = 0
-        for src in range(len(self.character_names)):
-            for dst in range(len(self.character_names)):
-                for group in self.character_names:
-                    for i in range(len([dst])):
-                        dst_path = pjoin(self.bvh_path, group[dst][i])
-                        self.writer[dst][i].write_raw(
-                            self.fake_res_denorm[p][i, ...],
-                            "quaternion",
-                            pjoin(dst_path, "{}_{}.bvh".format(self.id_test, src)),
-                        )
-                    p += 1
+        for src in range(len(self.topology)):
+            for dst in range(len(self.topology)):
+                for i in range(len([dst])):
+                    dst_path = pjoin(self.bvh_path, self.topology[dst][1][i])
+                    self.writer[dst][i].write_raw(
+                        self.fake_res_denorm[p][i, ...],
+                        "quaternion",
+                        pjoin(dst_path, "{}_{}.bvh".format(self.id_test, src)),
+                    )
+                p += 1
 
         self.id_test += 1
