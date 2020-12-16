@@ -35,12 +35,19 @@ def main():
         print(f'Topologies are {topo}')
         if src_character in topo[1] and target_character in topo[0]:
             topo_index = t
-            character_names.append([src_character])
-            file_id.append([input_bvh])
-            character_names.append([target_character])
-            file_id.append([target_bvh])
             break
     
+    if topo_index % 2 == 0:    
+        character_names.append([src_character])
+        file_id.append([input_bvh])
+        character_names.append([target_character])
+        file_id.append([target_bvh])
+    else:
+        character_names.append([src_character])
+        file_id.append([input_bvh])
+        character_names.append([target_character])
+        file_id.append([target_bvh])
+
     character_names = [character_names]
     print(f'Character names {character_names}')
     print(f'File id {file_id}')
@@ -86,7 +93,7 @@ def main():
     model.set_input(input_motion)
     model.test()
     # ---- Output 
-    bvh_path = f"{model.bvh_path}/{target_character}/0_{topo_index}.bvh"
+    bvh_path = f"{model.bvh_path}/{target_character}/0_0.bvh"
     print(f'BVH path {bvh_path}')
     copyfile(bvh_path, output_filename)
 
