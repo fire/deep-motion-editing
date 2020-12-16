@@ -23,11 +23,11 @@ def get_height(file):
 
 
 def example(
-    src_name, src_bvh, dst_name, dst_bvh, output_path, type
+    src_name, src_bvh, dst_name, dst_bvh, output_path
 ):
     if not os.path.exists(output_path):
         os.makedirs(output_path)
-    
+
     input_file = f"./datasets/Motions/{src_name}/{src_bvh}"
     copy_ref_file(input_file, pjoin(output_path, "input.bvh"))
 
@@ -38,7 +38,7 @@ def example(
     input_file = f"./datasets/Motions/{src_name}/{src_bvh}"
     ref_file = f"./datasets/Motions/{dst_name}/{dst_bvh}"
     joined_output_path = pjoin(output_path, "result.bvh")
-    cmd = f"python eval_single_pair.py --input_bvh=\"{input_file}\" --target_bvh=\"{ref_file}\" --output_filename=\"{joined_output_path}\" --type={type}"
+    cmd = f"python eval_single_pair.py --input_bvh=\"{input_file}\" --target_bvh=\"{ref_file}\" --output_filename=\"{joined_output_path}\""
 
     err = os.system(cmd)
     if err:
@@ -54,7 +54,7 @@ def example(
 if __name__ == "__main__":
     src_name = "BerkeleyMHAD_skl_s01"
     src_bvh = "skl_s01_a02_r03.bvh"
-    dst_name = "BerkeleyMHAD_skl_s03"
+    dst_name = "Kaya"
     dst_bvh = "skl_s03_a02_r03.bvh"
     example(
         src_name=src_name,
@@ -62,7 +62,6 @@ if __name__ == "__main__":
         dst_name=dst_name,
         dst_bvh=dst_bvh,
         output_path=f"./examples/{dst_name}_{src_bvh}/",
-        type="intra"
     )
     src_name, dst_name = dst_name, src_name
     src_bvh, dst_bvh = dst_bvh, src_bvh
@@ -72,29 +71,5 @@ if __name__ == "__main__":
         dst_name=dst_name,
         dst_bvh=dst_bvh,
         output_path=f"./examples/{dst_name}_{src_bvh}/",
-        type="intra"
     )
 
-    # Cross
-    src_name = "BerkeleyMHAD_skl_s01"
-    src_bvh = "skl_s01_a02_r03.bvh"
-    dst_name = "Kaya"
-    dst_bvh = "Catwalk Walk.bvh"
-    example(
-        src_name=src_name,
-        src_bvh=src_bvh,
-        dst_name=dst_name,
-        dst_bvh=dst_bvh,
-        output_path=f"./examples/{dst_name}_{src_bvh}/",
-        type="cross"
-    )
-    src_name, dst_name = dst_name, src_name
-    src_bvh, dst_bvh = dst_bvh, src_bvh
-    example(
-        src_name=src_name,
-        src_bvh=src_bvh,
-        dst_name=dst_name,
-        dst_bvh=dst_bvh,
-        output_path=f"./examples/{dst_name}_{src_bvh}/",
-        type="cross"
-    )
