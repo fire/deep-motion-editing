@@ -38,10 +38,10 @@ def main():
             break
     
     if topo_index % 2 == 0:    
-        character_names.append([src_character])
-        file_id.append([input_bvh])
         character_names.append([target_character])
         file_id.append([target_bvh])
+        character_names.append([src_character])
+        file_id.append([input_bvh])
     else:
         character_names.append([src_character])
         file_id.append([input_bvh])
@@ -56,7 +56,6 @@ def main():
     output_filename = args.output_filename
 
     test_device = args.cuda_device
-    eval_seq = args.eval_seq
 
     para_path = pjoin(args.save_dir, "para.txt")
     with open(para_path, "r") as para_file:
@@ -69,7 +68,6 @@ def main():
     print(f'Cuda device is {args.cuda_device}')
     args.is_train = False
     args.rotation = "quaternion"
-    args.eval_seq = eval_seq
     print(f'Characters {character_names}')
     dataset = create_dataset(args, character_names)
     model = create_model(args, character_names, dataset, topologies)
