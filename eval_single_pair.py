@@ -14,6 +14,7 @@ def main():
     parser = option_parser.get_parser()
     parser.add_argument("--input_bvh", type=str, required=True)
     parser.add_argument("--target_bvh", type=str, required=False)
+    parser.add_argument("--type", type=str, required=True)
     parser.add_argument("--output_filename", type=str, required=True)
     parser.add_argument("--cpu", type=bool, required=False)
 
@@ -22,6 +23,7 @@ def main():
     input_bvh = args.input_bvh
     target_bvh = args.target_bvh
     cpu = args.cpu
+    pair_type = args.type
 
     src_character = input_bvh.split("/")[-2]
     target_character = target_bvh.split("/")[-2]
@@ -31,13 +33,20 @@ def main():
     file_id = []
     topo_index = -1
     topologies = character_dict_to_list(train_dict)
+
+    order = 0
+    if pair_type == "intra":
+        result_character = target_character
+    elif pair_type == "cross":
+        order = not order
+        result_character = src_character
+
     for t, topo in enumerate(topologies):
         print(f'Topologies are {topo}')
-        if src_character in topo[1] and target_character in topo[0]:
+        if src_character in topo[order] and target_character in topo[not order]:
             topo_index = t
             break
-    
-    if topo_index % 2 == 0:    
+    if topo_index % 2 == order:    
         character_names.append([src_character])
         file_id.append([input_bvh])
         character_names.append([target_character])
@@ -93,7 +102,7 @@ def main():
     model.set_input(input_motion)
     model.test()
     # ---- Output 
-    bvh_path = f"{model.bvh_path}/{target_character}/0_0.bvh"
+    bvh_path = f"{model.bvh_path}/{result_character}/0_0.bvh"
     print(f'BVH path {bvh_path}')
     copyfile(bvh_path, output_filename)
 
