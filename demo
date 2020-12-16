@@ -23,7 +23,7 @@ def get_height(file):
 
 
 def example(
-    src_name, src_bvh, dst_name, dst_bvh, output_path
+    src_name, src_bvh, dst_name, dst_bvh, output_path, convert_type
 ):
     if not os.path.exists(output_path):
         os.makedirs(output_path)
@@ -38,7 +38,7 @@ def example(
     input_file = f"./datasets/Motions/{src_name}/{src_bvh}"
     ref_file = f"./datasets/Motions/{dst_name}/{dst_bvh}"
     joined_output_path = pjoin(output_path, "result.bvh")
-    cmd = f"python eval_single_pair.py --input_bvh=\"{input_file}\" --target_bvh=\"{ref_file}\" --output_filename=\"{joined_output_path}\""
+    cmd = f"python eval_single_pair.py --input_bvh=\"{input_file}\" --target_bvh=\"{ref_file}\" --output_filename=\"{joined_output_path}\" --convert_type=\"{convert_type}\""
 
     err = os.system(cmd)
     if err:
@@ -52,16 +52,17 @@ def example(
 
 
 if __name__ == "__main__":
-    src_name = "BerkeleyMHAD_skl_s01"
-    src_bvh = "skl_s01_a02_r03.bvh"
-    dst_name = "BerkeleyMHAD_skl_s04"
-    dst_bvh = "skl_s04_a02_r03.bvh"
+    src_name = "Kaya"
+    src_bvh = "Sitting Drinking.bvh"
+    dst_name = "BerkeleyMHAD_skl_s01"
+    dst_bvh = "skl_s01_a09_r01.bvh"
     example(
         src_name=src_name,
         src_bvh=src_bvh,
         dst_name=dst_name,
         dst_bvh=dst_bvh,
         output_path=f"./examples/{dst_name}_{src_bvh}/",
+        convert_type="cross",
     )
     src_name, dst_name = dst_name, src_name
     src_bvh, dst_bvh = dst_bvh, src_bvh
@@ -71,5 +72,6 @@ if __name__ == "__main__":
         dst_name=dst_name,
         dst_bvh=dst_bvh,
         output_path=f"./examples/{dst_name}_{src_bvh}/",
+        convert_type="cross",
     )
 
