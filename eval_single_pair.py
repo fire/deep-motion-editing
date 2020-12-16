@@ -16,12 +16,14 @@ def main():
     parser.add_argument("--target_bvh", type=str, required=False)
     parser.add_argument("--output_filename", type=str, required=True)
     parser.add_argument("--cpu", type=bool, required=False)
+    parser.add_argument("--convert_type", type=str, required=True)
 
     args = parser.parse_args()
 
     input_bvh = args.input_bvh
     target_bvh = args.target_bvh
     cpu = args.cpu
+    _convert_type = args.convert_type
 
     src_character = input_bvh.split("/")[-2]
     target_character = target_bvh.split("/")[-2]
