@@ -18,22 +18,21 @@ class GAN_model(BaseModel):
         self.character_names = character_names
         self.dataset = dataset
         self.topology = train_list
-        self.n_topology = len(character_names)   
+        self.n_topology = len(train_list)   
         self.models = []
         self.D_para = []
         self.G_para = []
         self.args = args
         print(f'Train list {train_list}')
-        for n, names in enumerate(character_names):
-            for _n, topo in enumerate(names):
-                print(f"Current \"{topo[0]}\" joint topology. Check for duplicate and mismatched bones in the skeleton parser. {dataset.joint_topologies[n]}")
-                print(f'Has bone count {len(dataset.joint_topologies[n])}')      
-                model = IntegratedModel(
-                    args, dataset.joint_topologies[n], None, self.device, names
-                )
-                self.models.append(model)
-                self.D_para += model.D_parameters()
-                self.G_para += model.G_parameters()
+        for n, names in enumerate(train_list):
+            print(f"Current \"{names}\" joint topology. Check for duplicate and mismatched bones in the skeleton parser. {dataset.joint_topologies[n]}")
+            print(f'Has bone count {len(dataset.joint_topologies[n])}')      
+            model = IntegratedModel(
+                args, dataset.joint_topologies[n], None, self.device, names
+            )
+            self.models.append(model)
+            self.D_para += model.D_parameters()
+            self.G_para += model.G_parameters()
 
         if self.is_train:
             self.fake_pools = []
@@ -63,7 +62,7 @@ class GAN_model(BaseModel):
             self.writer = []
             for i in range(self.n_topology):
                 writer_group = []
-                for _, char in enumerate(character_names[i][0]):
+                for _, char in enumerate(train_list[i][0]):
                     import option_parser
                     from datasets.bvh_parser import BVH_file
                     from datasets.bvh_writer import BVH_writer
@@ -77,7 +76,7 @@ class GAN_model(BaseModel):
 
         if not self.is_train:
             self.motion_backup = []
-            for i in range(self.n_topology):
+            for i in range(len(self.character_names)):
                 self.motion_backup.append(motions[i][0].clone())
                 self.motions_input[i][0][1:] = self.motions_input[i][0][0]
                 self.motions_input[i][1] = [0] * len(self.motions_input[i][1])
@@ -383,7 +382,7 @@ class GAN_model(BaseModel):
     def compute_test_result(self):
         gt_poses = []
         gt_denorm = []
-        for src in range(self.n_topology):
+        for src in range(len(self.character_names)):
             gt = self.motion_backup[src]
             idx = list(range(gt.shape[0]))
             gt = self.dataset.denorm(src, idx, gt)
@@ -393,7 +392,7 @@ class GAN_model(BaseModel):
             )
             gt_poses.append(gt_pose)
             for i in idx:
-                for group in self.character_names:
+                for group in self.topology:
                     new_path = pjoin(self.bvh_path, group[src][i])
                     from option_parser import try_mkdir
 
@@ -405,8 +404,8 @@ class GAN_model(BaseModel):
                     )
 
         p = 0
-        for src in range(self.n_topology):
-            for dst in range(self.n_topology):
+        for src in range(len(self.character_names)):
+            for dst in range(len(self.character_names)):
                 for group in self.character_names:
                     for i in range(len([dst])):
                         dst_path = pjoin(self.bvh_path, group[dst][i])
