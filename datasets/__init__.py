@@ -2,8 +2,12 @@ train_dict = {
     "corps_BerkeleyMHAD_01": [
         "BerkeleyMHAD_skl_s01",
         "BerkeleyMHAD_skl_s02",
+        "BerkeleyMHAD_skl_s03",
+        "BerkeleyMHAD_skl_s04",
     ],
     "corps_BerkeleyMHAD_02": [
+        "BerkeleyMHAD_skl_s01",
+        "BerkeleyMHAD_skl_s02",
         "BerkeleyMHAD_skl_s03",
         "BerkeleyMHAD_skl_s04",
     ],
