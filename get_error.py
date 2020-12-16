@@ -13,7 +13,7 @@ from datasets.bvh_parser import BVH_file
 
 def full_batch(suffix, prefix):
     res = []
-    chars = ["Mousey_m", "Goblin_m", "Mremireh_m", "Vampire_m"]
+    chars = ["BerkeleyMHAD_skl_s05", "BerkeleyMHAD_skl_s07"]
     for char in chars:
         res.append(batch(char, suffix, prefix))
     return res
@@ -50,7 +50,7 @@ def batch(char, suffix, prefix):
                 continue
             index.append(i)
 
-        file_ref = file_full[:-6] + "_reference.bvh"
+        file_ref = f'{file_full[:-6]}_reference.bvh'
         anim_ref, _, _ = BVH.load(file_ref)
 
         pos = Animation.positions_global(anim)  # [T, J, 3]

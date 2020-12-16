@@ -1,54 +1,42 @@
-train_set = {
+train_dict = {
     "corps_BerkeleyMHAD_01": [
         "BerkeleyMHAD_skl_s01",
         "BerkeleyMHAD_skl_s02",
+    ],
+    "corps_BerkeleyMHAD_02": [
         "BerkeleyMHAD_skl_s03",
         "BerkeleyMHAD_skl_s04",
-        "BerkeleyMHAD_skl_s05",
-        "BerkeleyMHAD_skl_s06",
-        "BerkeleyMHAD_skl_s07",
-        "BerkeleyMHAD_skl_s08",
-    ],    
-    "corps_name_1": [
-        "AJ",
-        "BigVegas",
-        "Kaya",
-        "SportyGranny",
-    ]
-}
-test_set = {
-    "corps_BerkeleyMHAD": [
-        "BerkeleyMHAD_skl_s09",
-        "BerkeleyMHAD_skl_s10",
-        "BerkeleyMHAD_skl_s11",
-        "BerkeleyMHAD_skl_s12",
     ],
+    # "corps_name_1": [
+    #     "AJ",
+    #     "BigVegas",
+    #     "Kaya",
+    #     "SportyGranny",
+    # ]
 }
+test_dict = train_dict
+
+
 def get_character_names(args):
     characters = {}
     if args.is_train:
         """
         Put the name of subdirectory in retargeting/datasets/Mixamo as [[names of group A], [names of group B]]
         """
-        characters = get_train_list()
+        characters = train_dict
     else:
         """
         To run evaluation successfully, number of characters in both groups must be the same. Repeat is okay.
         """
-        characters = {
-        "corps_BerkeleyMHAD": [
-            "BerkeleyMHAD_skl_s05",
-            "BerkeleyMHAD_skl_s06",
-        ],
-        "corps_motion_project": [
-            "Female1",
-            "Female1"
-        ],
-    }
-    
-    import itertools as it
+        characters = test_dict
+
+    return character_dict_to_list(characters)
+
+import itertools as it
+
+def character_dict_to_list(chars: dict):
     topo = []
-    for key in characters.values():
+    for key in chars.values():
         topo.append(key)
     topo = [list(x) for x in it.permutations(topo, 2)]
     return topo
@@ -59,13 +47,20 @@ def create_dataset(args, character_names=None):
     if args.is_train:
         return MixedData(args, character_names, get_train_list())
     else:
-        return TestData(args, character_names, get_train_list())
+        return TestData(args, character_names, get_test_list())
 
 
-def get_test_set():
-    return test_set
+def get_test_list():
+    test_list = []
+    for keys in test_dict.values():
+        for k in keys:
+            test_list.append(k)
+    return test_list
 
 
 def get_train_list():
-    return train_set
-    
+    train_list = []
+    for keys in train_dict.values():
+        for k in keys:
+            train_list.append(k)
+    return train_list
