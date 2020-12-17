@@ -52,10 +52,10 @@ def example(
 
 
 if __name__ == "__main__":
-    src_name = "BerkeleyMHAD_skl_s02"
-    src_bvh = "skl_s02_a01_r01.bvh"
-    dst_name = "Uncle"
-    dst_bvh = "Nonentity_uncle.bvh"
+    src_name = "Kaya"
+    src_bvh = "Golf Putt Victory.bvh"
+    tgt_name = "BerkeleyMHAD_skl_s04"
+    tgt_bvh = "skl_s04_a01_r01.bvh"
     example(
         src_name=src_name,
         src_bvh=src_bvh,

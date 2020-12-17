@@ -6,7 +6,7 @@ import shutil
 from os.path import join as pjoin
 from posixpath import join as pjoin
 from shutil import copyfile
-from datasets import create_dataset, get_train_list
+from datasets import create_dataset
 
 import numpy as np
 

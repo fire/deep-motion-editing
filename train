@@ -10,7 +10,7 @@ from posixpath import join as pjoin
 from torch.utils.data.dataloader import DataLoader
 
 import option_parser
-from datasets import create_dataset, get_character_names, get_train_list
+from datasets import create_dataset, get_character_names
 from models import create_model
 from option_parser import try_mkdir
 
@@ -31,7 +31,7 @@ def main():
     # You always need to set num_workers=0 when creating a DataLoaders because Pytorch multiprocessing does not work on Windows.
     data_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=0)
 
-    model = create_model(args, characters, dataset, get_character_names(args))
+    model = create_model(args, characters, dataset, characters)
 
     if args.epoch_begin:
         model.load(epoch=args.epoch_begin)
