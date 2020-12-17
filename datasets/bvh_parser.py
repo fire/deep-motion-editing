@@ -70,6 +70,22 @@ corps_names = {
         "LeftShoulder", "LeftArm", "LeftForeArm", "LeftHand",
         "RightShoulder", "RightArm", "RightForeArm", "RightHand",
     ],
+    "corps_MMD": [
+        "Center",
+        "Leg_L", "Knee_L", "Ankle_L",
+        "Leg_R", "Knee_R", "Ankle_R",
+        "UpperBody", "UpperBody2", "Neck", "Head",
+        "Clavicle_L", "Shoulder_L", "Arm_L", "Elbow_L", "Wrist_L",
+        "Clavicle_R", "Shoulder_R", "Arm_R", "Elbow_R", "Wrist_R",
+    ],
+    # "corps_MMD": [
+    #     "全ての親",
+    #     "足.L", "ひざ.L", "足首.L",
+    #     "足.R", "ひざ.R", "足首.R",
+    #     "全ての親", "上半身", "上半身２", "首", "頭",
+    #     "鎖骨.L", "肩.L", "腕.L", "ひじ.L" "手首.L",
+    #     "鎖骨.R", "肩.R", "腕.R", "ひじ.R" "手首.R",
+    # ],
     # "corps_name_example": ['Root', 'LeftUpLeg', ..., 'LeftToe', 'RightUpLeg', ..., 'RightToe', 'Spine', ..., 'Head', 'LeftShoulder', ..., 'LeftHand', 'RightShoulder', ..., 'RightHand'],
 }
 """
@@ -96,6 +112,13 @@ ee_names = {
     ],
     "corps_motion_project": ["LeftToeBase",
                              "RightToeBase", "Head", "LeftHand", "RightHand"],
+    "corps_MMD":[
+        "Ankle_L",
+        "Ankle_R",
+        "Head",
+        "Wrist_L",
+        "Wrist_R",
+    ],
     # "corps_name_example": ['LeftToe', 'RightToe', 'Head', 'LeftHand', 'RightHand'],
 }
 """
@@ -140,6 +163,8 @@ class BVH_file:
             self.skeleton_type = "corps_VRM"
         elif "LeftToeBase" in self._names:            
             self.skeleton_type = "corps_name_1"
+        elif "UpperBody2" in self._names:
+            self.skeleton_type = "corps_MMD"
         else:
             for i, _ in enumerate(full_fill):
                 if full_fill[i]:
