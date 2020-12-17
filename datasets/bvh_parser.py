@@ -75,8 +75,8 @@ corps_names = {
         "Leg_L", "Knee_L", "Ankle_L",
         "Leg_R", "Knee_R", "Ankle_R",
         "UpperBody", "UpperBody2", "Neck", "Head",
-        "Clavicle_L", "Shoulder_L", "Arm_L", "Elbow_L", "Wrist_L",
-        "Clavicle_R", "Shoulder_R", "Arm_R", "Elbow_R", "Wrist_R",
+        "Shoulder_L", "Arm_L", "Elbow_L", "Wrist_L",
+        "Shoulder_R", "Arm_R", "Elbow_R", "Wrist_R",
     ],
     # "corps_MMD": [
     #     "全ての親",
@@ -308,12 +308,12 @@ class BVH_file:
 
         res = 0
         p = self.ee_id[0]
-        while p != 0:
+        while p > 0:
             res += np.dot(offset[p], offset[p]) ** 0.5
             p = topo[p]
 
         p = self.ee_id[2]
-        while p != 0:
+        while p > 0:
             res += np.dot(offset[p], offset[p]) ** 0.5
             p = topo[p]
 

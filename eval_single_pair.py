@@ -7,7 +7,7 @@ import torch
 import option_parser
 from datasets import create_dataset
 from models import create_model
-from datasets import create_dataset, get_character_names, get_train_list, character_dict_to_list, train_dict
+from datasets import create_dataset, get_character_names, character_dict_to_list, train_dict
 
 
 def main():
@@ -25,9 +25,9 @@ def main():
     cpu = args.cpu
     _convert_type = args.convert_type
 
-    src_character = input_bvh.split("/")[-2]
+    source_character = input_bvh.split("/")[-2]
     target_character = target_bvh.split("/")[-2]
-    print(f'Source character {src_character}')
+    print(f'Source character {source_character}')
     print(f'Target character {target_character}')
     character_names = []
     file_id = []
@@ -35,17 +35,17 @@ def main():
     topologies = character_dict_to_list(train_dict)
     for t, topo in enumerate(topologies):
         print(f'Topologies are {topo}')
-        if src_character in topo[1] and target_character in topo[0]:
+        if source_character in topo[1] and target_character in topo[0]:
             topo_index = t
             break
     
     if topo_index % 2 == 0:    
         character_names.append([target_character])
         file_id.append([target_bvh])
-        character_names.append([src_character])
+        character_names.append([source_character])
         file_id.append([input_bvh])
     else:
-        character_names.append([src_character])
+        character_names.append([source_character])
         file_id.append([input_bvh])
         character_names.append([target_character])
         file_id.append([target_bvh])
@@ -73,7 +73,7 @@ def main():
     print(f'Characters {character_names}')
     dataset = create_dataset(args, character_names)
     model = create_model(args, character_names, dataset, topologies)
-    model.load(epoch=50, topology=topo_index)
+    model.load(epoch=1900, topology=topo_index)
     input_motion = []
 
     if not os.path.exists(input_bvh):
@@ -82,18 +82,20 @@ def main():
         return
 
     input_motion = []
-    for i in range(2):
+    for i, character_group in enumerate(topologies[topo_index]):
         input_group = []
+        print(f'Character group {character_group}')
         new_motion = dataset.get_item(file_id[i][0])
         new_motion.unsqueeze_(0)
         new_motion = (new_motion - dataset.mean[i][0]) / dataset.var[i][0]
         input_group.append(new_motion) 
         input_group = torch.cat(input_group, dim=0)
-        input_motion.append([input_group, list(range(1))])    
+        input_motion.append([input_group, list(range(1))]) 
     model.set_input(input_motion)
     model.test()
-    # ---- Output 
-    bvh_path = f"{model.bvh_path}/{topologies[topo_index][1][0]}/0_{topo_index}.bvh"
+
+    topo = topologies[topo_index][1]
+    bvh_path = f"{model.bvh_path}/{topo[0]}/0_{topo_index}.bvh"
     print(f'BVH path {bvh_path}')
     copyfile(bvh_path, output_filename)
 

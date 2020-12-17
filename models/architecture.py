@@ -24,12 +24,12 @@ class GAN_model(BaseModel):
         self.G_para = []
         self.args = args
         print(f'Train list {train_list}')
-        for n, names in enumerate(train_list):
+        for source_target_pair in range(self.n_topology):
             print(
-                f"Current \"{names}\" joint topology. Check for duplicate and mismatched bones in the skeleton parser. {dataset.joint_topologies[n]}")
-            print(f'Has bone count {len(dataset.joint_topologies[n])}')
+                f"Pair {source_target_pair}. Check for duplicate and mismatched bones in the skeleton parser. {dataset.joint_topologies[source_target_pair]}")
+            print(f'Has bone count {len(dataset.joint_topologies[source_target_pair])}')
             model = IntegratedModel(
-                args, dataset.joint_topologies[n], None, self.device, names
+                args, dataset.joint_topologies[source_target_pair], None, self.device, train_list[source_target_pair]
             )
             self.models.append(model)
             self.D_para += model.D_parameters()

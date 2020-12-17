@@ -156,9 +156,8 @@ class TestData(Dataset):
                 for j, character in enumerate(character_group):
                     std_bvh = get_std_bvh(dataset=character)
                     file = BVH_file(std_bvh)
-                    if j == 0:
-                        self.joint_topologies.append(file.topology)
-                        self.ee_ids.append(file.get_ee_id())
+                    self.joint_topologies.append(file.topology)
+                    self.ee_ids.append(file.get_ee_id())
                     new_offset = file.offset
                     new_offset = torch.tensor(new_offset, dtype=torch.float)
                     new_offset = new_offset.reshape((1,) + new_offset.shape)
