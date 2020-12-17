@@ -59,8 +59,8 @@ if __name__ == "__main__":
     example(
         src_name=src_name,
         src_bvh=src_bvh,
-        dst_name=dst_name,
-        dst_bvh=dst_bvh,
+        ref_name=dst_name,
+        ref_bvh=dst_bvh,
         output_path=f"./examples/{dst_name}_{src_bvh}/",
         convert_type="cross",
     )
@@ -69,8 +69,8 @@ if __name__ == "__main__":
     example(
         src_name=src_name,
         src_bvh=src_bvh,
-        dst_name=dst_name,
-        dst_bvh=dst_bvh,
+        ref_name=dst_name,
+        ref_bvh=dst_bvh,
         output_path=f"./examples/{dst_name}_{src_bvh}/",
         convert_type="cross",
     )
