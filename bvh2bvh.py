@@ -23,8 +23,7 @@ for _, dirs, _ in sorted([f for f in walk(data_path)]):
                 sourcepath = data_path + d + "/" + f
                 dumppath = data_path + d + "/" + f.split(".")[0] + ".bvh"
 
-                bpy.ops.import_anim.bvh(filepath=sourcepath,               
-                    rotate_mode='ZYX')
+                bpy.ops.import_anim.bvh(filepath=sourcepath)
                 frame_start = 9999
                 frame_end = -9999
                 action = bpy.data.actions[-1]
@@ -49,7 +48,6 @@ for _, dirs, _ in sorted([f for f in walk(data_path)]):
                     frame_start=frame_start,
                     frame_end=frame_end,
                     root_transform_only=True,
-                    rotate_mode='XYZ',
                 )
                 bpy.data.actions.remove(bpy.data.actions[-1])
 
