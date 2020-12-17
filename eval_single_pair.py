@@ -13,7 +13,7 @@ from datasets import create_dataset, get_character_names, character_dict_to_list
 def main():
     parser = option_parser.get_parser()
     parser.add_argument("--input_bvh", type=str, required=True)
-    parser.add_argument("--target_bvh", type=str, required=False)
+    parser.add_argument("--ref_bvh", type=str, required=False)
     parser.add_argument("--output_filename", type=str, required=True)
     parser.add_argument("--cpu", type=bool, required=False)
     parser.add_argument("--convert_type", type=str, required=True)
@@ -21,12 +21,12 @@ def main():
     args = parser.parse_args()
 
     input_bvh = args.input_bvh
-    target_bvh = args.target_bvh
+    ref_bvh = args.ref_bvh
     cpu = args.cpu
     _convert_type = args.convert_type
 
     source_character = input_bvh.split("/")[-2]
-    target_character = target_bvh.split("/")[-2]
+    target_character = ref_bvh.split("/")[-2]
     print(f'Source character {source_character}')
     print(f'Target character {target_character}')
     character_names = []
@@ -41,14 +41,14 @@ def main():
     
     if topo_index % 2 == 0:    
         character_names.append([target_character])
-        file_id.append([target_bvh])
+        file_id.append([ref_bvh])
         character_names.append([source_character])
         file_id.append([input_bvh])
     else:
         character_names.append([source_character])
         file_id.append([input_bvh])
         character_names.append([target_character])
-        file_id.append([target_bvh])
+        file_id.append([ref_bvh])
 
     character_names = [character_names]
     print(f'Character names {character_names}')
@@ -73,7 +73,7 @@ def main():
     print(f'Characters {character_names}')
     dataset = create_dataset(args, character_names)
     model = create_model(args, character_names, dataset, topologies)
-    model.load(epoch=1900, topology=topo_index)
+    model.load(epoch=50, topology=topo_index)
     input_motion = []
 
     if not os.path.exists(input_bvh):

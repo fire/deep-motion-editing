@@ -1,8 +1,8 @@
 train_dict = {
-    "corps_MMD_01": [
-        "Uncle",
-        "Uncle",
-    ],
+    # "corps_MMD_01": [
+    #     "Uncle",
+    #     "Uncle",
+    # ],
     "corps_BerkeleyMHAD_01": [
         #"BerkeleyMHAD_skl_s01",
         #"BerkeleyMHAD_skl_s02",
