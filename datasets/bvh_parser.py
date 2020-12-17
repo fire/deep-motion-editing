@@ -183,7 +183,10 @@ class BVH_file:
             raise Exception("Unknown skeleton")
 
         if self.skeleton_type == "corps_name_1":
-            self.set_new_root(1)        
+            self.set_new_root(1)
+
+        if self.skeleton_type == "corps_MMD":
+            self.set_new_root(2)         
         
         self.details = []
         for i, name in enumerate(self._names):
@@ -308,12 +311,12 @@ class BVH_file:
 
         res = 0
         p = self.ee_id[0]
-        while p > 0:
+        while p != 0:
             res += np.dot(offset[p], offset[p]) ** 0.5
             p = topo[p]
 
         p = self.ee_id[2]
-        while p > 0:
+        while p != 0:
             res += np.dot(offset[p], offset[p]) ** 0.5
             p = topo[p]
 
