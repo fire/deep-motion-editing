@@ -69,6 +69,13 @@ corps_names = {
         "ToSpine", "Spine", "Spine1", "Neck", "Head",
         "LeftShoulder", "LeftArm", "LeftForeArm", "LeftHand",
         "RightShoulder", "RightArm", "RightForeArm", "RightHand",
+    ],    "corps_MMD": [
+        "Center",
+        "LowerBody", "Leg_L", "Knee_L", "Ankle_L", "ToeTip_L",
+        "LowerBody", "Leg_R", "Knee_R", "Ankle_R", "ToeTip_R",
+        "UpperBody", "UpperBody2", "Neck", "Head",
+        "Clavicle_L", "Shoulder_L", "Arm_L", "Elbow_L", "Wrist_L",
+        "Clavicle_R", "Shoulder_R", "Arm_R", "Elbow_R", "Wrist_R",
     ],
     "corps_MMD": [
         "Center",
