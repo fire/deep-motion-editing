@@ -72,11 +72,11 @@ corps_names = {
     ],
     "corps_MMD": [
         "Center",
-        "Leg_L", "Knee_L", "Ankle_L",
-        "Leg_R", "Knee_R", "Ankle_R",
+        "LowerBody", "Leg_L", "Knee_L", "Ankle_L", "ToeTip_L",
+        "LowerBody", "Leg_R", "Knee_R", "Ankle_R", "ToeTip_R",
         "UpperBody", "UpperBody2", "Neck", "Head",
-        "Shoulder_L", "Arm_L", "Elbow_L", "Wrist_L",
-        "Shoulder_R", "Arm_R", "Elbow_R", "Wrist_R",
+        "Clavicle_L", "Shoulder_L", "Arm_L", "Elbow_L", "Wrist_L",
+        "Clavicle_R", "Shoulder_R", "Arm_R", "Elbow_R", "Wrist_R",
     ],
     # "corps_MMD": [
     #     "全ての親",
@@ -104,17 +104,17 @@ ee_names = {
         "RightHand",
     ],
     "corps_VRM": [
-        "leftFoot",
-        "rightFoot",
+        "ToeTip_L",
+        "ToeTip_R",
         "head",
         "leftHand",
         "rightHand",
     ],
     "corps_motion_project": ["LeftToeBase",
                              "RightToeBase", "Head", "LeftHand", "RightHand"],
-    "corps_MMD":[
-        "Ankle_L",
-        "Ankle_R",
+    "corps_MMD": [
+        "ToeTip_L",
+        "ToeTip_R",
         "Head",
         "Wrist_L",
         "Wrist_R",
@@ -161,7 +161,7 @@ class BVH_file:
             self.skeleton_type = "corps_motion_project"
         elif "leftLowerLeg" in self._names:
             self.skeleton_type = "corps_VRM"
-        elif "LeftToeBase" in self._names:            
+        elif "LeftToeBase" in self._names:
             self.skeleton_type = "corps_name_1"
         elif "UpperBody2" in self._names:
             self.skeleton_type = "corps_MMD"
@@ -183,8 +183,8 @@ class BVH_file:
             raise Exception("Unknown skeleton")
 
         if self.skeleton_type == "corps_name_1":
-            self.set_new_root(1)
-
+            self.set_new_root(1)        
+        
         self.details = []
         for i, name in enumerate(self._names):
             if ":" in name:
@@ -323,7 +323,8 @@ class BVH_file:
         motion = self.to_numpy(quater=False, edge=False)
         rotations = motion[..., :-3].reshape(motion.shape[0], -1, 3)
         positions = motion[..., -3:]
-        write_bvh(self.topology, self.offset, rotations, positions, self.names, 1.0/30, 'xyz', file_path)
+        write_bvh(self.topology, self.offset, rotations,
+                  positions, self.names, 1.0/30, 'xyz', file_path)
 
     def get_ee_length(self):
         if len(self.ee_length):
