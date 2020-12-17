@@ -73,7 +73,7 @@ def main():
     print(f'Characters {character_names}')
     dataset = create_dataset(args, character_names)
     model = create_model(args, character_names, dataset, topologies)
-    model.load(epoch=2, topology=topo_index)
+    model.load(epoch=50, topology=topo_index)
     input_motion = []
 
     if not os.path.exists(input_bvh):

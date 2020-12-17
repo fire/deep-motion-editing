@@ -53,7 +53,7 @@ def example(
 
 if __name__ == "__main__":
     src_name = "Kaya"
-    src_bvh = "Female Standing Pose.bvh"
+    src_bvh = "Catwalk Walk.bvh"
     dst_name = "BerkeleyMHAD_skl_s01"
     dst_bvh = "skl_s01_a01_r01.bvh"
     example(
