@@ -4,23 +4,19 @@ train_dict = {
     #     "Uncle",
     # ],
     "corps_BerkeleyMHAD_01": [
-        #"BerkeleyMHAD_skl_s01",
-        #"BerkeleyMHAD_skl_s02",
         "BerkeleyMHAD_skl_s03",
         "BerkeleyMHAD_skl_s04",
     ],
-    # "corps_BerkeleyMHAD_02": [
-    #     # "BerkeleyMHAD_skl_s01",
-    #     # "BerkeleyMHAD_skl_s02",
-    #     "BerkeleyMHAD_skl_s03",
-    #     "BerkeleyMHAD_skl_s04",
-    # ],
-    "corps_name_1": [
-        # "AJ",
-        # "BigVegas",
-        "Kaya",
-        "SportyGranny",
+    "corps_BerkeleyMHAD_02": [
+        "BerkeleyMHAD_skl_s01",
+        "BerkeleyMHAD_skl_s02",
     ],
+    # "corps_name_1": [
+    #     # "AJ",
+    #     # "BigVegas",
+    #     "Kaya",
+    #     "SportyGranny",
+    # ],
     # "corps_MMD": [
     #     "Uncle",
     #     "Uncle",

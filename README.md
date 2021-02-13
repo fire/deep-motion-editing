@@ -53,7 +53,7 @@ python3 test
 After preparing dataset, simply run 
 
 ``` bash
-python3 train
+python train
 ```
 
 It will use default hyper-parameters to train the model and save trained model in `training` directory. More options are available in `option_parser.py` . You can use tensorboard to monitor the training progress by running

@@ -52,8 +52,8 @@ def example(
 
 
 if __name__ == "__main__":
-    src_name = "Kaya"
-    src_bvh = "Golf Putt Victory.bvh"
+    src_name = "BerkeleyMHAD_sk3_s03"
+    src_bvh = "skl_s03_a01_r01.bvh"
     ref_name = "BerkeleyMHAD_skl_s04"
     ref_bvh = "skl_s04_a01_r01.bvh"
     example(
