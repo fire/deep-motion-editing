@@ -36,9 +36,11 @@ python3 test
 
 * `scoop install miniconda3` Install miniconda.
 
-* Install cuda. `conda install -y tqdm scipy tensorboard pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch -c=conda-forge`
+* Create conda `conda create --name kinetic` environment.
 
-* Activate conda `conda activate` at the base directory.
+* Activate conda `conda activate kinetic` at the base directory.
+
+* Install cuda. `conda install -y tqdm scipy tensorboard pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch -c=conda-forge`
 
 * Enter `datasets` directory and run `blender -b -P fbx2bvh.py` or `blender -b -P gltf2bvh.py` to convert fbx files to bvh files. If you already have bvh file as dataset, please skip this step.
 
