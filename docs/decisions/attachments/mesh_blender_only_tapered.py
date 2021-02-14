@@ -5,7 +5,17 @@ import mathutils
 from mathutils import Vector 
 from math import *
 
-def CreateMesh(self):
+class ArmatureMenu(bpy.types.Menu):
+    bl_label = "Mesh 2 Armature Menu"
+    bl_idname = "OBJECT_MT_Mesh_From_Armature"
+
+    def draw(self, context):
+        layout = self.layout
+        layout.operator("wm.mesh_from_armature", text="Pyramid").mesh_type = 'Pyramid' # from here
+        layout.operator("wm.mesh_from_armature", text="Tapered").mesh_type = 'Tapered' # from here
+        layout.operator("wm.mesh_from_armature", text="Box").mesh_type = 'Box' # from here
+
+def CreateMesh(self, meshType):
 
     obj = bpy.context.active_object
 
@@ -14,7 +24,7 @@ def CreateMesh(self):
     elif obj.type != 'ARMATURE':
         self.report({"ERROR"}, "Armature expected" )
     else:
-        processArmature( bpy.context, obj)
+        processArmature( bpy.context, obj, meshType = meshType )
 
 #Create the base object from the armature
 def meshFromArmature( arm ):
@@ -25,12 +35,31 @@ def meshFromArmature( arm ):
     return meshObj
 
 #Create the bone geometry (vertices and faces)
-def boneGeometry( l1, l2, x, z, baseSize, l1Size, l2Size, base):
-    x1 = x * baseSize * l1Size 
-    z1 = z * baseSize * l1Size
+def boneGeometry( l1, l2, x, z, baseSize, l1Size, l2Size, base, meshType ):
+    
+    if meshType == 'Tapered':
+        print(meshType)
+        x1 = x * baseSize * l1Size 
+        z1 = z * baseSize * l1Size
 
-    x2 = x * baseSize * l2Size 
-    z2 = z * baseSize * l2Size
+        x2 = x * baseSize * l2Size 
+        z2 = z * baseSize * l2Size
+    elif meshType == 'Box':
+        print(meshType)
+        lSize = (l1Size + l2Size) / 2
+        x1 = x * baseSize * lSize 
+        z1 = z * baseSize * lSize
+
+        x2 = x * baseSize * lSize 
+        z2 = z * baseSize * lSize
+
+    else: # default to Pyramid
+        print(meshType)
+        x1 = x * baseSize * l1Size 
+        z1 = z * baseSize * l1Size
+
+        x2 = Vector( (0, 0, 0) )
+        z2 = Vector( (0, 0, 0) )
 
     verts = [
         l1 - x1 + z1,
@@ -90,7 +119,7 @@ def processArmature(context, arm, genVertexGroups = True, meshType = 'Pyramid'):
             #Creates the mesh data for the bone
             baseIndex = len(verts)
             baseSize = sqrt( editBoneSize )
-            newVerts, newFaces = boneGeometry( editBoneHead, editBoneTail, editBoneX, editBoneZ, baseSize, editBoneHeadRadius, editBoneTailRadius, baseIndex)
+            newVerts, newFaces = boneGeometry( editBoneHead, editBoneTail, editBoneX, editBoneZ, baseSize, editBoneHeadRadius, editBoneTailRadius, baseIndex, meshType )
 
             verts.extend( newVerts )
             faces.extend( newFaces )
@@ -123,6 +152,32 @@ def processArmature(context, arm, genVertexGroups = True, meshType = 'Pyramid'):
 
     return meshObj
 
-CreateMesh(self)
+class MeshFromArmatureOperator(bpy.types.Operator):
+    bl_idname = "wm.mesh_from_armature"
+    bl_label  = "MeshFromArmatureOperator"
+
+    mesh_type : bpy.props.StringProperty(name="mesh_type")
+
+    def execute(self, context):
+        print('The mesh type is', self.mesh_type)
+        CreateMesh(self, self.mesh_type)
+        return {'FINISHED'}
+
+def register():
+    bpy.utils.register_class( ArmatureMenu )
+    bpy.utils.register_class( MeshFromArmatureOperator )
 
 
+def unregister():
+    bpy.utils.unregister_class( ArmatureMenu )
+    bpy.utils.unregister_class( MeshFromArmatureOperator )
+
+
+if __name__ == "__main__":
+    register()
+
+    # The menu can also be called from scripts
+    bpy.ops.wm.call_menu(name='OBJECT_MT_Mesh_From_Armature').mesh_type = 'Tapered' # from here
+
+    
+        layout.operator("wm.mesh_from_armature", text="Tapered")
