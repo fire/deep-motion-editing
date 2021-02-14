@@ -1,5 +1,7 @@
 # KineticTransfer-GAN
 
+[![Kinetic Transfer GAN ADRs](https://fire.github.io/kinetic-transfer-gan/log4brains/badge.svg)](https://fire.github.io/kinetic-transfer-gan/log4brains/)
+
 This library provides fundamental and advanced functions to work with 3D character animation in deep learning with Pytorch.
 
 This library is maintained by [K. S. Ernest (iFire) Lee](https://github.com/fire).
