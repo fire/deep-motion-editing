@@ -77,4 +77,4 @@ GLTF is a new open specification 3d interface format.
 
 ## Links <!-- optional -->
 
-- … <!-- numbers of links can vary -->
+- [Taper only Blender Mesh](attachments/mesh_blender_only_tapered.py)
