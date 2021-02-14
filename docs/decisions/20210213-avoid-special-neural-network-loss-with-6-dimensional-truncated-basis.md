@@ -62,26 +62,28 @@ Status quo is the Quaternion
 
 A basis is a 3x3 matrix. The basis is normalized.
 
-```
+```c++
 //x_raw is the X Axis / first row of the basis
 //y_raw is the Y Axis / second row of the basis.
 
 // On the Continuity of Rotation Representations in Neural Networks
 // arXiv:1812.07035
-    Basis compute_rotation_matrix_from_ortho_6d(Vector3 x_raw, Vector3 y_raw) {
-        Vector3 x = x_raw.normalized();
-        Vector3 z = x.cross(y_raw);
-        z = z.normalized();
-        Vector3 y = z.cross(x);
-        Basis basis;
-        basis.set_axis(Vector3::AXIS_X, x);
-        basis.set_axis(Vector3::AXIS_Y, y);
-        basis.set_axis(Vector3::AXIS_Z, z);
-        return basis;
-    }
+Basis compute_rotation_matrix_from_ortho_6d(Vector3 x_raw, Vector3 y_raw) {
+    Vector3 x = x_raw.normalized();
+    Vector3 z = x.cross(y_raw);
+    z = z.normalized();
+    Vector3 y = z.cross(x);
+    Basis basis;
+    basis.set_axis(Vector3::AXIS_X, x);
+    basis.set_axis(Vector3::AXIS_Y, y);
+    basis.set_axis(Vector3::AXIS_Z, z);
+    return basis;
+}
 ```
 
 - Good, because it's space efficent with 6 floats
 - Bad, because it's not standard
 
 ## Links <!-- optional -->
+
+- https://arxiv.org/pdf/1812.07035.pdf
