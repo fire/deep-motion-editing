@@ -58,7 +58,15 @@ BVH is a way to import and export animations.
 
 GLTF is a new open specification 3d interface format.
 
-1. Ingest anything to a skeleton in Blender
+- Good, because it is a standard
+- Good, because we don't have problems with 3d conventions
+- Good, because I have experience with GLTF2 and less with the other formats.
+- Bad, because python libraries to handle gltf2 may be underbaked
+- Bad, because some work needs to be done
+
+#### GLTF2 Pipeline
+
+1. We ingest anything to one skeleton in Blender.
 1. Generate meshes for the bones
 1. Export to glTF2.
 1. Pick a python library that can read simple skin gltf2
@@ -68,12 +76,6 @@ GLTF is a new open specification 3d interface format.
 1. Output into glTF2
 1. Trash mesh and recreate meshes
 1. Output glTF2
-
-- Good, because it is a standard
-- Good, because we don't have problems with 3d conventions
-- Good, because I have experience with GLTF2 and less with the other formats.
-- Bad, because python libraries to handle gltf2 may be underbaked
-- Bad, because some work needs to be done
 
 ## Links <!-- optional -->
 
