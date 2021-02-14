@@ -1,9 +1,9 @@
 # Convert BVH to GLTF2 for import and export
 
-- Status: proposed <!-- optional -->
-- Deciders: fire <!-- optional -->
-- Date: 2021-02-13 <!-- optional. To customize the ordering without relying on Git creation dates and filenames -->
-- Tags: data,pipeline,import <!-- optional -->
+- Status: proposed
+- Deciders: fire
+- Date: 2021-02-13
+- Tags: data,pipeline,import
 
 ## Context and Problem Statement
 
