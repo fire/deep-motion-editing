@@ -22,7 +22,7 @@ How do we ingest data? Keep it proper and have compatible outputs.
 
 ## Decision Outcome
 
-GLTF2 is the only choice because FBX and BVH are not standardized formats. Not BVH or BVH because it does not standardize on up, front or scale.
+GLTF2 is the only choice because FBX and BVH are not standardized formats. Not BVH or FBX because they do not standardize on up, front or scale.
 
 ### Positive Consequences <!-- optional -->
 
