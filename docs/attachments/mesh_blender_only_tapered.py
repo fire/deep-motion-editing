@@ -5,17 +5,7 @@ import mathutils
 from mathutils import Vector 
 from math import *
 
-class ArmatureMenu(bpy.types.Menu):
-    bl_label = "Mesh 2 Armature Menu"
-    bl_idname = "OBJECT_MT_Mesh_From_Armature"
-
-    def draw(self, context):
-        layout = self.layout
-        layout.operator("wm.mesh_from_armature", text="Pyramid").mesh_type = 'Pyramid' # from here
-        layout.operator("wm.mesh_from_armature", text="Tapered").mesh_type = 'Tapered' # from here
-        layout.operator("wm.mesh_from_armature", text="Box").mesh_type = 'Box' # from here
-
-def CreateMesh(self, meshType):
+def CreateMesh(meshType):
 
     obj = bpy.context.active_object
 
@@ -163,21 +153,5 @@ class MeshFromArmatureOperator(bpy.types.Operator):
         CreateMesh(self, self.mesh_type)
         return {'FINISHED'}
 
-def register():
-    bpy.utils.register_class( ArmatureMenu )
-    bpy.utils.register_class( MeshFromArmatureOperator )
-
-
-def unregister():
-    bpy.utils.unregister_class( ArmatureMenu )
-    bpy.utils.unregister_class( MeshFromArmatureOperator )
-
-
 if __name__ == "__main__":
-    register()
-
-    # The menu can also be called from scripts
-    bpy.ops.wm.call_menu(name='OBJECT_MT_Mesh_From_Armature').mesh_type = 'Tapered' # from here
-
-    
-        layout.operator("wm.mesh_from_armature", text="Tapered")
+    CreateMesh("Tapered")
