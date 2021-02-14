@@ -33,7 +33,7 @@ GLTF2 is the only choice because FBX and BVH are not standardized formats. Not B
 ### Negative Consequences <!-- optional -->
 
 - Requires blender tooling
-- GLTF2 is not a common format
+- GLTF2 is not a standard format
 - Needs a GLTF2 python library
 
 ## Pros and Cons of the Options <!-- optional -->
@@ -52,22 +52,22 @@ BVH is a way to import and export animations.
 
 - Good, because it already is here
 - Good, because no extra code
-- Bad, because there was great difficulty finding euler order, up, scale and forward
+- Bad, because there was great difficulty finding Euler order, up, scale and forward
 
 ### GLTF2
 
 GLTF is a new open specification 3d interface format.
 
-1. Ingest anything to a skeleton in blender
+1. Ingest anything to a skeleton in Blender
 1. Generate meshes for the bones
-1. Export to gltf.
+1. Export to glTF2.
 1. Pick a python library that can read simple skin gltf2
 1. Read gltf2
-1. Input into ML pytorch
+1. Input into ML PyTorch
 1. process
-1. Output into gltf
+1. Output into glTF2
 1. Trash mesh and recreate meshes
-1. Output gltf
+1. Output glTF2
 
 - Good, because it is a standard
 - Good, because we don't have problems with 3d conventions
