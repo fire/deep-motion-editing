@@ -1,0 +1,5 @@
+project:
+  name: Kinetic Transfer Gan
+  tz: America/Vancouver
+  adrFolder: docs/decisions
+  packages: []
