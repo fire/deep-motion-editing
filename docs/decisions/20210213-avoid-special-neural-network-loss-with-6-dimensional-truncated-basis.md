@@ -1,5 +1,4 @@
-
-# Avoid special neural network loss with 6 dimensional truncated basis
+# Avoid special neural network loss with six dimensional truncated basis
 
 - Status: proposed
 - Deciders: fire
@@ -8,7 +7,7 @@
 
 ## Context and Problem Statement
 
-Neural network requires special treament because we use quaternions. The quaternion orientation format is not continuous.
+The neural network requires special treatment because we use quaternions. The quaternion orientation format is not continuous.
 
 ## Decision Drivers <!-- optional -->
 
@@ -24,12 +23,12 @@ Neural network requires special treament because we use quaternions. The quatern
 
 ## Decision Outcome
 
-Choose 6D Truncation 3x3 basis because its theory is the simplest and the paper mathematically proved it was accurate.
+Choose 6D Truncation 3x3 basis because its theory is the simplest, and the paper mathematically proved it was accurate.
 
 ### Positive Consequences <!-- optional -->
 
 - Better training gain
-- Simpler to understand
+- The code is simpler to understand
 
 ### Negative Consequences <!-- optional -->
 
@@ -41,13 +40,13 @@ Choose 6D Truncation 3x3 basis because its theory is the simplest and the paper 
 
 Basis 3x3 matrix.
 
-- Good, because continnous
-- Bad, because it uses 9 rather than the 6 floats.
-- Bad, because space inefficent
+- Good, because continuous
+- Bad, because it uses nine rather than six floats.
+- Bad, because space inefficient
 
 ### Quaternion
 
-Status quo is the Quaternion
+The status quo is the Quaternion.
 
 - Good, because it is standard
 - Good, because the status quo
@@ -60,7 +59,7 @@ Status quo is the Quaternion
 
 ### 6D Truncation 3x3 Basis
 
-A basis is a 3x3 matrix. The basis is normalized.
+A basis is a 3x3 matrix. The Basis is normalized.
 
 ```c++
 //x_raw is the X Axis / first row of the basis
@@ -81,7 +80,7 @@ Basis compute_rotation_matrix_from_ortho_6d(Vector3 x_raw, Vector3 y_raw) {
 }
 ```
 
-- Good, because it's space efficent with 6 floats
+- Good, because it's space-efficient with six floats
 - Bad, because it's not standard
 
 ## Links <!-- optional -->
