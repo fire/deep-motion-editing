@@ -1,73 +1,80 @@
 # Convert BVH to GLTF2 for import and export
 
-- Status: [draft | proposed | rejected | accepted | deprecated | … | superseded by [xxx](yyyymmdd-xxx.md)] <!-- optional -->
-- Deciders: [list everyone involved in the decision] <!-- optional -->
-- Date: [YYYY-MM-DD when the decision was last updated] <!-- optional. To customize the ordering without relying on Git creation dates and filenames -->
-- Tags: [space and/or comma separated list of tags] <!-- optional -->
-
-Technical Story: [description | ticket/issue URL] <!-- optional -->
+- Status: proposed <!-- optional -->
+- Deciders: fire <!-- optional -->
+- Date: 2021-02-13 <!-- optional. To customize the ordering without relying on Git creation dates and filenames -->
+- Tags: data,pipeline,import <!-- optional -->
 
 ## Context and Problem Statement
 
-[Describe the context and problem statement, e.g., in free form using two to three sentences. You may want to articulate the problem in form of a question.]
+How do we ingest data? Keep it proper and have compatible outputs.
 
 ## Decision Drivers <!-- optional -->
 
-- [driver 1, e.g., a force, facing concern, …]
-- [driver 2, e.g., a force, facing concern, …]
-- … <!-- numbers of drivers can vary -->
+- Inconsistent up, front and scale
+- Not standardized format
 
 ## Considered Options
 
-- [option 1]
-- [option 2]
-- [option 3]
-- … <!-- numbers of options can vary -->
+- FBX
+- BVH
+- GLTF2
 
 ## Decision Outcome
 
-Chosen option: "[option 1]", because [justification. e.g., only option, which meets k.o. criterion decision driver | which resolves force force | … | comes out best (see below)].
+GLTF2 is the only choice because FBX and BVH are not standardized formats. Not BVH or BVH because it does not standardize on up, front or scale.
 
 ### Positive Consequences <!-- optional -->
 
-- [e.g., improvement of quality attribute satisfaction, follow-up decisions required, …]
-- …
+- Standardized import gives better data for learning
+- Expect better gain
+- Godot supports GLTF2
 
 ### Negative Consequences <!-- optional -->
 
-- [e.g., compromising quality attribute, follow-up decisions required, …]
-- …
+- Requires blender tooling
+- GLTF2 is not a common format
+- Needs a GLTF2 python library
 
 ## Pros and Cons of the Options <!-- optional -->
 
-### [option 1]
+### FBX
 
-[example | description | pointer to more information | …] <!-- optional -->
+FBX can be an interchange format.
 
-- Good, because [argument a]
-- Good, because [argument b]
-- Bad, because [argument c]
-- … <!-- numbers of pros and cons can vary -->
+- Good, because it is the most common
+- Good, because it is already coded to work
+- Bad, because FBX does not have a spec.
 
-### [option 2]
+### BVH
 
-[example | description | pointer to more information | …] <!-- optional -->
+BVH is a way to import and export animations.
 
-- Good, because [argument a]
-- Good, because [argument b]
-- Bad, because [argument c]
-- … <!-- numbers of pros and cons can vary -->
+- Good, because it already is here
+- Good, because no extra code
+- Bad, because there was great difficulty finding euler order, up, scale and forward
 
-### [option 3]
+### GLTF2
 
-[example | description | pointer to more information | …] <!-- optional -->
+GLTF is a new open specification 3d interface format.
 
-- Good, because [argument a]
-- Good, because [argument b]
-- Bad, because [argument c]
-- … <!-- numbers of pros and cons can vary -->
+1. Ingest anything to a skeleton in blender
+1. Generate meshes for the bones
+1. Export to gltf.
+1. Pick a python library that can read simple skin gltf2
+1. Read gltf2
+1. Input into ML pytorch
+1. process
+1. Output into gltf
+1. Trash mesh and recreate meshes
+1. Output gltf
+
+- Good, because it is a standard
+- Good, because we don't have problems with 3d conventions
+- Good, because I have experience with GLTF2 and less with the other formats.
+- Bad, because python libraries to handle gltf2 may be underbaked
+- Bad, because some work needs to be done
 
 ## Links <!-- optional -->
 
-- [Link type](link to adr) <!-- example: Refined by [xxx](yyyymmdd-xxx.md) -->
 - … <!-- numbers of links can vary -->
