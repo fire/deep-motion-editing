@@ -8,7 +8,7 @@
 
 ## Context and Problem Statement
 
-Neural network requires special treament because we use quaternions. The quaternion orientation format is not continnous.
+Neural network requires special treament because we use quaternions. The quaternion orientation format is not continuous.
 
 ## Decision Drivers <!-- optional -->
 
