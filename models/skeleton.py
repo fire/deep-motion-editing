@@ -264,38 +264,12 @@ class SkeletonUnpool(nn.Module):
 Helper functions for skeleton operation
 """
 
-
 def dfs(x, fa, vis, dist):
     vis[x] = 1
     for y in range(len(fa)):
         if (fa[y] == x or fa[x] == y) and vis[y] == 0:
             dist[y] = dist[x] + 1
             dfs(y, fa, vis, dist)
-
-
-"""
-def find_neighbor_joint(fa, threshold):
-    neighbor_list = [[]]
-    for x in range(1, len(fa)):
-        vis = [0 for _ in range(len(fa))]
-        dist = [0 for _ in range(len(fa))]
-        dist[0] = 10000
-        dfs(x, fa, vis, dist)
-        neighbor = []
-        for j in range(1, len(fa)):
-            if dist[j] <= threshold:
-                neighbor.append(j)
-        neighbor_list.append(neighbor)
-    neighbor = [0]
-    for i, x in enumerate(neighbor_list):
-        if i == 0: continue
-        if 1 in x:
-            neighbor.append(i)
-            neighbor_list[i] = [0] + neighbor_list[i]
-    neighbor_list[0] = neighbor
-    return neighbor_list
-"""
-
 
 def build_edge_topology(topology, offset):
     # get all edges (pa, child, offset)
@@ -390,18 +364,9 @@ def find_neighbor(edges, d):
             if edge_mat[i][j] <= d:
                 neighbor.append(j)
         neighbor_list.append(neighbor)
-
-    # add neighbor for global part
-    global_part_neighbor = neighbor_list[0].copy()
-    """
-    Line #373 is buggy. Thanks @crissallan!!
-    See issue #30 (https://github.com/DeepMotionEditing/deep-motion-editing/issues/30)
-    However, fixing this bug will make it unable to load the pretrained model and 
-    affect the reproducibility of quantitative error reported in the paper.
-    It is not a fatal bug so we didn't touch it and we are looking for possible solutions.
-    """
-    for i in global_part_neighbor:
-        neighbor_list[i].append(edge_num)
-    neighbor_list.append(global_part_neighbor)
+        
+    for item in edge_mat:
+        if 0 in item:
+            neighbor_list.append(item)
 
     return neighbor_list
