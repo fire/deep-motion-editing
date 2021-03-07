@@ -66,7 +66,7 @@ corps_names = {
         "spine_01",
         "spine_02",
         "spine_03",
-        "neck_01",        
+        "neck_01",
         "head",
         #
         "clavicle_l",
@@ -313,7 +313,12 @@ class BVH_file:
         if len(self.corps) != len(corps_names[self.skeleton_type]):
             for i in corps_names[self.skeleton_type]:
                 print(i, end=" ")
-            print(corps_names[self.skeleton_type], self.skeleton_type, len(corps_names[self.skeleton_type]), sep="\t")
+            print(
+                corps_names[self.skeleton_type],
+                self.skeleton_type,
+                len(corps_names[self.skeleton_type]),
+                sep="\t",
+            )
             for i in self.corps:
                 print(self._names[i], end=" ")
             print(self.corps, self.skeleton_type, len(self.corps), sep="\t")

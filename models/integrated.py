@@ -27,7 +27,7 @@ class IntegratedModel:
         self.real_height = []
         for group in characters:
             for char in group:
-                print(f'Char {char}')
+                print(f"Char {char}")
                 if args.use_sep_ee:
                     h = BVH_file(get_std_bvh(dataset=char)).get_ee_length()
                 else:
@@ -36,7 +36,9 @@ class IntegratedModel:
                     h = torch.tensor(h, dtype=torch.float)
                 else:
                     h = torch.tensor(h, dtype=torch.float, requires_grad=False)
-                self.real_height.append(BVH_file(get_std_bvh(dataset=char)).get_height())
+                self.real_height.append(
+                    BVH_file(get_std_bvh(dataset=char)).get_height()
+                )
                 self.height.append(h.unsqueeze(0))
         self.real_height = torch.tensor(self.real_height, device=device)
         self.height = torch.cat(self.height, dim=0)

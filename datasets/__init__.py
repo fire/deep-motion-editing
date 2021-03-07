@@ -1,10 +1,6 @@
 train_dict = {
-    "corps_name_1": [
-        "mixamo_tpose_1",
-    ],
-    "corps_number_1": [
-        "godot_girl_1",
-    ],
+    "corps_name_1": ["mixamo_tpose_1",],
+    "corps_number_1": ["godot_girl_1",],
 }
 test_dict = train_dict
 
@@ -24,7 +20,9 @@ def get_character_names(args):
 
     return character_dict_to_list(characters)
 
+
 import itertools as it
+
 
 def character_dict_to_list(chars: dict):
     topo = []
@@ -36,6 +34,7 @@ def character_dict_to_list(chars: dict):
 
 def create_dataset(args, character_names=None):
     from datasets.combined_motion import TestData, MixedData
+
     print(f"get_character_names {get_character_names(args)}")
     print(f"character_names {character_names}")
     if args.is_train:

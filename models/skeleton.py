@@ -6,18 +6,30 @@ import numpy as np
 
 
 class SkeletonConv(nn.Module):
-    def __init__(self, neighbour_list, in_channels, out_channels, kernel_size, joint_num, stride=1, padding=0,
-                 bias=True, padding_mode='zeros', add_offset=False, in_offset_channel=0):
+    def __init__(
+        self,
+        neighbour_list,
+        in_channels,
+        out_channels,
+        kernel_size,
+        joint_num,
+        stride=1,
+        padding=0,
+        bias=True,
+        padding_mode="zeros",
+        add_offset=False,
+        in_offset_channel=0,
+    ):
         self.in_channels_per_joint = in_channels // joint_num
         self.out_channels_per_joint = out_channels // joint_num
         if in_channels % joint_num != 0 or out_channels % joint_num != 0:
-            raise Exception('BAD')
+            raise Exception("BAD")
         super(SkeletonConv, self).__init__()
 
-        if padding_mode == 'zeros':
-            padding_mode = 'constant'
-        if padding_mode == 'reflection':
-            padding_mode = 'reflect'
+        if padding_mode == "zeros":
+            padding_mode = "constant"
+        if padding_mode == "reflection":
+            padding_mode = "reflect"
 
         self.expanded_neighbour_list = []
         self.expanded_neighbour_list_offset = []
@@ -41,7 +53,8 @@ class SkeletonConv(nn.Module):
 
         if self.add_offset:
             self.offset_enc = SkeletonLinear(
-                neighbour_list, in_offset_channel * len(neighbour_list), out_channels)
+                neighbour_list, in_offset_channel * len(neighbour_list), out_channels
+            )
 
             for neighbour in neighbour_list:
                 expanded = []
@@ -54,37 +67,73 @@ class SkeletonConv(nn.Module):
         if bias:
             self.bias = torch.zeros(out_channels)
         else:
-            self.register_parameter('bias', None)
+            self.register_parameter("bias", None)
 
         self.mask = torch.zeros_like(self.weight)
         for i, neighbour in enumerate(self.expanded_neighbour_list):
-            self.mask[self.out_channels_per_joint *
-                      i: self.out_channels_per_joint * (i + 1), neighbour, ...] = 1
+            self.mask[
+                self.out_channels_per_joint * i : self.out_channels_per_joint * (i + 1),
+                neighbour,
+                ...,
+            ] = 1
         self.mask = nn.Parameter(self.mask, requires_grad=False)
 
-        self.description = 'SkeletonConv(in_channels_per_armature={}, out_channels_per_armature={}, kernel_size={}, ' \
-                           'joint_num={}, stride={}, padding={}, bias={})'.format(
-                               in_channels // joint_num, out_channels // joint_num, kernel_size, joint_num, stride, padding, bias
-                           )
+        self.description = (
+            "SkeletonConv(in_channels_per_armature={}, out_channels_per_armature={}, kernel_size={}, "
+            "joint_num={}, stride={}, padding={}, bias={})".format(
+                in_channels // joint_num,
+                out_channels // joint_num,
+                kernel_size,
+                joint_num,
+                stride,
+                padding,
+                bias,
+            )
+        )
         self.reset_parameters()
 
     def reset_parameters(self):
         for i, neighbour in enumerate(self.expanded_neighbour_list):
             """ Use temporary variable to avoid assign to copy of slice, which might lead to un expected result """
-            tmp = torch.zeros_like(self.weight[self.out_channels_per_joint * i: self.out_channels_per_joint * (i + 1),
-                                               neighbour, ...])
+            tmp = torch.zeros_like(
+                self.weight[
+                    self.out_channels_per_joint
+                    * i : self.out_channels_per_joint
+                    * (i + 1),
+                    neighbour,
+                    ...,
+                ]
+            )
             nn.init.kaiming_uniform_(tmp, a=math.sqrt(5))
-            self.weight[self.out_channels_per_joint * i: self.out_channels_per_joint * (i + 1),
-                        neighbour, ...] = tmp
+            self.weight[
+                self.out_channels_per_joint * i : self.out_channels_per_joint * (i + 1),
+                neighbour,
+                ...,
+            ] = tmp
             if self.bias is not None:
                 fan_in, _ = nn.init._calculate_fan_in_and_fan_out(
-                    self.weight[self.out_channels_per_joint * i: self.out_channels_per_joint * (i + 1), neighbour, ...])
+                    self.weight[
+                        self.out_channels_per_joint
+                        * i : self.out_channels_per_joint
+                        * (i + 1),
+                        neighbour,
+                        ...,
+                    ]
+                )
                 bound = 1 / math.sqrt(fan_in)
                 tmp = torch.zeros_like(
-                    self.bias[self.out_channels_per_joint * i: self.out_channels_per_joint * (i + 1)])
+                    self.bias[
+                        self.out_channels_per_joint
+                        * i : self.out_channels_per_joint
+                        * (i + 1)
+                    ]
+                )
                 nn.init.uniform_(tmp, -bound, bound)
-                self.bias[self.out_channels_per_joint *
-                          i: self.out_channels_per_joint * (i + 1)] = tmp
+                self.bias[
+                    self.out_channels_per_joint
+                    * i : self.out_channels_per_joint
+                    * (i + 1)
+                ] = tmp
 
         self.weight = nn.Parameter(self.weight)
         if self.bias is not None:
@@ -92,18 +141,24 @@ class SkeletonConv(nn.Module):
 
     def set_offset(self, offset):
         if not self.add_offset:
-            raise Exception('Wrong Combination of Parameters')
+            raise Exception("Wrong Combination of Parameters")
         self.offset = offset.reshape(offset.shape[0], -1)
 
     def forward(self, input):
         weight_masked = self.weight * self.mask
-        res = F.conv1d(F.pad(input, self._padding_repeated_twice, mode=self.padding_mode),
-                       weight_masked, self.bias, self.stride,
-                       0, self.dilation, self.groups)
+        res = F.conv1d(
+            F.pad(input, self._padding_repeated_twice, mode=self.padding_mode),
+            weight_masked,
+            self.bias,
+            self.stride,
+            0,
+            self.dilation,
+            self.groups,
+        )
 
         if self.add_offset:
             offset_res = self.offset_enc(self.offset)
-            offset_res = offset_res.reshape(offset_res.shape + (1, ))
+            offset_res = offset_res.reshape(offset_res.shape + (1,))
             res += offset_res / 100
         return res
 
@@ -135,14 +190,22 @@ class SkeletonLinear(nn.Module):
     def reset_parameters(self):
         for i, neighbour in enumerate(self.expanded_neighbour_list):
             tmp = torch.zeros_like(
-                self.weight[i*self.out_channels_per_joint: (
-                    i + 1)*self.out_channels_per_joint, neighbour]
+                self.weight[
+                    i
+                    * self.out_channels_per_joint : (i + 1)
+                    * self.out_channels_per_joint,
+                    neighbour,
+                ]
             )
-            self.mask[i*self.out_channels_per_joint: (
-                i + 1)*self.out_channels_per_joint, neighbour] = 1
+            self.mask[
+                i * self.out_channels_per_joint : (i + 1) * self.out_channels_per_joint,
+                neighbour,
+            ] = 1
             nn.init.kaiming_uniform_(tmp, a=math.sqrt(5))
-            self.weight[i*self.out_channels_per_joint: (
-                i + 1)*self.out_channels_per_joint, neighbour] = tmp
+            self.weight[
+                i * self.out_channels_per_joint : (i + 1) * self.out_channels_per_joint,
+                neighbour,
+            ] = tmp
 
         fan_in, _ = nn.init._calculate_fan_in_and_fan_out(self.weight)
         bound = 1 / math.sqrt(fan_in)
@@ -164,9 +227,8 @@ class SkeletonPool(nn.Module):
     def __init__(self, edges, pooling_mode, channels_per_edge, last_pool=False):
         super(SkeletonPool, self).__init__()
 
-        if pooling_mode != 'mean':
-            raise Exception(
-                'Unimplemented pooling mode in matrix_implementation')
+        if pooling_mode != "mean":
+            raise Exception("Unimplemented pooling mode in matrix_implementation")
 
         self.channels_per_edge = channels_per_edge
         self.pooling_mode = pooling_mode
@@ -211,18 +273,21 @@ class SkeletonPool(nn.Module):
         # add global position
         self.pooling_list.append([self.edge_num - 1])
 
-        self.description = 'SkeletonPool(in_edge_num={}, out_edge_num={})'.format(
+        self.description = "SkeletonPool(in_edge_num={}, out_edge_num={})".format(
             len(edges), len(self.pooling_list)
         )
 
         self.weight = torch.zeros(
-            len(self.pooling_list) * channels_per_edge, self.edge_num * channels_per_edge)
+            len(self.pooling_list) * channels_per_edge,
+            self.edge_num * channels_per_edge,
+        )
 
         for i, pair in enumerate(self.pooling_list):
             for j in pair:
                 for c in range(channels_per_edge):
-                    self.weight[i * channels_per_edge + c, j *
-                                channels_per_edge + c] = 1.0 / len(pair)
+                    self.weight[
+                        i * channels_per_edge + c, j * channels_per_edge + c
+                    ] = 1.0 / len(pair)
 
         self.weight = nn.Parameter(self.weight, requires_grad=False)
 
@@ -240,10 +305,13 @@ class SkeletonUnpool(nn.Module):
         for t in self.pooling_list:
             self.output_edge_num += len(t)
 
-        self.description = 'SkeletonUnpool(in_edge_num={}, out_edge_num={})'.format(
+        self.description = "SkeletonUnpool(in_edge_num={}, out_edge_num={})".format(
             self.input_edge_num, self.output_edge_num,
         )
-        weight_size = self.output_edge_num * channels_per_edge, self.input_edge_num * channels_per_edge
+        weight_size = (
+            self.output_edge_num * channels_per_edge,
+            self.input_edge_num * channels_per_edge,
+        )
         self.weight = torch.zeros(weight_size)
 
         for i, pair in enumerate(self.pooling_list):
@@ -264,12 +332,14 @@ class SkeletonUnpool(nn.Module):
 Helper functions for skeleton operation
 """
 
+
 def dfs(x, fa, vis, dist):
     vis[x] = 1
     for y in range(len(fa)):
         if (fa[y] == x or fa[x] == y) and vis[y] == 0:
             dist[y] = dist[x] + 1
             dfs(y, fa, vis, dist)
+
 
 def build_edge_topology(topology, offset):
     # get all edges (pa, child, offset)
@@ -304,7 +374,7 @@ def build_joint_topology(edges, origin_names):
         if out_degree[edge[0]] > 1:
             parent.append(pa)
             offset.append(np.array([0, 0, 0]))
-            names.append(origin_names[edge[1]] + '_virtual')
+            names.append(origin_names[edge[1]] + "_virtual")
             edge2joint.append(-1)
             pa = joint_cnt
             joint_cnt += 1
@@ -349,8 +419,7 @@ def calc_edge_mat(edges):
     for k in range(edge_num):
         for i in range(edge_num):
             for j in range(edge_num):
-                edge_mat[i][j] = min(
-                    edge_mat[i][j], edge_mat[i][k] + edge_mat[k][j])
+                edge_mat[i][j] = min(edge_mat[i][j], edge_mat[i][k] + edge_mat[k][j])
     return edge_mat
 
 
@@ -364,7 +433,7 @@ def find_neighbor(edges, d):
             if edge_mat[i][j] <= d:
                 neighbor.append(j)
         neighbor_list.append(neighbor)
-        
+
     for item in edge_mat:
         if 0 in item:
             neighbor_list.append(item)

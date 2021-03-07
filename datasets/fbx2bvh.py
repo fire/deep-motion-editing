@@ -14,12 +14,13 @@ from os import walk
 data_path = "./datasets/Motions/"
 from multiprocessing import Process
 
+
 def process_fbx(f):
     sourcepath = data_path + d + "/" + f
     dumppath = data_path + d + "/" + f.split(".fbx")[0] + ".bvh"
 
     bpy.ops.import_scene.fbx(filepath=sourcepath)
-    
+
     frame_start = 9999
     frame_end = -9999
     action = bpy.data.actions[-1]
@@ -35,12 +36,13 @@ def process_fbx(f):
         frame_end=frame_end,
         root_transform_only=True,
         global_scale=0.01,
-        rotate_mode='XYZ',
+        rotate_mode="XYZ",
     )
     bpy.data.actions.remove(bpy.data.actions[-1])
 
     print(data_path + d + "/" + f + " processed.")
     os.remove(sourcepath)
+
 
 jobs = []
 

@@ -17,51 +17,66 @@ from option_parser import try_mkdir
 
 def batch_copy(source_path, suffix, dest_path, dest_suffix=None):
     try_mkdir(dest_path)
-    files = [f for f in os.listdir(source_path) if f.endswith('_{}.bvh'.format(suffix))]
+    files = [f for f in os.listdir(source_path) if f.endswith("_{}.bvh".format(suffix))]
 
-    length = len('_{}.bvh'.format(suffix))
+    length = len("_{}.bvh".format(suffix))
     for f in files:
         src = ""
         dst = ""
         if dest_suffix is not None:
             src = pjoin(source_path, f)
-            dst = pjoin(dest_path, f[:-length] + '_{}.bvh'.format(dest_suffix))
+            dst = pjoin(dest_path, f[:-length] + "_{}.bvh".format(dest_suffix))
         else:
             src = pjoin(source_path, f)
-            dst = pjoin(dest_path, f[:-length] + '.bvh')
+            dst = pjoin(dest_path, f[:-length] + ".bvh")
         copyfile(src, dst)
 
 
-if __name__ == '__main__':
-    test_characters = ['BerkeleyMHAD_skl_s04', 'BerkeleyMHAD_skl_s05', 'BerkeleyMHAD_skl_s06', 'BerkeleyMHAD_skl_s07']
+if __name__ == "__main__":
+    test_characters = [
+        "BerkeleyMHAD_skl_s04",
+        "BerkeleyMHAD_skl_s05",
+        "BerkeleyMHAD_skl_s06",
+        "BerkeleyMHAD_skl_s07",
+    ]
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--save_dir', type=str, default='./pretrained/')
+    parser.add_argument("--save_dir", type=str, default="./pretrained/")
     args = parser.parse_args()
     prefix = args.save_dir
 
-    cross_dest_path = pjoin(prefix, 'results/cross_structure/')
-    intra_dest_path = pjoin(prefix, 'results/intra_structure/')
-    source_path = pjoin(prefix, 'results/bvh/')
+    cross_dest_path = pjoin(prefix, "results/cross_structure/")
+    intra_dest_path = pjoin(prefix, "results/intra_structure/")
+    source_path = pjoin(prefix, "results/bvh/")
 
     cross_error = []
     intra_error = []
     for i in range(4):
-        print('Batch [{}/4]'.format(i + 1))
+        print("Batch [{}/4]".format(i + 1))
         eval(i, prefix)
 
-        print('Collecting test error...')
+        print("Collecting test error...")
         if i == 0:
             cross_error += full_batch(0, prefix)
             for char in test_characters:
                 batch_copy(pjoin(source_path, char), 0, pjoin(cross_dest_path, char))
-                batch_copy(pjoin(source_path, char), 'reference', pjoin(cross_dest_path, char), 'reference')
+                batch_copy(
+                    pjoin(source_path, char),
+                    "reference",
+                    pjoin(cross_dest_path, char),
+                    "reference",
+                )
 
-        intra_dest = pjoin(intra_dest_path, 'from_{}'.format(test_characters[i]))
+        intra_dest = pjoin(intra_dest_path, "from_{}".format(test_characters[i]))
         for char in test_characters:
             for char in test_characters:
                 batch_copy(pjoin(source_path, char), 1, pjoin(intra_dest, char))
-                batch_copy(pjoin(source_path, char), 'reference', pjoin(intra_dest, char), 'reference')
+                batch_copy(
+                    pjoin(source_path, char),
+                    "reference",
+                    pjoin(intra_dest, char),
+                    "reference",
+                )
 
         intra_error += full_batch(1, prefix)
 
@@ -71,8 +86,8 @@ if __name__ == '__main__':
     cross_error_mean = cross_error.mean()
     intra_error_mean = intra_error.mean()
 
-    shutil.rmtree(pjoin(prefix, 'results/bvh'), ignore_errors = True)
+    shutil.rmtree(pjoin(prefix, "results/bvh"), ignore_errors=True)
 
-    print('Intra-retargeting error:', intra_error_mean)
-    print('Cross-retargeting error:', cross_error_mean)
-    print('Evaluation finished!')
+    print("Intra-retargeting error:", intra_error_mean)
+    print("Cross-retargeting error:", cross_error_mean)
+    print("Evaluation finished!")

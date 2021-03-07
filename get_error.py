@@ -50,7 +50,7 @@ def batch(char, suffix, prefix):
                 continue
             index.append(i)
 
-        file_ref = f'{file_full[:-6]}_reference.bvh'
+        file_ref = f"{file_full[:-6]}_reference.bvh"
         anim_ref, _, _ = BVH.load(file_ref)
 
         pos = Animation.positions_global(anim)  # [T, J, 3]

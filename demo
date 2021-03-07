@@ -22,23 +22,21 @@ def get_height(file):
     return file.get_height()
 
 
-def example(
-    src_name, src_bvh, ref_name, ref_bvh, output_path, convert_type
-):
+def example(src_name, src_bvh, ref_name, ref_bvh, output_path, convert_type):
     if not os.path.exists(output_path):
         os.makedirs(output_path)
 
     input_file = f"./datasets/Motions/{src_name}/{src_bvh}"
     copy_ref_file(input_file, pjoin(output_path, "input.bvh"))
 
-    ref_file = f'./datasets/Motions/{ref_name}/{ref_bvh}'
-    copy_ref_file(ref_file, pjoin(output_path, 'reference.bvh'))
+    ref_file = f"./datasets/Motions/{ref_name}/{ref_bvh}"
+    copy_ref_file(ref_file, pjoin(output_path, "reference.bvh"))
     height = get_height(input_file)
 
     input_file = f"./datasets/Motions/{src_name}/{src_bvh}"
     ref_file = f"./datasets/Motions/{ref_name}/{ref_bvh}"
     joined_output_path = pjoin(output_path, "result.bvh")
-    cmd = f"python eval_single_pair.py --input_bvh=\"{input_file}\" --ref_bvh=\"{ref_file}\" --output_filename=\"{joined_output_path}\" --convert_type=\"{convert_type}\""
+    cmd = f'python eval_single_pair.py --input_bvh="{input_file}" --ref_bvh="{ref_file}" --output_filename="{joined_output_path}" --convert_type="{convert_type}"'
 
     err = os.system(cmd)
     if err:
@@ -74,4 +72,3 @@ if __name__ == "__main__":
         output_path=f"./examples/{ref_name}_{src_bvh}/",
         convert_type="cross",
     )
-

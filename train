@@ -2,7 +2,7 @@
 
 import sys
 
-sys.path.append('.')
+sys.path.append(".")
 import os
 import time
 from posixpath import join as pjoin
@@ -19,12 +19,12 @@ def main():
     args = option_parser.get_args()
     characters = get_character_names(args)
 
-    log_path = pjoin(args.save_dir, 'logs/')
+    log_path = pjoin(args.save_dir, "logs/")
     try_mkdir(args.save_dir)
     try_mkdir(log_path)
 
-    with open(pjoin(args.save_dir, 'para.txt'), 'w') as para_file:
-        para_file.write(' '.join(sys.argv))
+    with open(pjoin(args.save_dir, "para.txt"), "w") as para_file:
+        para_file.write(" ".join(sys.argv))
 
     dataset = create_dataset(args, characters)
     # https://github.com/fastai/fastbook/issues/85
@@ -47,7 +47,7 @@ def main():
 
             if args.verbose:
                 res = model.verbose()
-                print(f'[{epoch}/{args.epoch_num}]\t[{step}/{len(data_loader), res}]\t')
+                print(f"[{epoch}/{args.epoch_num}]\t[{step}/{len(data_loader), res}]\t")
 
         if epoch % 50 == 0 or epoch == args.epoch_num - 1:
             model.save()
@@ -55,8 +55,8 @@ def main():
         model.epoch()
 
     end_time = time.time()
-    print('training time', end_time - start_time)
+    print("training time", end_time - start_time)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
