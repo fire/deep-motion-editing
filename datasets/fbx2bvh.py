@@ -34,6 +34,7 @@ def process_fbx(f):
         frame_start=frame_start,
         frame_end=frame_end,
         root_transform_only=True,
+        global_scale=0.01,
         rotate_mode='XYZ',
     )
     bpy.data.actions.remove(bpy.data.actions[-1])
@@ -49,7 +50,7 @@ for _, dirs, _ in sorted([f for f in walk(data_path)]):
             continue
         for _, _, files in sorted([f for f in walk(data_path + d)]):
             for f in files:
-                if not f.endswith(".fbx"):
+                if not f.lower().endswith(".fbx"):
                     continue
                 p = Process(target=process_fbx, args=(f,))
                 jobs.append(p)
