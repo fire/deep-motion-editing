@@ -116,3 +116,4 @@ training/
 *.npy
 datasets/Motions/std_bvhs/
 pretrained
+datasets/Motions/
