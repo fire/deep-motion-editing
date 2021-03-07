@@ -1,26 +1,10 @@
 train_dict = {
-    # "corps_MMD_01": [
-    #     "Uncle",
-    #     "Uncle",
-    # ],
-    "corps_BerkeleyMHAD_01": [
-        "BerkeleyMHAD_skl_s03",
-        "BerkeleyMHAD_skl_s04",
+    "corps_name_1": [
+        "mixamo_tpose_1",
     ],
-    "corps_BerkeleyMHAD_02": [
-        "BerkeleyMHAD_skl_s01",
-        "BerkeleyMHAD_skl_s02",
+    "corps_number_1": [
+        "godot_girl_1",
     ],
-    # "corps_name_1": [
-    #     # "AJ",
-    #     # "BigVegas",
-    #     "Kaya",
-    #     "SportyGranny",
-    # ],
-    # "corps_MMD": [
-    #     "Uncle",
-    #     "Uncle",
-    # ],
 }
 test_dict = train_dict
 
@@ -52,6 +36,8 @@ def character_dict_to_list(chars: dict):
 
 def create_dataset(args, character_names=None):
     from datasets.combined_motion import TestData, MixedData
+    print(f"get_character_names {get_character_names(args)}")
+    print(f"character_names {character_names}")
     if args.is_train:
         return MixedData(args, character_names, get_character_names(args))
     else:
