@@ -32,7 +32,7 @@ def main():
         # You always need to set num_workers=0 when creating a DataLoaders because Pytorch multiprocessing does not work on Windows.
         data_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
 
-        model = create_model(args, characters, dataset, characters)
+        model = create_model(args, characters, dataset)
 
         if args.epoch_begin:
             model.load(epoch=args.epoch_begin)
