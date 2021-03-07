@@ -32,7 +32,7 @@ class GAN_model(BaseModel):
         print(f"Train list {train_list}")
         for source_target_pair in range(self.n_topology):
             print(
-                f"Pair {source_target_pair}. Check for duplicate and mismatched bones in the skeleton parser. {dataset.joint_topologies[source_target_pair]}"
+                f"Pair {source_target_pair}. {dataset.joint_topologies[source_target_pair]}"
             )
             print(f"Has bone count {len(dataset.joint_topologies[source_target_pair])}")
             model = IntegratedModel(
