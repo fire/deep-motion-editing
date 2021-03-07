@@ -29,7 +29,7 @@ def main():
     dataset = create_dataset(args, characters)
     # https://github.com/fastai/fastbook/issues/85
     # You always need to set num_workers=0 when creating a DataLoaders because Pytorch multiprocessing does not work on Windows.
-    data_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=0)
+    data_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
 
     model = create_model(args, characters, dataset, characters)
 
@@ -54,8 +54,8 @@ def main():
 
         model.epoch()
 
-    end_tiem = time.time()
-    print('training time', end_tiem - start_time)
+    end_time = time.time()
+    print('training time', end_time - start_time)
 
 
 if __name__ == '__main__':
