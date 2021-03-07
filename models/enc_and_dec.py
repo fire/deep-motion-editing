@@ -206,7 +206,7 @@ class AE(nn.Module):
         return latent, result
 
 
-# eoncoder for static part, i.e. offset part
+# encoder for static part, i.e. offset part
 class StaticEncoder(nn.Module):
     def __init__(self, args, edges):
         super(StaticEncoder, self).__init__()
