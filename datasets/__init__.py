@@ -35,8 +35,6 @@ def character_dict_to_list(chars: dict):
 def create_dataset(args, character_names=None):
     from datasets.combined_motion import TestData, MixedData
 
-    print(f"get_character_names {get_character_names(args)}")
-    print(f"character_names {character_names}")
     if args.is_train:
         return MixedData(args, character_names, get_character_names(args))
     else:
