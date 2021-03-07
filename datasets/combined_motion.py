@@ -55,38 +55,36 @@ class MixedData(Dataset):
         all_datas = []
 
         for group in datasets_groups:
-            for datasets in group:
+            for dataset in group:
                 offsets_group = []
                 means_group = []
                 vars_group = []
-                dataset_num += len(datasets)
+                dataset_num += len(dataset)
                 tmp = []
-                for i, dataset in enumerate(datasets):
-                    new_args = copy.copy(args)
-                    new_args.data_augment = 0
-                    new_args.dataset = dataset
+                new_args = copy.copy(args)
+                new_args.data_augment = 0
+                new_args.dataset = dataset
 
-                    tmp.append(MotionData(new_args))
-                    mean = np.load(f"./datasets/Motions/mean_var/{dataset}_mean.npy")
-                    var = np.load(f"./datasets/Motions/mean_var/{dataset}_var.npy")
-                    mean = torch.tensor(mean)
-                    mean = mean.reshape((1,) + mean.shape)
-                    var = torch.tensor(var)
-                    var = var.reshape((1,) + var.shape)
+                tmp.append(MotionData(new_args))
+                mean = np.load(f"./datasets/Motions/mean_var/{dataset}_mean.npy")
+                var = np.load(f"./datasets/Motions/mean_var/{dataset}_var.npy")
+                mean = torch.tensor(mean)
+                mean = mean.reshape((1,) + mean.shape)
+                var = torch.tensor(var)
+                var = var.reshape((1,) + var.shape)
 
-                    means_group.append(mean)
-                    vars_group.append(var)
+                means_group.append(mean)
+                vars_group.append(var)
 
-                    file = BVH_file(get_std_bvh(dataset=dataset))
-                    if i == 0:
-                        self.joint_topologies.append(file.topology)
-                        self.ee_ids.append(file.get_ee_id())
-                    new_offset = file.offset
-                    new_offset = torch.tensor(new_offset, dtype=torch.float)
-                    new_offset = new_offset.reshape((1,) + new_offset.shape)
-                    offsets_group.append(new_offset)
+                file = BVH_file(get_std_bvh(dataset=dataset))
+                self.joint_topologies.append(file.topology)
+                self.ee_ids.append(file.get_ee_id())
+                new_offset = file.offset
+                new_offset = torch.tensor(new_offset, dtype=torch.float)
+                new_offset = new_offset.reshape((1,) + new_offset.shape)
+                offsets_group.append(new_offset)
 
-                    total_length = min(total_length, len(tmp[-1]))
+                total_length = min(total_length, len(tmp[-1]))
                 all_datas.append(tmp)
                 offsets_group = torch.cat(offsets_group, dim=0)
                 offsets_group = offsets_group.to(device)
@@ -96,11 +94,11 @@ class MixedData(Dataset):
                 self.means.append(means_group)
                 self.vars.append(vars_group)
 
-        for datasets in all_datas:
+        for dataset in all_datas:
             pt = 0
             motions = []
             skeleton_idx = []
-            for dataset in datasets:
+            for dataset in dataset:
                 motions.append(dataset[:])
                 skeleton_idx += [pt] * len(dataset)
                 pt += 1
