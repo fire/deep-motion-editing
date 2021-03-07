@@ -29,7 +29,7 @@ class GAN_model(BaseModel):
         self.D_para = []
         self.G_para = []
         self.args = args
-        print(f"Train list {train_list}")
+        print(f"Training {train_list}")
         for source_target_pair in range(self.n_topology):
             model = IntegratedModel(
                 args,
