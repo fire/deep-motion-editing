@@ -53,46 +53,46 @@ class MixedData(Dataset):
         seed = 19260817
         total_length = 10000000
         all_datas = []
+        print(datasets_groups)
+        for i in range(1, 0, -1):
+            print(i)
+            offsets_group = []
+            means_group = []
+            vars_group = []
+            dataset_num += 1
+            tmp = []
+            new_args = copy.copy(args)
+            new_args.data_augment = 0
+            new_args.dataset = datasets_groups[i][0]
 
-        for group in datasets_groups:
-            for dataset in group:
-                offsets_group = []
-                means_group = []
-                vars_group = []
-                dataset_num += len(dataset)
-                tmp = []
-                new_args = copy.copy(args)
-                new_args.data_augment = 0
-                new_args.dataset = dataset
+            tmp.append(MotionData(new_args))
+            mean = np.load(f"./datasets/Motions/mean_var/{datasets_groups[i][0]}_mean.npy")
+            var = np.load(f"./datasets/Motions/mean_var/{datasets_groups[i][0]}_var.npy")
+            mean = torch.tensor(mean)
+            mean = mean.reshape((1,) + mean.shape)
+            var = torch.tensor(var)
+            var = var.reshape((1,) + var.shape)
 
-                tmp.append(MotionData(new_args))
-                mean = np.load(f"./datasets/Motions/mean_var/{dataset}_mean.npy")
-                var = np.load(f"./datasets/Motions/mean_var/{dataset}_var.npy")
-                mean = torch.tensor(mean)
-                mean = mean.reshape((1,) + mean.shape)
-                var = torch.tensor(var)
-                var = var.reshape((1,) + var.shape)
+            means_group.append(mean)
+            vars_group.append(var)
 
-                means_group.append(mean)
-                vars_group.append(var)
+            file = BVH_file(get_std_bvh(dataset=datasets_groups[i][0]))
+            self.joint_topologies.append(file.topology)
+            self.ee_ids.append(file.get_ee_id())
+            new_offset = file.offset
+            new_offset = torch.tensor(new_offset, dtype=torch.float)
+            new_offset = new_offset.reshape((1,) + new_offset.shape)
+            offsets_group.append(new_offset)
 
-                file = BVH_file(get_std_bvh(dataset=dataset))
-                self.joint_topologies.append(file.topology)
-                self.ee_ids.append(file.get_ee_id())
-                new_offset = file.offset
-                new_offset = torch.tensor(new_offset, dtype=torch.float)
-                new_offset = new_offset.reshape((1,) + new_offset.shape)
-                offsets_group.append(new_offset)
-
-                total_length = min(total_length, len(tmp[-1]))
-                all_datas.append(tmp)
-                offsets_group = torch.cat(offsets_group, dim=0)
-                offsets_group = offsets_group.to(device)
-                means_group = torch.cat(means_group, dim=0).to(device)
-                vars_group = torch.cat(vars_group, dim=0).to(device)
-                self.offsets.append(offsets_group)
-                self.means.append(means_group)
-                self.vars.append(vars_group)
+            total_length = min(total_length, len(tmp[-1]))
+            all_datas.append(tmp)
+            offsets_group = torch.cat(offsets_group, dim=0)
+            offsets_group = offsets_group.to(device)
+            means_group = torch.cat(means_group, dim=0).to(device)
+            vars_group = torch.cat(vars_group, dim=0).to(device)
+            self.offsets.append(offsets_group)
+            self.means.append(means_group)
+            self.vars.append(vars_group)
 
         for dataset in all_datas:
             pt = 0

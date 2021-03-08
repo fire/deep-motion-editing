@@ -215,7 +215,11 @@ class SkeletonLinear(nn.Module):
         self.mask = nn.Parameter(self.mask, requires_grad=False)
 
     def forward(self, input):
+        print(f"before input {input.size()}")
         input = input.reshape(input.shape[0], -1)
+        print(f"after input {input.size()}")
+        print(f"self.weight {self.weight.size()}")
+        print(f"self.mask {self.mask.size()}")
         weight_masked = self.weight * self.mask
         res = F.linear(input, weight_masked, self.bias)
         if self.extra_dim1:
