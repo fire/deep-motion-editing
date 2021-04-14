@@ -54,6 +54,4 @@ for _, dirs, _ in sorted([f for f in walk(data_path)]):
             for f in files:
                 if not f.lower().endswith(".fbx"):
                     continue
-                p = Process(target=process_fbx, args=(f,))
-                jobs.append(p)
-                p.start()
+                process_fbx(f)
