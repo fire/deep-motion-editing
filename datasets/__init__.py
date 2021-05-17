@@ -1,6 +1,5 @@
 train_dict = {
-    "corps_name_1": ["mixamo_tpose_1",],
-    "corps_number_1": ["godot_girl_1",],
+    "corps_VRM": ["Godot_Chan","Dances"],
 }
 test_dict = train_dict
 
