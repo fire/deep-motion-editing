@@ -23,30 +23,41 @@ for _, dirs, _ in sorted([f for f in walk(data_path)]):
                 sourcepath = data_path + d + "/" + f
                 dumppath = data_path + d + "/" + f.split(".")[0] + ".bvh"
 
+                bpy.ops.wm.read_homefile(use_empty=True)
+
                 bpy.ops.import_scene.gltf(filepath=sourcepath)
 
-                frame_start = -99999
-                frame_end = 99999
-                action = bpy.data.actions[-1]
-                if action.frame_range[1] > frame_end:
-                    frame_end = action.frame_range[1]
-                if action.frame_range[0] < frame_start:
-                    frame_start = action.frame_range[0]       
+                # check if actions is empty
+                if bpy.data.actions:
 
-                frame_end = np.max([60, frame_end])
+                    # get all actions
+                    action_list = [action.frame_range for action in bpy.data.actions]
+
+                    # sort, remove doubles and create a set
+                    keys = (sorted(set([item for sublist in action_list for item in sublist])))
+
+                    # print all keyframes
+                    print (keys)
+
+                    # print first and last keyframe
+                    print ("{} {}".format("first keyframe:", keys[0]))
+                    print ("{} {}".format("last keyframe:", keys[-1]))
+                    frame_end = keys[-1]
+                
 
                 for i in range(len(bpy.context.scene.objects)):
                     element = bpy.context.scene.objects[i]
                     if element.type != "ARMATURE":
                         continue
+
                     bpy.context.view_layer.objects.active = element
                     element.select_set(state=True)
                     bpy.ops.export_anim.bvh(
                         filepath=dumppath,
-                        frame_start=frame_start,
-                        frame_end=frame_end,
+                        frame_start= 1,
+                        frame_end= frame_end,
                         root_transform_only=True,
-                        rotate_mode="XYZ",
+                        rotate_mode="NATIVE",
                     )
                     bpy.data.actions.remove(bpy.data.actions[-1])
 
