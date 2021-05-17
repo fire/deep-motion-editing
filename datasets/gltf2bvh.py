@@ -10,7 +10,7 @@ from math import radians
 sys.path.append(".")
 
 
-data_path = "./datasets/Motions/"
+data_path = "./Motions/"
 
 for _, dirs, _ in sorted([f for f in walk(data_path)]):
     for d in dirs:
@@ -25,13 +25,13 @@ for _, dirs, _ in sorted([f for f in walk(data_path)]):
 
                 bpy.ops.import_scene.gltf(filepath=sourcepath)
 
-                frame_start = 9999
-                frame_end = -9999
+                frame_start = -99999
+                frame_end = 99999
                 action = bpy.data.actions[-1]
                 if action.frame_range[1] > frame_end:
                     frame_end = action.frame_range[1]
                 if action.frame_range[0] < frame_start:
-                    frame_start = action.frame_range[0]
+                    frame_start = action.frame_range[0]       
 
                 frame_end = np.max([60, frame_end])
 
