@@ -46,9 +46,9 @@ python3 test
 
 * Restart powershell
 
-* Install cuda. `conda install -y tqdm scipy tensorboard pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch -c=conda-forge`
+* Install cuda. `conda install -y tqdm scipy tensorboard pytorch torchvision torchaudio cudatoolkit=11.1 -c pytorch -c=conda-forge`
 
-* Run `blender -b -P datasets/fbx2bvh.py` or `blender -b -P datasets/gltf2bvh.py` to convert animation files to bvh files. If you already have bvh file as dataset, please skip this step.
+* Run `blender -b -P fbx2bvh.py` or `blender -b -P gltf2bvh.py` to convert animation files to bvh files. If you already have bvh file as dataset, please skip this step.
 
 * **REQUIRED** Run `python datasets/preprocess.py` to simplify the skeleton by removing some less interesting joints, e.g. fingers and convert bvh files into npy files. If you use your own data, you'll need to define simplified structure in `datasets/bvh_parser.py` . This information currently is hard-coded in the code. See the comment in source file for more details. There are four steps to make your own dataset work.
 
