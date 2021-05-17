@@ -106,6 +106,8 @@ class MotionData(Dataset):
                     new = np.concatenate(
                         (rotations, new[:, -1, :].reshape(new.shape[0], -1)), axis=1
                     )
+                else:
+                    break
 
                 new = new[np.newaxis, ...]
                 new_window = torch.tensor(new, dtype=torch.float32)

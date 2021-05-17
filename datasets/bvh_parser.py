@@ -109,28 +109,54 @@ corps_names = {
     #     "RightForeArmRoll",
     #     "RightHand",
     # ],
-    # "corps_VRM": [
-    #     "hips",
-    #     "leftUpperLeg",
-    #     "leftLowerLeg",
-    #     "leftFoot",
-    #     "rightUpperLeg",
-    #     "rightLowerLeg",
-    #     "rightFoot",
-    #     "spine",
-    #     "chest",
-    #     "upperChest",
-    #     "neck",
-    #     "head",
-    #     "leftShoulder",
-    #     "leftUpperArm",
-    #     "leftLowerArm",
-    #     "leftHand",
-    #     "rightShoulder",
-    #     "rightUpperArm",
-    #     "rightLowerArm",
-    #     "rightHand",
-    # ],
+    "corps_VRM": [
+        "hips",
+        "leftUpperLeg",
+        "leftLowerLeg",
+        "leftFoot",
+        "leftToes",
+        "rightUpperLeg",
+        "rightLowerLeg",
+        "rightFoot",
+        "rightToes",
+        "spine",
+        "chest",
+        "upperChest",
+        "neck",
+        "head",
+        "leftShoulder",
+        "leftUpperArm",
+        "leftLowerArm",
+        "leftHand",
+        "rightShoulder",
+        "rightUpperArm",
+        "rightLowerArm",
+        "rightHand",
+    ],
+    "corps_VRM_1": [
+        "Hips",
+        "LeftUpperLeg",
+        "LeftLowerLeg",
+        "LeftFoot",
+        "LeftToes",
+        "RightUpperLeg",
+        "RightLowerLeg",
+        "RightFoot",
+        "RightToes",
+        "Spine",
+        "Chest",
+        "UpperChest",
+        "Neck",
+        "Head",
+        "LeftShoulder",
+        "LeftUpperArm",
+        "LeftLowerArm",
+        "LeftHand",
+        "RightShoulder",
+        "RightUpperArm",
+        "RightLowerArm",
+        "RightHand",
+    ],
     # "corps_motion_project": [
     #     "Hips",
     #     "LeftUpLeg",
@@ -209,7 +235,8 @@ ee_names = {
         "hand_r",
     ],
     # "corps_BerkeleyMHAD": ["LeftFoot", "RightFoot", "Head", "LeftHand", "RightHand",],
-    # "corps_VRM": ["ToeTip_L", "ToeTip_R", "head", "leftHand", "rightHand",],
+    "corps_VRM": ["leftToes", "rightToes", "head", "leftHand", "rightHand",],
+    "corps_VRM_1": ["LeftToes", "RightToes", "Head", "LeftHand", "RightHand",],
     # "corps_motion_project": [
     #     "LeftToeBase",
     #     "RightToeBase",
@@ -254,14 +281,16 @@ class BVH_file:
                     full_fill[i] = 0
                     break
 
-        if "LeftUpLegRoll" in self._names:
+        if "leftLowerLeg" in self._names:
+            self.skeleton_type = "corps_VRM"
+        elif "LeftLowerLeg" in self._names:
+            self.skeleton_type = "corps_VRM_1"
+        elif "LeftUpLegRoll" in self._names:
             self.skeleton_type = "corps_BerkeleyMHAD"
         elif "clavicle_l" in self._names:
             self.skeleton_type = "corps_number_1"
         elif "ToSpine" in self._names:
             self.skeleton_type = "corps_motion_project"
-        elif "leftLowerLeg" in self._names:
-            self.skeleton_type = "corps_VRM"
         elif "LeftToeBase" in self._names:
             self.skeleton_type = "corps_name_1"
         elif "UpperBody2" in self._names:
@@ -308,9 +337,10 @@ class BVH_file:
             for j in range(self.anim.shape[1]):
                 if name == self._names[j]:
                     self.corps.append(j)
-                    break
+                    break                
 
         if len(self.corps) != len(corps_names[self.skeleton_type]):
+            print(f"Matched skeleton {self.skeleton_type}")
             for i in corps_names[self.skeleton_type]:
                 print(i, end=" ")
             print(
@@ -319,6 +349,7 @@ class BVH_file:
                 len(corps_names[self.skeleton_type]),
                 sep="\t",
             )
+            print(f"Current skeleton")
             for i in self.corps:
                 print(self._names[i], end=" ")
             print(self.corps, self.skeleton_type, len(self.corps), sep="\t")
