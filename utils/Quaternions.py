@@ -271,21 +271,6 @@ class Quaternions:
         q3 = q[..., 3]
         es = np.zeros(self.shape + (3,))
 
-        # These version is wrong on converting
-        """
-        if   order == 'xyz':
-            es[...,0] = np.arctan2(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2))
-            es[...,1] = np.arcsin((2 * (q0 * q2 - q3 * q1)).clip(-1,1))
-            es[...,2] = np.arctan2(2 * (q0 * q3 + q1 * q2), 1 - 2 * (q2 * q2 + q3 * q3))
-        elif order == 'yzx':
-            es[...,0] = np.arctan2(2 * (q1 * q0 - q2 * q3), -q1 * q1 + q2 * q2 - q3 * q3 + q0 * q0)
-            es[...,1] = np.arctan2(2 * (q2 * q0 - q1 * q3),  q1 * q1 - q2 * q2 - q3 * q3 + q0 * q0)
-            es[...,2] = np.arcsin((2 * (q1 * q2 + q3 * q0)).clip(-1,1))
-        else:
-            raise NotImplementedError('Cannot convert from ordering %s' % order)
-        
-        """
-
         if order == "xyz":
             es[..., 2] = np.arctan2(
                 2 * (q0 * q3 - q1 * q2), q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3
@@ -296,42 +281,6 @@ class Quaternions:
             )
         else:
             raise NotImplementedError("Cannot convert from ordering %s" % order)
-
-        # These conversion don't appear to work correctly for Maya.
-        # http://bediyap.com/programming/convert-quaternion-to-euler-rotations/
-        """
-        if   order == 'xyz':
-            es[..., 0] = np.arctan2(2 * (q0 * q3 - q1 * q2), q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3)
-            es[..., 1] = np.arcsin((2 * (q1 * q3 + q0 * q2)).clip(-1,1))
-            es[..., 2] = np.arctan2(2 * (q0 * q1 - q2 * q3), q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3)
-        elif order == 'yzx':
-            es[fa + (0,)] = np.arctan2(2 * (q0 * q1 - q2 * q3), q0 * q0 - q1 * q1 + q2 * q2 - q3 * q3)
-            es[fa + (1,)] = np.arcsin((2 * (q1 * q2 + q0 * q3)).clip(-1,1))
-            es[fa + (2,)] = np.arctan2(2 * (q0 * q2 - q1 * q3), q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3)
-        elif order == 'zxy':
-            es[fa + (0,)] = np.arctan2(2 * (q0 * q2 - q1 * q3), q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3)
-            es[fa + (1,)] = np.arcsin((2 * (q0 * q1 + q2 * q3)).clip(-1,1))
-            es[fa + (2,)] = np.arctan2(2 * (q0 * q3 - q1 * q2), q0 * q0 - q1 * q1 + q2 * q2 - q3 * q3) 
-        elif order == 'xzy':
-            es[fa + (0,)] = np.arctan2(2 * (q0 * q2 + q1 * q3), q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3)
-            es[fa + (1,)] = np.arcsin((2 * (q0 * q3 - q1 * q2)).clip(-1,1))
-            es[fa + (2,)] = np.arctan2(2 * (q0 * q1 + q2 * q3), q0 * q0 - q1 * q1 + q2 * q2 - q3 * q3)
-        elif order == 'yxz':
-            es[fa + (0,)] = np.arctan2(2 * (q1 * q2 + q0 * q3), q0 * q0 - q1 * q1 + q2 * q2 - q3 * q3)
-            es[fa + (1,)] = np.arcsin((2 * (q0 * q1 - q2 * q3)).clip(-1,1))
-            es[fa + (2,)] = np.arctan2(2 * (q1 * q3 + q0 * q2), q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3)
-        elif order == 'zyx':
-            es[fa + (0,)] = np.arctan2(2 * (q0 * q1 + q2 * q3), q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3)
-            es[fa + (1,)] = np.arcsin((2 * (q0 * q2 - q1 * q3)).clip(-1,1))
-            es[fa + (2,)] = np.arctan2(2 * (q0 * q3 + q1 * q2), q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3)
-        
-        else:
-            raise KeyError('Unknown ordering %s' % order)
-        """
-
-        # https://github.com/ehsan/ogre/blob/master/OgreMain/src/OgreMatrix3.cpp
-        # Use this class and convert from matrix
-
         return es
 
     def average(self):
