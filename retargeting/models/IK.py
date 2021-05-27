@@ -8,7 +8,7 @@ sys.path.append("../utils")
 
 import BVH as BVH
 import Animation as Animation
-from Quaternions_old import Quaternions
+from Quaternions import Quaternions
 
 
 L = 5  # #frame to look forward/backward

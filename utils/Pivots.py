@@ -1,6 +1,6 @@
 import numpy as np
 
-from Quaternions_old import Quaternions
+from Quaternions import Quaternions
 
 
 class Pivots:
