@@ -16,13 +16,18 @@ class BaseModel(ABC):
     def __init__(self, args):
         self.args = args
         self.is_train = args.is_train
-        self.device = torch.device(args.cuda_device if (torch.cuda.is_available()) else 'cpu')
-        self.model_save_dir = os.path.join(args.save_dir, 'models')  # save all the checkpoints to save_dir
+        self.device = torch.device(
+            args.cuda_device if (torch.cuda.is_available()) else "cpu"
+        )
+        self.model_save_dir = os.path.join(
+            args.save_dir, "models"
+        )  # save all the checkpoints to save_dir
 
         if self.is_train:
             from loss_record import LossRecorder
             from torch.utils.tensorboard import SummaryWriter
-            self.log_path = os.path.join(args.save_dir, 'logs')
+
+            self.log_path = os.path.join(args.save_dir, "logs")
             self.writer = SummaryWriter(self.log_path)
             self.loss_recoder = LossRecorder(self.writer)
 
@@ -50,25 +55,35 @@ class BaseModel(ABC):
         """Run forward pass; called by both functions <optimize_parameters> and <test>."""
         pass
 
-
     @abstractmethod
     def optimize_parameters(self):
         """Calculate losses, gradients, and update network weights; called in every training iteration"""
         pass
 
     def get_scheduler(self, optimizer):
-        if self.args.scheduler == 'linear':
+        if self.args.scheduler == "linear":
+
             def lambda_rule(epoch):
-                lr_l = 1.0 - max(0, epoch - self.args.n_epochs_origin) / float(self.args.n_epochs_decay + 1)
+                lr_l = 1.0 - max(0, epoch - self.args.n_epochs_origin) / float(
+                    self.args.n_epochs_decay + 1
+                )
                 return lr_l
+
             return torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda_rule)
-        if self.args.scheduler == 'Step_LR':
-            print('Step_LR scheduler set')
+        if self.args.scheduler == "Step_LR":
+            print("Step_LR scheduler set")
             return torch.optim.lr_scheduler.StepLR(optimizer, 50, 0.5)
-        if self.args.scheduler == 'Plateau':
-            print('Plateau_LR shceduler set')
-            return torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.2, threshold=0.01, patience=5, verbose=True)
-        if self.args.scheduler == 'MultiStep':
+        if self.args.scheduler == "Plateau":
+            print("Plateau_LR shceduler set")
+            return torch.optim.lr_scheduler.ReduceLROnPlateau(
+                optimizer,
+                mode="min",
+                factor=0.2,
+                threshold=0.01,
+                patience=5,
+                verbose=True,
+            )
+        if self.args.scheduler == "MultiStep":
             return torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[])
 
     def setup(self):
@@ -77,7 +92,9 @@ class BaseModel(ABC):
             opt (Option class) -- stores all the experiment flags; needs to be a subclass of BaseOptions
         """
         if self.is_train:
-            self.schedulers = [self.get_scheduler(optimizer) for optimizer in self.optimizers]
+            self.schedulers = [
+                self.get_scheduler(optimizer) for optimizer in self.optimizers
+            ]
 
     def epoch(self):
         self.loss_recoder.epoch()

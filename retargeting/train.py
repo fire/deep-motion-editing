@@ -1,5 +1,6 @@
 import sys
-sys.path.append('./retargeting/')
+
+sys.path.append("./retargeting/")
 from torch.utils.data.dataloader import DataLoader
 from models import create_model
 from datasets import create_dataset, get_character_names
@@ -13,15 +14,17 @@ def main():
     args = option_parser.get_args()
     characters = get_character_names(args)
 
-    log_path = os.path.join(args.save_dir, 'logs/')
+    log_path = os.path.join(args.save_dir, "logs/")
     try_mkdir(args.save_dir)
     try_mkdir(log_path)
 
-    with open(os.path.join(args.save_dir, 'para.txt'), 'w') as para_file:
-        para_file.write(' '.join(sys.argv))
+    with open(os.path.join(args.save_dir, "para.txt"), "w") as para_file:
+        para_file.write(" ".join(sys.argv))
 
     dataset = create_dataset(args, characters)
-    data_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=2)
+    data_loader = DataLoader(
+        dataset, batch_size=args.batch_size, shuffle=True, num_workers=2
+    )
 
     model = create_model(args, characters, dataset)
 
@@ -39,7 +42,12 @@ def main():
 
             if args.verbose:
                 res = model.verbose()
-                print('[{}/{}]\t[{}/{}]\t'.format(epoch, args.epoch_num, step, len(data_loader)), res)
+                print(
+                    "[{}/{}]\t[{}/{}]\t".format(
+                        epoch, args.epoch_num, step, len(data_loader)
+                    ),
+                    res,
+                )
 
         if epoch % 200 == 0 or epoch == args.epoch_num - 1:
             model.save()
@@ -47,8 +55,8 @@ def main():
         model.epoch()
 
     end_tiem = time.time()
-    print('training time', end_tiem - start_time)
+    print("training time", end_tiem - start_time)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

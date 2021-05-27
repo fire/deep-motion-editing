@@ -34,8 +34,8 @@ python test.py -model_path MODEL_PATH -input_A PATH_A -input_B PATH_B -edit_type
 ```-->
 
 ### Motion Retargeting
-<!-- `TYPE = retargeting`  
-`PATH_A` - motion input  
+<!-- `TYPE = retargeting`
+`PATH_A` - motion input
 `PATH_B` - skeleton input -->
 
 Download and extract the test dataset from [Google Drive](https://docs.google.com/uc?export=download&id=1_849LvuT3WBEHktBT97P2oMBzeJz7-UP) or [Baidu Disk](https://pan.baidu.com/s/1z1cQiqLUgjfxlWoajIPr0g) (ye1q). Then place the `Mixamo` directory within `retargeting/datasets`.
@@ -101,7 +101,7 @@ Now the skeleton and the skin are bound and the animation can be rendered.
 
 
 ## Acknowledgments
-The code in the utils directory is mostly taken from [Holden et al. [2016]](http://theorangeduck.com/page/deep-learning-framework-character-motion-synthesis-and-editing).  
+The code in the utils directory is mostly taken from [Holden et al. [2016]](http://theorangeduck.com/page/deep-learning-framework-character-motion-synthesis-and-editing).
 In addition, part of the MoCap dataset is taken from [Adobe Mixamo](https://www.mixamo.com/) and from the work of [Xia et al.](http://faculty.cs.tamu.edu/jchai/projects/SIG15/style-final.pdf).
 
 ## Citation

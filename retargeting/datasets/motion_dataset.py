@@ -1,6 +1,7 @@
 from torch.utils.data import Dataset
 import os
 import sys
+
 sys.path.append("../utils")
 import numpy as np
 import torch
@@ -13,15 +14,16 @@ class MotionData(Dataset):
     Clip long dataset into fixed length window for batched training
     each data is a 2d tensor with shape (Joint_num*3) * Time
     """
+
     def __init__(self, args):
         super(MotionData, self).__init__()
         name = args.dataset
-        file_path = './datasets/Mixamo/{}.npy'.format(name)
+        file_path = "./datasets/Mixamo/{}.npy".format(name)
 
         if args.debug:
-            file_path = file_path[:-4] + '_debug' + file_path[-4:]
+            file_path = file_path[:-4] + "_debug" + file_path[-4:]
 
-        print('load from file {}'.format(file_path))
+        print("load from file {}".format(file_path))
         self.total_frame = 0
         self.std_bvh = get_std_bvh(args)
         self.args = args
@@ -37,7 +39,7 @@ class MotionData(Dataset):
         if args.normalization == 1:
             self.mean = torch.mean(self.data, (0, 2), keepdim=True)
             self.var = torch.var(self.data, (0, 2), keepdim=True)
-            self.var = self.var ** (1/2)
+            self.var = self.var ** (1 / 2)
             idx = self.var < 1e-5
             self.var[idx] = 1
             self.data = (self.data - self.mean) / self.var
@@ -53,7 +55,11 @@ class MotionData(Dataset):
 
         self.reset_length_flag = 0
         self.virtual_length = 0
-        print('Window count: {}, total frame (without downsampling): {}'.format(len(self), self.total_frame))
+        print(
+            "Window count: {}, total frame (without downsampling): {}".format(
+                len(self), self.total_frame
+            )
+        )
 
     def reset_length(self, length):
         self.reset_length_flag = 1
@@ -66,7 +72,8 @@ class MotionData(Dataset):
             return self.data.shape[0]
 
     def __getitem__(self, item):
-        if isinstance(item, int): item %= self.data.shape[0]
+        if isinstance(item, int):
+            item %= self.data.shape[0]
         if self.args.data_augment == 0 or np.random.randint(0, 2) == 0:
             return self.data[item]
         else:
@@ -87,14 +94,18 @@ class MotionData(Dataset):
                 end = begin + window_size
 
                 new = motion[begin:end, :]
-                if self.args.rotation == 'quaternion':
+                if self.args.rotation == "quaternion":
                     new = new.reshape(new.shape[0], -1, 3)
                     rotations = new[:, :-1, :]
                     rotations = Quaternions.from_euler(np.radians(rotations)).qs
                     rotations = rotations.reshape(rotations.shape[0], -1)
                     positions = new[:, -1, :]
-                    positions = np.concatenate((new, np.zeros((new.shape[0], new.shape[1], 1))), axis=2)
-                    new = np.concatenate((rotations, new[:, -1, :].reshape(new.shape[0], -1)), axis=1)
+                    positions = np.concatenate(
+                        (new, np.zeros((new.shape[0], new.shape[1], 1))), axis=2
+                    )
+                    new = np.concatenate(
+                        (rotations, new[:, -1, :].reshape(new.shape[0], -1)), axis=1
+                    )
 
                 new = new[np.newaxis, ...]
 
@@ -112,5 +123,6 @@ class MotionData(Dataset):
                 self.var = self.var.to(motion.device)
                 self.mean = self.mean.to(motion.device)
             ans = motion * self.var + self.mean
-        else: ans = motion
+        else:
+            ans = motion
         return ans
