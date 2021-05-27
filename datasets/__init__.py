@@ -15,11 +15,11 @@ train_dict = {
     #     "BerkeleyMHAD_skl_s03",
     #     "BerkeleyMHAD_skl_s04",
     # ],
-    "corps_name_1": [
+    "corps_BerkeleyMHAD_02": [
         # "AJ",
         # "BigVegas",
-        "Kaya",
-        "SportyGranny",
+        "BerkeleyMHAD_skl_s01",
+        "BerkeleyMHAD_skl_s02",
     ],
     # "corps_MMD": [
     #     "Uncle",
