@@ -40,17 +40,6 @@ def example(
     joined_output_path = pjoin(output_path, "result.bvh")
     cmd = f"python eval_single_pair.py --input_bvh=\"{input_file}\" --ref_bvh=\"{ref_file}\" --output_filename=\"{joined_output_path}\" --convert_type=\"{convert_type}\""
 
-    err = os.system(cmd)
-    if err:
-        return err
-    # fix_foot_contact(
-    #     pjoin(output_path, "result.bvh"),
-    #     pjoin(output_path, "input.bvh"),
-    #     pjoin(output_path, "result.bvh"),
-    #     height,
-    # )
-
-
 if __name__ == "__main__":
     src_name = "Kaya"
     src_bvh = "Golf Putt Victory.bvh"
