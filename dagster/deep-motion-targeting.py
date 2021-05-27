@@ -224,11 +224,7 @@ def train_one_motion_targeting_epoch(_):
     #     para_file.write(' '.join(sys.argv))
 
     dataset = create_dataset(args, characters)
-    # https://github.com/fastai/fastbook/issues/85
-    # You always need to set num_workers=0 when creating a DataLoaders because Pytorch multiprocessing does not work on Windows.
-    data_loader = DataLoader(
-        dataset, batch_size=args.batch_size, shuffle=True, num_workers=0
-    )
+    data_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
 
     model = create_model(args, characters, dataset)
 

@@ -6,7 +6,8 @@ This library is maintained by [K. S. Ernest (iFire) Lee](https://github.com/fire
 
 ## Prerequisites
 
-* Windows 10, Linux or macOS
+* NOT Windows 10, 
+* Linux or macOS
 * Python 3
 * CPU or NVIDIA GPU + CUDA CuDNN
 

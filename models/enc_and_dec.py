@@ -187,7 +187,7 @@ class Decoder(nn.Module):
             if self.args.skeleton_info == "concat":
                 self.convs[i].set_offset(offset[len(self.layers) - i - 1])
             input = layer(input)
-        # throw the padded rwo for global position
+        # throw the padded row for global position
         if self.args.rotation == "quaternion" and self.args.pos_repr != "4d":
             input = input[:, :-1, :]
 
