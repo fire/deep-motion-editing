@@ -40,7 +40,7 @@ def get_parser():
         "--rotation",
         type=str,
         default="quaternion",
-        help="representation of rotation:euler_angle, quaternion",
+        help="representation of rotation: quaternion",
     )
     parser.add_argument(
         "--data_augment", type=int, default=1, help="data_augment: 1 or 0"

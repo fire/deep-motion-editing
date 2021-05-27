@@ -13,9 +13,7 @@ class Encoder(nn.Module):
     def __init__(self, args, topology):
         super(Encoder, self).__init__()
         self.topologies = [topology]
-        if args.rotation == "euler_angle":
-            self.channel_base = [3]
-        elif args.rotation == "quaternion":
+        if args.rotation == "quaternion":
             self.channel_base = [4]
         self.channel_list = []
         self.edge_num = [len(topology) + 1]
