@@ -36,13 +36,10 @@ def item(_):
 
 @solid
 def fetch_vrm_metadata(_, api_jwt: str, page: int):
-    url = f"https://api.baserow.io/api/database/rows/table/5785/?size=1&page={str(page)}"
-    req = requests.get(
-        url,
-        headers={
-            "Authorization": f"Token {api_jwt}"
-        }
+    url = (
+        f"https://api.baserow.io/api/database/rows/table/5785/?size=1&page={str(page)}"
     )
+    req = requests.get(url, headers={"Authorization": f"Token {api_jwt}"})
     return req.text
 
 
@@ -54,11 +51,11 @@ VRM_TABLE_FILES: str = "field_24364"
 def fetch_vrm_gltf_baserow(context, m: str):
     doc = json.loads(m)
     for r in doc["results"]:
-        context.log.info(f'Name: {r[VRM_TABLE_NAME]}')
+        context.log.info(f"Name: {r[VRM_TABLE_NAME]}")
         files = r[VRM_TABLE_FILES]
         for f in files:
             url = f["url"]
-            context.log.debug(f'Url: {url}')
+            context.log.debug(f"Url: {url}")
             vrm_binary = requests.get(url, allow_redirects=True)
             return vrm_binary.content
 
@@ -72,19 +69,28 @@ def fetch_vrm_gltf_url(context, url: str):
 @solid
 def check_num_of_vrm_frames(context, vrm) -> bool:
     current_abs_path = pathlib.Path().absolute()
-    temp = tempfile.mkdtemp(prefix='check_num_of_vrm_frames_')
-    path = 'check_num_of_vrm_frames.vrm'
-    temp_path = f'{temp}/{path}'
-    f = open(temp_path, 'wb')
+    temp = tempfile.mkdtemp(prefix="check_num_of_vrm_frames_")
+    path = "check_num_of_vrm_frames.vrm"
+    temp_path = f"{temp}/{path}"
+    f = open(temp_path, "wb")
     f.write(vrm)
     f.close()
     import subprocess
-    subprocess.run(["blender", "--background", "--python",
-                    f"{current_abs_path}/lib/get_frame_count_blender.py", "--", f'{temp_path}'])
-    f = open(f'{temp_path}.json', 'rb')
+
+    subprocess.run(
+        [
+            "blender",
+            "--background",
+            "--python",
+            f"{current_abs_path}/lib/get_frame_count_blender.py",
+            "--",
+            f"{temp_path}",
+        ]
+    )
+    f = open(f"{temp_path}.json", "rb")
     out = json.load(f)
     frames = out["last_keyframe"] - out["first_keyframe"]
-    context.log.debug(f'Frames: {frames}')
+    context.log.debug(f"Frames: {frames}")
     if frames < 1:
         raise ValueError
     return True
@@ -93,17 +99,26 @@ def check_num_of_vrm_frames(context, vrm) -> bool:
 @solid
 def get_scene_info_of_vrm(context, vrm):
     current_abs_path = pathlib.Path().absolute()
-    temp = tempfile.mkdtemp(prefix='get_scene_info_of_vrm_')
-    path = 'get_scene_info_of_vrm.vrm'
-    temp_path = f'{temp}/{path}'
-    context.log.debug(f'Temporary file: {temp_path}')
-    f = open(temp_path, 'wb')
+    temp = tempfile.mkdtemp(prefix="get_scene_info_of_vrm_")
+    path = "get_scene_info_of_vrm.vrm"
+    temp_path = f"{temp}/{path}"
+    context.log.debug(f"Temporary file: {temp_path}")
+    f = open(temp_path, "wb")
     f.write(vrm)
     f.close()
     import subprocess
-    subprocess.run(["blender", "--background", "--python",
-                    f'{current_abs_path}/lib/get_scene_info_blender.py', '--', temp_path])
-    f = open(f'{temp_path}.json', 'rb')
+
+    subprocess.run(
+        [
+            "blender",
+            "--background",
+            "--python",
+            f"{current_abs_path}/lib/get_scene_info_blender.py",
+            "--",
+            temp_path,
+        ]
+    )
+    f = open(f"{temp_path}.json", "rb")
     context.log.debug(str(f))
     return f
 
@@ -116,16 +131,25 @@ def get_url(_):
 @solid
 def convert_to_bvh(context, has_enough_frames: bool, vrm) -> DataFrame:
     current_abs_path = pathlib.Path().absolute()
-    temp = tempfile.mkdtemp(prefix='convert_to_bvh_')
-    path = 'convert_to_bvh.vrm'
-    temp_path = f'{temp}/{path}'
-    f = open(temp_path, 'wb')
+    temp = tempfile.mkdtemp(prefix="convert_to_bvh_")
+    path = "convert_to_bvh.vrm"
+    temp_path = f"{temp}/{path}"
+    f = open(temp_path, "wb")
     f.write(vrm)
     f.close()
     import subprocess
-    subprocess.run(["blender",  "--background", "--python",
-                    f"{current_abs_path}/lib/convert_to_bvh_blender.py", "--", temp_path])
-    f = open(f'{temp_path}.bvh', 'rb')
+
+    subprocess.run(
+        [
+            "blender",
+            "--background",
+            "--python",
+            f"{current_abs_path}/lib/convert_to_bvh_blender.py",
+            "--",
+            temp_path,
+        ]
+    )
+    f = open(f"{temp_path}.bvh", "rb")
     bvh_doc = str(f)
     bvh = [[bvh_doc]]
     return bvh
@@ -170,10 +194,12 @@ def return_true(_):
 def rename_rig_bones_to_vrm(_, vrm_bones, rig_bvh, common_rigs):
     pass
 
-@solid 
+
+@solid
 def train_one_motion_targeting_epoch(_):
     import sys
-    sys.path.append('.')
+
+    sys.path.append(".")
     import os
     import time
     from posixpath import join as pjoin
@@ -189,7 +215,7 @@ def train_one_motion_targeting_epoch(_):
     characters = get_character_names(args)
 
     # Logs for tensorboard
-    log_path = pjoin(args.save_dir, 'logs/')
+    log_path = pjoin(args.save_dir, "logs/")
     try_mkdir(args.save_dir)
     try_mkdir(log_path)
 
@@ -200,7 +226,9 @@ def train_one_motion_targeting_epoch(_):
     dataset = create_dataset(args, characters)
     # https://github.com/fastai/fastbook/issues/85
     # You always need to set num_workers=0 when creating a DataLoaders because Pytorch multiprocessing does not work on Windows.
-    data_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=0)
+    data_loader = DataLoader(
+        dataset, batch_size=args.batch_size, shuffle=True, num_workers=0
+    )
 
     model = create_model(args, characters, dataset)
 
@@ -212,7 +240,7 @@ def train_one_motion_targeting_epoch(_):
     for step, motions in enumerate(data_loader):
         model.set_input(motions)
         model.optimize_parameters()
-        #print('[{}/{}]\t[{}/{}]\t'.format(epoch, args.epoch_num, step, len(data_loader)), res)
+        # print('[{}/{}]\t[{}/{}]\t'.format(epoch, args.epoch_num, step, len(data_loader)), res)
 
     model.epoch()
     # Save epoch number

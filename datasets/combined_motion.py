@@ -18,8 +18,7 @@ class MixedData0(Dataset):
         super(MixedData0, self).__init__()
 
         self.motions = motions
-        self.motions_reverse = torch.tensor(
-            self.motions.numpy()[..., ::-1].copy())
+        self.motions_reverse = torch.tensor(self.motions.numpy()[..., ::-1].copy())
         self.skeleton_idx = skeleton_idx
         self.length = motions.shape[0]
         self.args = args
@@ -40,8 +39,9 @@ class MixedData(Dataset):
     """
 
     def __init__(self, args, datasets_groups, topography):
-        device = torch.device(args.cuda_device if (
-            torch.cuda.is_available()) else 'cpu')
+        device = torch.device(
+            args.cuda_device if (torch.cuda.is_available()) else "cpu"
+        )
         self.final_data = []
         self.length = 0
         self.offsets = []
@@ -67,10 +67,8 @@ class MixedData(Dataset):
                     new_args.dataset = dataset
 
                     tmp.append(MotionData(new_args))
-                    mean = np.load(
-                        f'./datasets/Motions/mean_var/{dataset}_mean.npy')
-                    var = np.load(
-                        f'./datasets/Motions/mean_var/{dataset}_var.npy')
+                    mean = np.load(f"./datasets/Motions/mean_var/{dataset}_mean.npy")
+                    var = np.load(f"./datasets/Motions/mean_var/{dataset}_var.npy")
                     mean = torch.tensor(mean)
                     mean = mean.reshape((1,) + mean.shape)
                     var = torch.tensor(var)
@@ -123,7 +121,7 @@ class MixedData(Dataset):
 
     def get_item_string(self, item_string):
         item_file = BVH_file(item_string)
-        motion = item_file.to_tensor(quater=self.args.rotation == 'quaternion')
+        motion = item_file.to_tensor(quater=self.args.rotation == "quaternion")
         motion = motion[:, ::2]
         length = motion.shape[-1]
         length = length // 4 * 4
@@ -137,7 +135,7 @@ class MixedData(Dataset):
 
 
 class TestData(Dataset):
-    def __init__(self, args, characters, test_list : list):
+    def __init__(self, args, characters, test_list: list):
         self.characters = characters
         self.file_list = test_list
         self.mean = []
@@ -162,15 +160,13 @@ class TestData(Dataset):
                     new_offset = torch.tensor(new_offset, dtype=torch.float)
                     new_offset = new_offset.reshape((1,) + new_offset.shape)
                     offsets_group.append(new_offset)
-                    print(f'Load character {character}, group {i}, index {j}')
-                    mean = np.load(
-                        f'./datasets/Motions/mean_var/{character}_mean.npy')
-                    var = np.load(
-                        f'./datasets/Motions/mean_var/{character}_var.npy')
+                    print(f"Load character {character}, group {i}, index {j}")
+                    mean = np.load(f"./datasets/Motions/mean_var/{character}_mean.npy")
+                    var = np.load(f"./datasets/Motions/mean_var/{character}_var.npy")
                     mean = torch.tensor(mean)
-                    mean = mean.reshape((1, ) + mean.shape)
+                    mean = mean.reshape((1,) + mean.shape)
                     var = torch.tensor(var)
-                    var = var.reshape((1, ) + var.shape)
+                    var = var.reshape((1,) + var.shape)
                     mean_group.append(mean)
                     var_group.append(var)
 
@@ -190,30 +186,29 @@ class TestData(Dataset):
             for j in range(len(character_group)):
                 new_motion = self.get_item(i, j, item)
                 if new_motion is not None:
-                    new_motion = new_motion.reshape((1, ) + new_motion.shape)
-                    new_motion = (
-                        new_motion - self.mean[i][j]) / self.var[i][j]
+                    new_motion = new_motion.reshape((1,) + new_motion.shape)
+                    new_motion = (new_motion - self.mean[i][j]) / self.var[i][j]
                     ref_shape = new_motion
                 res_group.append(new_motion)
 
             if ref_shape is None:
-                print('Bad at {}'.format(item))
+                print("Bad at {}".format(item))
                 return None
             for j in range(len(character_group)):
                 if res_group[j] is None:
                     bad_flag = 1
                     res_group[j] = torch.zeros_like(ref_shape)
             if bad_flag:
-                print('Bad at {}'.format(item))
+                print("Bad at {}".format(item))
 
             res_group = torch.cat(res_group, dim=0)
             res.append([res_group, list(range(len(character_group)))])
         return res
 
     def get_item(self, path: str):
-        print(f'Path {path}')
+        print(f"Path {path}")
         file = BVH_file(path)
-        motion = file.to_tensor(quater=self.args.rotation == 'quaternion')
+        motion = file.to_tensor(quater=self.args.rotation == "quaternion")
         motion = motion[:, ::2]
         length = motion.shape[-1]
         length = length // 4 * 4

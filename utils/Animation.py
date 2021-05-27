@@ -10,22 +10,22 @@ from Quaternions_old import Quaternions
 class Animation:
     """
     Animation is a numpy-like wrapper for animation data
-    
+
     Animation data consists of several arrays consisting
     of F frames and J joints.
-    
+
     The animation is specified by
-    
+
         rotations : (F, J) Quaternions | Joint Rotations
         positions : (F, J, 3) ndarray  | Joint Positions
-    
+
     The base pose is specified by
-    
+
         orients   : (J) Quaternions    | Joint Orientations
         offsets   : (J, 3) ndarray     | Joint Offsets
-        
+
     And the skeletal structure is specified by
-        
+
         parents   : (J) ndarray        | Joint Parents
     """
 
@@ -183,24 +183,24 @@ def load_to_maya(anim, names=None, radius=0.5):
     """
     Load Animation Object into Maya as Joint Skeleton
     loads each frame as a new keyfame in maya.
-    
+
     If the animation is too slow or too fast perhaps
     the framerate needs adjusting before being loaded
     such that it matches the maya scene framerate.
-    
-    
+
+
     Parameters
     ----------
-    
+
     anim : Animation
         Animation to load into Scene
-        
+
     names : [str]
         Optional list of Joint names for Skeleton
-    
+
     Returns
     -------
-    
+
     List of Maya Joint Nodes loaded into scene
     """
 
@@ -256,25 +256,25 @@ def load_to_maya(anim, names=None, radius=0.5):
 
 def load_from_maya(root, start, end):
     """
-    Load Animation Object from Maya Joint Skeleton    
-    
+    Load Animation Object from Maya Joint Skeleton
+
     Parameters
     ----------
-    
+
     root : PyNode
         Root Joint of Maya Skeleton
-        
+
     start, end : int, int
         Start and End frame index of Maya Animation
-    
+
     Returns
     -------
-    
+
     animation : Animation
         Loaded animation from maya
-        
+
     names : [str]
-        Joint names from maya   
+        Joint names from maya
     """
 
     import pymel.core as pm
@@ -344,23 +344,23 @@ def load_from_maya(root, start, end):
 def transforms_local(anim):
     """
     Computes Animation Local Transforms
-    
+
     As well as a number of other uses this can
     be used to compute global joint transforms,
     which in turn can be used to compete global
     joint positions
-    
+
     Parameters
     ----------
-    
+
     anim : Animation
         Input animation
-        
+
     Returns
     -------
-    
+
     transforms : (F, J, 4, 4) ndarray
-    
+
         For each frame F, joint local
         transforms for each joint J
     """
@@ -381,20 +381,20 @@ def transforms_local(anim):
 def transforms_multiply(t0s, t1s):
     """
     Transforms Multiply
-    
+
     Multiplies two arrays of animation transforms
-    
+
     Parameters
     ----------
-    
+
     t0s, t1s : (F, J, 4, 4) ndarray
         Two arrays of transforms
         for each frame F and each
         joint J
-        
+
     Returns
     -------
-    
+
     transforms : (F, J, 4, 4) ndarray
         Array of transforms for each
         frame F and joint J multiplied
@@ -413,18 +413,18 @@ def transforms_inv(ts):
 def transforms_blank(anim):
     """
     Blank Transforms
-    
+
     Parameters
     ----------
-    
+
     anim : Animation
         Input animation
-    
+
     Returns
     -------
-    
+
     transforms : (F, J, 4, 4) ndarray
-        Array of identity transforms for 
+        Array of identity transforms for
         each frame F and joint J
     """
 
@@ -440,24 +440,24 @@ def transforms_blank(anim):
 def transforms_global(anim):
     """
     Global Animation Transforms
-    
+
     This relies on joint ordering
     being incremental. That means a joint
     J1 must not be a ancestor of J0 if
     J0 appears before J1 in the joint
     ordering.
-    
+
     Parameters
     ----------
-    
+
     anim : Animation
         Input animation
-    
+
     Returns
     ------
-    
+
     transforms : (F, J, 4, 4) ndarray
-        Array of global transforms for 
+        Array of global transforms for
         each frame F and joint J
     """
 
@@ -478,21 +478,21 @@ def transforms_global(anim):
 def positions_global(anim):
     """
     Global Joint Positions
-    
+
     Given an animation compute the global joint
     positions at at every frame
-    
+
     Parameters
     ----------
-    
+
     anim : Animation
         Input animation
-        
+
     Returns
     -------
-    
+
     positions : (F, J, 3) ndarray
-        Positions for every frame F 
+        Positions for every frame F
         and joint position J
     """
 
@@ -507,24 +507,24 @@ def positions_global(anim):
 def rotations_global(anim):
     """
     Global Animation Rotations
-    
+
     This relies on joint ordering
     being incremental. That means a joint
     J1 must not be a ancestor of J0 if
     J0 appears before J1 in the joint
     ordering.
-    
+
     Parameters
     ----------
-    
+
     anim : Animation
         Input animation
-        
+
     Returns
     -------
-    
+
     points : (F, J) Quaternions
-        global rotations for every frame F 
+        global rotations for every frame F
         and joint J
     """
 
@@ -551,31 +551,31 @@ def rotations_parents_global(anim):
 def rotations_load_to_maya(rotations, positions, names=None):
     """
     Load Rotations into Maya
-    
+
     Loads a Quaternions array into the scene
     via the representation of axis
-    
+
     Parameters
     ----------
-    
-    rotations : (F, J) Quaternions 
+
+    rotations : (F, J) Quaternions
         array of rotations to load
         into the scene where
             F = number of frames
             J = number of joints
-    
-    positions : (F, J, 3) ndarray 
+
+    positions : (F, J, 3) ndarray
         array of positions to load
         rotation axis at where:
             F = number of frames
             J = number of joints
-            
+
     names : [str]
         List of joint names
-    
+
     Returns
     -------
-    
+
     maxies : Group
         Grouped Maya Node of all Axis nodes
     """

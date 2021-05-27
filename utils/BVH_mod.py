@@ -23,22 +23,22 @@ ordermap = {
 def load(filename, start=None, end=None, order=None, world=False, need_quater=False):
     """
     Reads a BVH file and constructs an animation
-    
+
     Parameters
     ----------
     filename: str
         File to be opened
-        
+
     start : int
         Optional Starting Frame
-        
+
     end : int
         Optional Ending Frame
-    
+
     order : str
         Optional Specifier for joint order.
         Given as string E.G 'xyz', 'zxy'
-        
+
     world : bool
         If set to true euler angles are applied
         together in world space rather than local
@@ -46,7 +46,7 @@ def load(filename, start=None, end=None, order=None, world=False, need_quater=Fa
 
     Returns
     -------
-    
+
     (animation, joint_names, frametime)
         Tuple of loaded animation and joint names
     """
@@ -199,33 +199,33 @@ def save(
 ):
     """
     Saves an Animation to file as BVH
-    
+
     Parameters
     ----------
     filename: str
         File to be saved to
-        
+
     anim : Animation
         Animation to save
-        
+
     names : [str]
         List of joint names
-    
+
     order : str
         Optional Specifier for joint order.
         Given as string E.G 'xyz', 'zxy'
-    
+
     frametime : float
         Optional Animation Frame time
-        
+
     positions : bool
         Optional specfier to save bone
         positions for each frame
-        
+
     orients : bool
         Multiply joint orients to the rotations
         before saving.
-        
+
     """
 
     if names is None:

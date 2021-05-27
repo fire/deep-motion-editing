@@ -9,47 +9,47 @@ from Quaternions_old import Quaternions
 class BasicInverseKinematics:
     """
     Basic Inverse Kinematics Solver
-    
+
     This is an extremely simple full body IK
     solver.
-    
+
     It works given the following conditions:
-    
+
         * All joint targets must be specified
         * All joint targets must be in reach
-        * All joint targets must not differ 
+        * All joint targets must not differ
           extremely from the starting pose
         * No bone length constraints can be violated
-        * The root translation and rotation are 
+        * The root translation and rotation are
           set to good initial values
-    
+
     It works under the observation that if the
     _directions_ the joints are pointing toward
     match the _directions_ of the vectors between
     the target joints then the pose should match
     that of the target pose.
-    
+
     Therefore it iterates over joints rotating
     each joint such that the vectors between it
     and it's children match that of the target
     positions.
-    
+
     Parameters
     ----------
-    
+
     animation : Animation
         animation input
-        
+
     positions : (F, J, 3) ndarray
         target positions for each frame F
         and each joint J
-    
+
     iterations : int
         Optional number of iterations.
         If the above conditions are met
         1 iteration should be enough,
         therefore the default is 1
-        
+
     silent : bool
         Optional if to suppress output
         defaults to False
@@ -118,53 +118,53 @@ class BasicInverseKinematics:
 class JacobianInverseKinematics:
     """
     Jacobian Based Full Body IK Solver
-    
+
     This is a full body IK solver which
     uses the dampened least squares inverse
     jacobian method.
-    
+
     It should remain fairly stable and effective
     even for joint positions which are out of
     reach and it can also take any number of targets
     to treat as end effectors.
-    
+
     Parameters
     ----------
-    
+
     animation : Animation
         animation to solve inverse problem on
 
     targets : {int : (F, 3) ndarray}
         Dictionary of target positions for each
-        frame F, mapping joint index to 
+        frame F, mapping joint index to
         a target position
-    
+
     references : (F, 3)
         Optional list of J joint position
         references for which the result
         should bias toward
-        
+
     iterations : int
         Optional number of iterations to
         compute. More iterations results in
-        better accuracy but takes longer to 
+        better accuracy but takes longer to
         compute. Default is 10.
-        
+
     recalculate : bool
         Optional if to recalcuate jacobian
         each iteration. Gives better accuracy
         but slower to compute. Defaults to True
-        
+
     damping : float
         Optional damping constant. Higher
         damping increases stability but
         requires more iterations to converge.
         Defaults to 5.0
-        
+
     secondary : float
         Force, or bias toward secondary target.
         Defaults to 0.25
-        
+
     silent : bool
         Optional if to suppress output
         defaults to False

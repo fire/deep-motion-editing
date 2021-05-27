@@ -6,16 +6,16 @@ class Quaternions:
     Quaternions is a wrapper around a numpy ndarray
     that allows it to act as if it were an narray of
     a quater data type.
-    
+
     Therefore addition, subtraction, multiplication,
     division, negation, absolute, are all defined
     in terms of quater operations such as quater
     multiplication.
-    
+
     This allows for much neater code and many routines
     which conceptually do the same thing to be written
     in the same way for point data and for rotation data.
-    
+
     The Quaternions class has been desgined such that it
     should support broadcasting and slicing in all of the
     usual ways.
@@ -90,16 +90,16 @@ class Quaternions:
     def __mul__(self, other):
         """
         Quaternion multiplication has three main methods.
-        
+
         When multiplying a Quaternions array by Quaternions
         normal quater multiplication is performed.
-        
+
         When multiplying a Quaternions array by a vector
         array of the same shape, where the last axis is 3,
-        it is assumed to be a Quaternion by 3D-Vector 
+        it is assumed to be a Quaternion by 3D-Vector
         multiplication and the 3D-Vectors are rotated
         in space by the Quaternions.
-        
+
         When multipplying a Quaternions array by a scalar
         or vector of different shape it is assumed to be
         a Quaternions by Scalars multiplication and the
@@ -148,7 +148,7 @@ class Quaternions:
         """
         When a Quaternion type is supplied, division is defined
         as multiplication by the inverse of that Quaternion.
-        
+
         When a scalar or vector is supplied it is defined
         as multiplicaion of one over the supplied value.
         Essentially a scaling.

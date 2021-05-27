@@ -1,6 +1,7 @@
 import sys
-sys.path.append('.')
-sys.path.append('./utils')
+
+sys.path.append(".")
+sys.path.append("./utils")
 
 import torch
 import BVH_mod as BVH
@@ -49,41 +50,134 @@ corps_names = {
         "RightHand",
     ],
     "corps_BerkeleyMHAD": [
-        'Hips',
-        'LeftUpLeg', 'LeftUpLegRoll', 'LeftLeg', 'LeftLegRoll', 'LeftFoot',
-        'RightUpLeg', 'RightUpLegRoll', 'RightLeg', 'RightLegRoll', 'RightFoot',
-        'spine', 'spine1', 'spine2', 'Neck', 'Head',
-        'LeftShoulder', 'LeftArm', 'LeftArmRoll', 'LeftForeArm', 'LeftForeArmRoll', 'LeftHand',
-        'RightShoulder', 'RightArm', 'RightArmRoll', 'RightForeArm', 'RightForeArmRoll', 'RightHand'],
+        "Hips",
+        "LeftUpLeg",
+        "LeftUpLegRoll",
+        "LeftLeg",
+        "LeftLegRoll",
+        "LeftFoot",
+        "RightUpLeg",
+        "RightUpLegRoll",
+        "RightLeg",
+        "RightLegRoll",
+        "RightFoot",
+        "spine",
+        "spine1",
+        "spine2",
+        "Neck",
+        "Head",
+        "LeftShoulder",
+        "LeftArm",
+        "LeftArmRoll",
+        "LeftForeArm",
+        "LeftForeArmRoll",
+        "LeftHand",
+        "RightShoulder",
+        "RightArm",
+        "RightArmRoll",
+        "RightForeArm",
+        "RightForeArmRoll",
+        "RightHand",
+    ],
     "corps_VRM": [
-        'hips',
-        'leftUpperLeg', 'leftLowerLeg', 'leftFoot',
-        'rightUpperLeg', 'rightLowerLeg', 'rightFoot',
-        'spine', 'chest', 'upperChest', 'neck', 'head',
-        'leftShoulder', 'leftUpperArm', 'leftLowerArm', 'leftHand',
-        'rightShoulder', 'rightUpperArm', 'rightLowerArm', 'rightHand'],
+        "hips",
+        "leftUpperLeg",
+        "leftLowerLeg",
+        "leftFoot",
+        "rightUpperLeg",
+        "rightLowerLeg",
+        "rightFoot",
+        "spine",
+        "chest",
+        "upperChest",
+        "neck",
+        "head",
+        "leftShoulder",
+        "leftUpperArm",
+        "leftLowerArm",
+        "leftHand",
+        "rightShoulder",
+        "rightUpperArm",
+        "rightLowerArm",
+        "rightHand",
+    ],
     "corps_motion_project": [
         "Hips",
-        "LeftUpLeg", "LeftLeg", "LeftFoot", "LeftToeBase",
-        "RightUpLeg", "RightLeg", "RightFoot", "RightToeBase",
-        "ToSpine", "Spine", "Spine1", "Neck", "Head",
-        "LeftShoulder", "LeftArm", "LeftForeArm", "LeftHand",
-        "RightShoulder", "RightArm", "RightForeArm", "RightHand",
-    ],    "corps_MMD": [
-        "Center",
-        "LowerBody", "Leg_L", "Knee_L", "Ankle_L", "ToeTip_L",
-        "LowerBody", "Leg_R", "Knee_R", "Ankle_R", "ToeTip_R",
-        "UpperBody", "UpperBody2", "Neck", "Head",
-        "Clavicle_L", "Shoulder_L", "Arm_L", "Elbow_L", "Wrist_L",
-        "Clavicle_R", "Shoulder_R", "Arm_R", "Elbow_R", "Wrist_R",
+        "LeftUpLeg",
+        "LeftLeg",
+        "LeftFoot",
+        "LeftToeBase",
+        "RightUpLeg",
+        "RightLeg",
+        "RightFoot",
+        "RightToeBase",
+        "ToSpine",
+        "Spine",
+        "Spine1",
+        "Neck",
+        "Head",
+        "LeftShoulder",
+        "LeftArm",
+        "LeftForeArm",
+        "LeftHand",
+        "RightShoulder",
+        "RightArm",
+        "RightForeArm",
+        "RightHand",
     ],
     "corps_MMD": [
         "Center",
-        "LowerBody", "Leg_L", "Knee_L", "Ankle_L", "ToeTip_L",
-        "LowerBody", "Leg_R", "Knee_R", "Ankle_R", "ToeTip_R",
-        "UpperBody", "UpperBody2", "Neck", "Head",
-        "Clavicle_L", "Shoulder_L", "Arm_L", "Elbow_L", "Wrist_L",
-        "Clavicle_R", "Shoulder_R", "Arm_R", "Elbow_R", "Wrist_R",
+        "LowerBody",
+        "Leg_L",
+        "Knee_L",
+        "Ankle_L",
+        "ToeTip_L",
+        "LowerBody",
+        "Leg_R",
+        "Knee_R",
+        "Ankle_R",
+        "ToeTip_R",
+        "UpperBody",
+        "UpperBody2",
+        "Neck",
+        "Head",
+        "Clavicle_L",
+        "Shoulder_L",
+        "Arm_L",
+        "Elbow_L",
+        "Wrist_L",
+        "Clavicle_R",
+        "Shoulder_R",
+        "Arm_R",
+        "Elbow_R",
+        "Wrist_R",
+    ],
+    "corps_MMD": [
+        "Center",
+        "LowerBody",
+        "Leg_L",
+        "Knee_L",
+        "Ankle_L",
+        "ToeTip_L",
+        "LowerBody",
+        "Leg_R",
+        "Knee_R",
+        "Ankle_R",
+        "ToeTip_R",
+        "UpperBody",
+        "UpperBody2",
+        "Neck",
+        "Head",
+        "Clavicle_L",
+        "Shoulder_L",
+        "Arm_L",
+        "Elbow_L",
+        "Wrist_L",
+        "Clavicle_R",
+        "Shoulder_R",
+        "Arm_R",
+        "Elbow_R",
+        "Wrist_R",
     ],
     # "corps_MMD": [
     #     "全ての親",
@@ -117,8 +211,13 @@ ee_names = {
         "leftHand",
         "rightHand",
     ],
-    "corps_motion_project": ["LeftToeBase",
-                             "RightToeBase", "Head", "LeftHand", "RightHand"],
+    "corps_motion_project": [
+        "LeftToeBase",
+        "RightToeBase",
+        "Head",
+        "LeftHand",
+        "RightHand",
+    ],
     "corps_MMD": [
         "ToeTip_L",
         "ToeTip_R",
@@ -152,7 +251,7 @@ class BVH_file:
 
         for i, name in enumerate(self._names):
             if ":" in name:
-                name = name[name.find(":") + 1:]
+                name = name[name.find(":") + 1 :]
                 self._names[i] = name
 
         full_fill = [1] * len(corps_names)
@@ -193,12 +292,12 @@ class BVH_file:
             self.set_new_root(1)
 
         if self.skeleton_type == "corps_MMD":
-            self.set_new_root(2)         
-        
+            self.set_new_root(2)
+
         self.details = []
         for i, name in enumerate(self._names):
             if ":" in name:
-                name = name[name.find(":") + 1:]
+                name = name[name.find(":") + 1 :]
             if name not in corps_names[self.skeleton_type]:
                 self.details.append(i)
         self.joint_num = self.anim.shape[1]
@@ -242,8 +341,7 @@ class BVH_file:
         global_position[1:, :] += (1 - alpha) * global_position[0, :]
 
     def rotate(self, theta, axis):
-        q = Quaternions(
-            np.hstack((np.cos(theta / 2), np.sin(theta / 2) * axis)))
+        q = Quaternions(np.hstack((np.cos(theta / 2), np.sin(theta / 2) * axis)))
         position = self.anim.positions[:, 0, :].copy()
         rotation = self.anim.rotations[:, 0, :]
         position[1:, ...] -= position[0:-1, ...]
@@ -333,8 +431,16 @@ class BVH_file:
         motion = self.to_numpy(quater=False, edge=False)
         rotations = motion[..., :-3].reshape(motion.shape[0], -1, 3)
         positions = motion[..., -3:]
-        write_bvh(self.topology, self.offset, rotations,
-                  positions, self.names, 1.0/30, 'xyz', file_path)
+        write_bvh(
+            self.topology,
+            self.offset,
+            rotations,
+            positions,
+            self.names,
+            1.0 / 30,
+            "xyz",
+            file_path,
+        )
 
     def get_ee_length(self):
         if len(self.ee_length):

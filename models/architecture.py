@@ -8,8 +8,14 @@ from torch import optim
 
 from models.base_model import BaseModel
 from models.integrated import IntegratedModel
-from models.utils import (Criterion_EE, Criterion_EE_2, Eval_Criterion,
-                          GAN_loss, ImagePool, get_ee)
+from models.utils import (
+    Criterion_EE,
+    Criterion_EE_2,
+    Eval_Criterion,
+    GAN_loss,
+    ImagePool,
+    get_ee,
+)
 
 
 class GAN_model(BaseModel):
@@ -23,13 +29,18 @@ class GAN_model(BaseModel):
         self.D_para = []
         self.G_para = []
         self.args = args
-        print(f'Train list {train_list}')
+        print(f"Train list {train_list}")
         for source_target_pair in range(self.n_topology):
             print(
-                f"Pair {source_target_pair}. Check for duplicate and mismatched bones in the skeleton parser. {dataset.joint_topologies[source_target_pair]}")
-            print(f'Has bone count {len(dataset.joint_topologies[source_target_pair])}')
+                f"Pair {source_target_pair}. Check for duplicate and mismatched bones in the skeleton parser. {dataset.joint_topologies[source_target_pair]}"
+            )
+            print(f"Has bone count {len(dataset.joint_topologies[source_target_pair])}")
             model = IntegratedModel(
-                args, dataset.joint_topologies[source_target_pair], None, self.device, train_list[source_target_pair]
+                args,
+                dataset.joint_topologies[source_target_pair],
+                None,
+                self.device,
+                train_list[source_target_pair],
             )
             self.models.append(model)
             self.D_para += model.D_parameters()
@@ -55,8 +66,7 @@ class GAN_model(BaseModel):
 
             self.err_crit = []
             for i in range(self.n_topology):
-                self.err_crit.append(Eval_Criterion(
-                    dataset.joint_topologies[i]))
+                self.err_crit.append(Eval_Criterion(dataset.joint_topologies[i]))
             self.id_test = 0
             self.bvh_path = pjoin(args.save_dir, "results/bvh")
             option_parser.try_mkdir(self.bvh_path)
@@ -155,8 +165,7 @@ class GAN_model(BaseModel):
             for dst in range(self.n_topology):
                 if self.is_train:
                     rnd_idx = torch.randint(
-                        len(self.character_names[dst]
-                            ), (self.latents[src].shape[0],)
+                        len(self.character_names[dst]), (self.latents[src].shape[0],)
                     )
                 else:
                     rnd_idx = list(range(self.latents[0].shape[0]))
@@ -184,8 +193,7 @@ class GAN_model(BaseModel):
                     from_root=self.args.ee_from_root,
                 )
                 height = self.models[dst].height[rnd_idx]
-                height = height.reshape(
-                    (height.shape[0], 1, height.shape[1], 1))
+                height = height.reshape((height.shape[0], 1, height.shape[1], 1))
                 fake_ee = fake_ee / height
 
                 self.fake_latent.append(fake_latent)
@@ -228,8 +236,7 @@ class GAN_model(BaseModel):
                 )
             )
             self.loss_D += self.loss_Ds[-1]
-            self.loss_recoder.add_scalar(
-                "D_loss_{}".format(i), self.loss_Ds[-1])
+            self.loss_recoder.add_scalar("D_loss_{}".format(i), self.loss_Ds[-1])
 
     def backward_G(self):
         # rec_loss and gan loss
@@ -241,16 +248,20 @@ class GAN_model(BaseModel):
         self.loss_G_total = 0
         for i in range(self.n_topology):
             rec_loss1 = self.criterion_rec(self.motions[i], self.res[i])
-            self.loss_recoder.add_scalar(
-                "rec_loss_quater_{}".format(i), rec_loss1)
+            self.loss_recoder.add_scalar("rec_loss_quater_{}".format(i), rec_loss1)
 
             height = self.models[i].real_height[self.motions_input[i][1]]
-            height = height.reshape(height.shape + (1, 1,))
+            height = height.reshape(
+                height.shape
+                + (
+                    1,
+                    1,
+                )
+            )
             input_pos = self.motion_denorm[i][:, -3:, :] / height
             rec_pos = self.res_denorm[i][:, -3:, :] / height
             rec_loss2 = self.criterion_rec(input_pos, rec_pos)
-            self.loss_recoder.add_scalar(
-                "rec_loss_global_{}".format(i), rec_loss2)
+            self.loss_recoder.add_scalar("rec_loss_global_{}".format(i), rec_loss2)
 
             pos_ref_global = self.models[i].fk.from_local_to_world(
                 self.pos_ref[i]
@@ -259,8 +270,7 @@ class GAN_model(BaseModel):
                 self.res_pos[i]
             ) / height.reshape(height.shape + (1,))
             rec_loss3 = self.criterion_rec(pos_ref_global, res_pos_global)
-            self.loss_recoder.add_scalar(
-                "rec_loss_position_{}".format(i), rec_loss3)
+            self.loss_recoder.add_scalar("rec_loss_position_{}".format(i), rec_loss3)
 
             rec_loss = (
                 rec_loss1
@@ -286,15 +296,13 @@ class GAN_model(BaseModel):
                 self.cycle_loss += cycle_loss
 
                 ee_loss = self.criterion_ee(self.ee_ref[src], self.fake_ee[p])
-                self.loss_recoder.add_scalar(
-                    "ee_loss_{}_{}".format(src, dst), ee_loss)
+                self.loss_recoder.add_scalar("ee_loss_{}_{}".format(src, dst), ee_loss)
                 self.ee_loss += ee_loss
 
                 if src != dst:
                     if self.args.gan_mode != "none":
                         loss_G = self.criterion_gan(
-                            self.models[dst].discriminator(
-                                self.fake_pos[p]), True
+                            self.models[dst].discriminator(self.fake_pos[p]), True
                         )
                     else:
                         loss_G = torch.tensor(0)
@@ -346,26 +354,24 @@ class GAN_model(BaseModel):
         if self.is_train:
             for i, model in enumerate(self.models):
                 model.save(
-                    pjoin(self.model_save_dir,
-                          "topology{}".format(i)), self.epoch_cnt
+                    pjoin(self.model_save_dir, "topology{}".format(i)), self.epoch_cnt
                 )
 
             for i, optimizer in enumerate(self.optimizers):
                 file_name = pjoin(
-                    self.model_save_dir, "optimizers/{}/{}.pt".format(
-                        self.epoch_cnt, i)
+                    self.model_save_dir, "optimizers/{}/{}.pt".format(self.epoch_cnt, i)
                 )
                 try_mkdir(psplit(file_name)[0])
                 torch.save(optimizer.state_dict(), file_name)
         elif topology != -1:
             self.models[topology].save(
-                pjoin(self.model_save_dir, "topology{}".format(
-                    topology)), self.epoch_cnt
+                pjoin(self.model_save_dir, "topology{}".format(topology)),
+                self.epoch_cnt,
             )
 
             file_name = pjoin(
-                self.model_save_dir, "optimizers/{}/{}.pt".format(
-                    self.epoch_cnt, topology)
+                self.model_save_dir,
+                "optimizers/{}/{}.pt".format(self.epoch_cnt, topology),
             )
             try_mkdir(psplit(file_name)[0])
             torch.save(self.optimizers[topology].state_dict(), file_name)
@@ -373,8 +379,7 @@ class GAN_model(BaseModel):
     def load(self, epoch=None, topology=-1):
         if self.is_train:
             for i, model in enumerate(self.models):
-                model.load(pjoin(self.model_save_dir,
-                                 "topology{}".format(i)), epoch)
+                model.load(pjoin(self.model_save_dir, "topology{}".format(i)), epoch)
 
             for i, optimizer in enumerate(self.optimizers):
                 file_name = pjoin(
@@ -384,13 +389,13 @@ class GAN_model(BaseModel):
         elif topology != -1:
             for i, model in enumerate(self.models):
                 if topology == i:
-                    model.load(pjoin(self.model_save_dir,
-                                     "topology{}".format(topology)), epoch)
+                    model.load(
+                        pjoin(self.model_save_dir, "topology{}".format(topology)), epoch
+                    )
             for i, optimizer in enumerate(self.optimizers):
                 if topology == i:
                     file_name = pjoin(
-                        self.model_save_dir, "optimizers/{}/{}.pt".format(
-                            epoch, i)
+                        self.model_save_dir, "optimizers/{}/{}.pt".format(epoch, i)
                     )
                     optimizer.load_state_dict(torch.load(file_name))
         self.epoch_cnt = epoch

@@ -9,21 +9,21 @@ import Animation as Animation
 def load_from_maya(root):
     """
     Load joint parents and names from maya
-    
+
     Parameters
     ----------
-    
+
     root : PyNode
         Root Maya Node
-        
+
     Returns
     -------
-    
+
     (names, parents) : ([str], (J) ndarray)
         List of joint names and array
         of indices representing the parent
         joint for each joint J.
-        
+
         Joint index -1 is used to represent
         that there is no parent joint
     """
@@ -65,13 +65,13 @@ def joints(parents):
     """
     Parameters
     ----------
-    
+
     parents : (J) ndarray
         parents array
-    
+
     Returns
     -------
-    
+
     joints : (J) ndarray
         Array of joint indices
     """
@@ -82,13 +82,13 @@ def joints_list(parents):
     """
     Parameters
     ----------
-    
+
     parents : (J) ndarray
         parents array
-    
+
     Returns
     -------
-    
+
     joints : [ndarray]
         List of arrays of joint idices for
         each joint
@@ -100,13 +100,13 @@ def parents_list(parents):
     """
     Parameters
     ----------
-    
+
     parents : (J) ndarray
         parents array
-    
+
     Returns
     -------
-    
+
     parents : [ndarray]
         List of arrays of joint idices for
         the parents of each joint
@@ -118,13 +118,13 @@ def children_list(parents):
     """
     Parameters
     ----------
-    
+
     parents : (J) ndarray
         parents array
-    
+
     Returns
     -------
-    
+
     children : [ndarray]
         List of arrays of joint indices for
         the children of each joint
@@ -140,13 +140,13 @@ def descendants_list(parents):
     """
     Parameters
     ----------
-    
+
     parents : (J) ndarray
         parents array
-    
+
     Returns
     -------
-    
+
     descendants : [ndarray]
         List of arrays of joint idices for
         the descendants of each joint
@@ -164,13 +164,13 @@ def ancestors_list(parents):
     """
     Parameters
     ----------
-    
+
     parents : (J) ndarray
         parents array
-    
+
     Returns
     -------
-    
+
     ancestors : [ndarray]
         List of arrays of joint idices for
         the ancestors of each joint
@@ -190,7 +190,7 @@ def ancestors_list(parents):
 def mask(parents, filter):
     """
     Constructs a Mask for a give filter
-    
+
     A mask is a (J, J) ndarray truth table for a given
     condition over J joints. For example there
     may be a mask specifying if a joint N is a
@@ -199,20 +199,20 @@ def mask(parents, filter):
     This could be constructed into a mask using
     `m = mask(parents, children_list)` and the condition
     of childhood tested using `m[N, M]`.
-    
+
     Parameters
     ----------
-    
+
     parents : (J) ndarray
         parents array
-        
+
     filter : (J) ndarray -> [ndarray]
         function that outputs a list of arrays
         of joint indices for some condition
 
     Returns
     -------
-    
+
     mask : (N, N) ndarray
         boolean truth table of given condition
     """
@@ -262,30 +262,30 @@ def joint_chain_ascend(parents, start, end):
 def constraints(anim, **kwargs):
     """
     Constraint list for Animation
-    
+
     This constraint list can be used in the
     VerletParticle solver to constrain
     a animation global joint positions.
-    
+
     Parameters
     ----------
-    
+
     anim : Animation
         Input animation
-        
+
     masses : (F, J) ndarray
         Optional list of masses
         for joints J across frames F
         defaults to weighting by
         vertical height
-    
+
     Returns
     -------
-    
+
     constraints : [(int, int, (F, J) ndarray, (F, J) ndarray, (F, J) ndarray)]
         A list of constraints in the format:
         (Joint1, Joint2, Masses1, Masses2, Lengths)
-    
+
     """
 
     masses = kwargs.pop("masses", None)
@@ -327,27 +327,27 @@ def graph(anim):
     Generates a weighted adjacency matrix
     using local joint distances along
     the skeletal structure.
-    
+
     Joints which are not connected
     are assigned the weight `0`.
-    
+
     Joints which actually have zero distance
     between them, but are still connected, are
     perturbed by some minimal amount.
-    
+
     The output of this routine can be used
     with the `scipy.sparse.csgraph`
     routines for graph analysis.
-    
+
     Parameters
     ----------
-    
+
     anim : Animation
         input animation
-        
+
     Returns
     -------
-    
+
     graph : (N, N) ndarray
         weight adjacency matrix using
         local distances along the
@@ -374,16 +374,16 @@ def distances(anim):
     Generates a distance matrix for
     pairwise joint distances along
     the skeletal structure
-    
+
     Parameters
     ----------
-    
+
     anim : Animation
         input animation
-        
+
     Returns
     -------
-    
+
     distances : (N, N) ndarray
         array of pairwise distances
         along skeletal structure
@@ -445,16 +445,16 @@ def distances(anim):
 def edges(parents):
     """
     Animation structure edges
-    
+
     Parameters
     ----------
-    
+
     parents : (J) ndarray
         parents array
-        
+
     Returns
     -------
-    
+
     edges : (M, 2) ndarray
         array of pairs where each
         pair contains two indices of a joints
@@ -468,18 +468,18 @@ def edges(parents):
 def incidence(parents):
     """
     Incidence Matrix
-    
+
     Parameters
     ----------
-    
+
     parents : (J) ndarray
         parents array
-        
+
     Returns
     -------
-    
+
     incidence : (N, M) ndarray
-        
+
         Matrix of N joint positions by
         M edges which each entry is either
         1 or -1 and multiplication by the

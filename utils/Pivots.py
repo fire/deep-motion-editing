@@ -10,8 +10,8 @@ class Pivots:
     This wrapper provides some functions for
     working with pivots.
 
-    These are particularly useful as a number 
-    of atomic operations (such as adding or 
+    These are particularly useful as a number
+    of atomic operations (such as adding or
     subtracting) cannot be achieved using
     the standard arithmatic and need to be
     defined differently to work correctly
